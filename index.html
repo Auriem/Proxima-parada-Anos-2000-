@@ -7,103 +7,101 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* Estilos customizados para complementar o Tailwind e dar o toque Y2K */
+        /* Estilo Retrowave Final v6 */
         body {
             font-family: 'VT323', monospace;
-            background-color: #000020;
-            color: #0FF;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            background-color: #00008B; /* Azul Royal do fundo */
+            color: #FFFFFF;
+            font-size: 1.2rem;
         }
-        .font-y2k-title {
+
+        .main-frame {
+            background-color: rgba(0, 0, 40, 0.6);
+            border: 4px solid #FF00FF;
+            box-shadow: 0 0 15px #FF00FF, 0 0 25px #FF00FF, inset 0 0 15px #00FFFF;
+            border-radius: 20px;
+            margin: 20px auto;
+            padding: 20px 30px;
+            max-width: 1200px;
+        }
+
+        .section-title {
             font-family: 'Press Start 2P', cursive;
-            text-shadow: 0 0 5px #FF00FF, 0 0 10px #FF00FF, 0 0 15px #FF00FF;
+            color: #FFFF00;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px #00008B;
         }
-        .y2k-border {
-            border: 3px solid #FF00FF;
-            box-shadow: 0 0 10px #FF00FF, inset 0 0 10px #FF00FF;
+        
+        .retrowave-button {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #F81894;
+            color: #FFFFFF;
+            border: 2px solid white;
+            padding: 12px 24px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 8px #F81894;
             border-radius: 8px;
         }
-        .y2k-button {
-            font-family: 'Press Start 2P', cursive;
-            background-color: #FF00FF;
-            color: #000020;
-            border: 2px solid #0FF;
-            padding: 10px 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 5px #FF00FF, 0 0 10px #FF00FF;
-        }
-        .y2k-button:hover:not(:disabled) {
-            background-color: #0FF;
-            color: #FF00FF;
-            border-color: #FF00FF;
+        .retrowave-button:hover:not(:disabled) {
+            background-color: #FFFFFF;
+            color: #F81894;
+            border-color: #F81894;
             transform: scale(1.05);
-            box-shadow: 0 0 10px #0FF, 0 0 15px #0FF;
+            box-shadow: 0 0 15px #FFFFFF;
         }
-        .y2k-button:disabled {
-            background-color: #500050;
-            color: #A0A0A0;
-            border-color: #800080;
+        
+        .ticket-button {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #F81894;
+            color: #FFFFFF;
+            border: 2px solid white;
+            padding: 10px 20px;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 8px #F81894;
+            border-radius: 8px;
+        }
+        .ticket-button:hover:not(:disabled) {
+            background-color: #FFFFFF;
+            color: #F81894;
+            border-color: #F81894;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #FFFFFF;
+        }
+        .ticket-button:disabled {
+            background-color: #808080;
+            color: #A9A9A9;
             cursor: not-allowed;
-            opacity: 0.7;
+            border: 2px solid #555;
+            box-shadow: none;
         }
-        .y2k-input {
+
+        .y2k-input, .y2k-input-form {
             background-color: #000030;
-            border: 2px solid #0FF;
-            color: #0FF;
-            padding: 8px;
-            border-radius: 4px;
-            font-family: 'VT323', monospace;
-            width: 60px;
-            text-align: center;
-        }
-        .y2k-input-form {
-            background-color: #000030;
-            border: 2px solid #0FF;
-            color: #0FF;
+            border: 1px solid #00FFFF;
+            color: #FFFFFF;
             padding: 10px;
             border-radius: 4px;
             font-family: 'VT323', monospace;
-            font-size: 1.1rem;
-            width: 100%; 
-        }
-        .y2k-input::placeholder, .y2k-input-form::placeholder {
-            color: #0AA;
-        }
-        .y2k-card {
-            background-color: rgba(0,0,50,0.8);
-            backdrop-filter: blur(5px);
-        }
-        @keyframes subtle-glow {
-            0%, 100% { text-shadow: 0 0 5px #0FF, 0 0 8px #0FF; }
-            50% { text-shadow: 0 0 8px #0FF, 0 0 12px #0FF; }
-        }
-        .subtle-glow-text {
-            animation: subtle-glow 2s infinite alternate;
-        }
-        .visitor-counter {
-            background-color: #000;
-            border: 2px solid #0FF;
-            padding: 5px 10px;
-            font-family: 'Press Start 2P', cursive;
-            color: #0F0;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .scanlines::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
+            font-size: 1.2rem;
             width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(transparent,transparent 2px,rgba(0, 255, 255, 0.05) 3px,rgba(0, 255, 255, 0.05) 4px);
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.5;
         }
+        .y2k-input {
+            width: 70px;
+            text-align: center;
+        }
+        .y2k-input-form::placeholder {
+            color: #00AAAA;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -114,402 +112,416 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
         }
         .modal-content {
-            background-color: #000030;
-            margin: 5% auto;
-            padding: 25px;
-            border: 3px solid #FF00FF;
+            background-color: rgba(0, 0, 40, 0.9);
+            border: 4px solid #FF00FF;
+            box-shadow: 0 0 15px #FF00FF, 0 0 25px #FF00FF, inset 0 0 15px #00FFFF;
+            border-radius: 20px;
             width: 90%;
             max-width: 700px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px #FF00FF;
+            padding: 25px;
             position: relative;
         }
         .close-button {
             color: #FF00FF;
-            float: right;
+            position: absolute;
+            top: 15px;
+            right: 20px;
             font-size: 30px;
             font-weight: bold;
             cursor: pointer;
-            font-family: 'Press Start 2P', cursive;
-            line-height: 1;
+            text-shadow: 0 0 5px #FF00FF;
+            transition: all 0.2s;
         }
-        .close-button:hover,
-        .close-button:focus {
-            color: #0FF;
-            text-decoration: none;
+        .close-button:hover {
+            color: #FFFFFF;
+            transform: scale(1.1);
         }
-        .qr-code-pagamento { 
-            width: 140px; 
-            height: 140px;
-            background-color: #fff; 
-            margin: 5px; 
-            display: inline-block; 
-            border: 1px solid #FF00FF;
-            padding: 5px; 
-        }
-        .qr-code-container { 
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .qr-code-item { 
-            margin-bottom: 10px;
-        }
-        .header-logo {
-            height: 50px; 
-            width: auto;     
-            max-width: 150px; 
-            margin-right: 15px; 
-        }
-        .y2k-gif { /* TAMANHO DOS GIFs MENORES AUMENTADO */
+        
+        .elenco-membro img {
             width: 120px; 
-            height: auto;
-            margin: 5px;
-            border: 1px solid #0FF; 
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid #00FFFF; 
+            margin: 0 auto 10px auto;
+            background-color: #000030; 
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
         }
-        .gif-compra-sucesso { /* TAMANHO DO GIF DE COMPRA AUMENTADO */
-            display: block;
-            margin: 10px auto 20px auto; 
-            max-width: 350px; 
-            border: 2px solid #0FF;
-            border-radius: 5px;
-        }
-        .custom-alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #FF00FF;
-            color: #000020;
-            padding: 15px 25px;
-            border-radius: 5px;
-            z-index: 2000;
-            font-family: "'Press Start 2P', cursive";
-            box-shadow: 0 0 10px #000;
+        .elenco-membro h4 {
+            font-family: 'Press Start 2P', cursive;
+            color: #FFFF00; 
             font-size: 0.9rem;
+            margin-bottom: 4px;
         }
+        .elenco-membro p {
+            color: #FFFFFF; 
+            font-size: 1rem;
+        }
+        
+        .ticket-card {
+            background-color: #CCCCCC;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ticket-card-header {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #A9A9A9;
+            padding: 8px;
+            margin: -15px -15px 15px -15px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .ticket-card-body p {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        
+        .marquee-container {
+            background-color: #F81894;
+            color: #FFFFFF;
+            font-family: 'Press Start 2P', cursive;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-top: 20px;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            box-shadow: 0 0 10px #F81894;
+        }
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
         #formspree-feedback {
             text-align: center;
             margin-top: 15px;
             font-size: 1.1rem;
         }
-        .sessao-item {
-            background-color: rgba(0,0,80,0.6);
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px solid #0FF;
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+        
+        .qr-code-pagamento {
+            width: 140px; 
+            height: 140px;
+            background-color: #fff; 
+            margin: 5px; 
+            display: inline-block; 
+            border: 1px solid #000;
+            padding: 5px; 
         }
-         .sessao-item p {
+        .qr-code-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .qr-code-item {
             margin-bottom: 10px;
         }
-        .sessao-esgotada-aviso {
-            color: #FF4136;
-            font-weight: bold;
-            font-family: 'Press Start 2P', cursive;
-            margin-top: 5px;
-        }
-        .elenco-membro {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .elenco-membro img {
-            width: 120px; 
-            height: 120px;
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 3px solid #0FF; 
-            margin: 0 auto 10px auto;
-            background-color: #000030; 
-        }
-        .elenco-membro h4 {
-            font-family: 'Press Start 2P', cursive;
-            color: #FF00FF; 
-            font-size: 1.1rem;
-            margin-bottom: 2px;
-        }
-        .elenco-membro p {
-            color: #0FF; 
-            font-size: 1rem;
-        }
-        .produtora-logo {
-            max-width: 200px; 
-            height: auto;
-            margin: 15px auto;
+        .gif-compra-sucesso {
             display: block;
-            border: 2px solid #FF00FF;
-            padding: 5px;
-            background-color: rgba(255,255,255,0.1); 
+            margin: -10px auto 10px auto;
+            max-width: 250px;
+            border-radius: 5px;
+        }
+        .retro-gif {
+            height: 60px;
+            margin: 0 10px;
+        }
+        .social-button {
+            display: inline-block;
+            margin: 0 10px;
+            transition: transform 0.2s;
+        }
+        .social-button:hover {
+            transform: scale(1.1);
+        }
+        .visitor-counter-footer {
+            display: inline-block;
+            background-color: #000;
+            color: #00FF00;
+            font-family: 'Press Start 2P', cursive;
+            padding: 5px 10px;
+            border: 2px solid #555;
+            font-size: 0.8rem;
         }
     </style>
 </head>
-<body class="relative">
-    <div class="scanlines"></div>
+<body class="p-4 md:p-6">
 
-    <header class="py-6 px-4 md:px-8 y2k-border m-2 md:m-4">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center mb-4 md:mb-0">
-                <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="header-logo">
-                <h1 class="font-y2k-title text-2xl sm:text-3xl md:text-4xl text-center md:text-left">
-                    Próxima Parada Anos 2000!
-                </h1>
+    <div class="main-frame">
+        <header class="text-center mb-10">
+            <h1 class="section-title text-2xl md:text-4xl">Próxima Parada: Anos 2000</h1>
+            <p class="text-lg md:text-xl text-gray-200 leading-relaxed">E aí, galera! Preparados para a peça mais irada dos últimos tempos?<br>Use o menu aí embaixo pra navegar e comprar seus ingressos. Não mosca, senão acaba!</p>
+            <div class="marquee-container">
+                <span class="marquee-text">Garanta já seu ingresso!! ✨ Garanta já seu ingresso!! ✨ </span>
             </div>
-            <nav class="flex flex-wrap justify-center space-x-3 md:space-x-4 text-sm md:text-lg">
-                <a href="#sobre" class="hover:text-[#FF00FF] transition-colors subtle-glow-text">Sobre</a>
-                <a href="#elenco" class="hover:text-[#FF00FF] transition-colors subtle-glow-text">Elenco</a>
-                <a href="#produtora" class="hover:text-[#FF00FF] transition-colors subtle-glow-text">Produtora</a>
-                <a href="#local" class="hover:text-[#FF00FF] transition-colors subtle-glow-text">Datas & Ingressos</a>
-                <a href="#contato" class="hover:text-[#FF00FF] transition-colors subtle-glow-text">Contato</a>
-            </nav>
-        </div>
-    </header>
+        </header>
 
-    <section id="hero" class="container mx-auto text-center py-10 px-4">
-        <img src="https://placehold.co/800x300/FF00FF/000020?text=Próxima+Parada+Anos+2000!" alt="Banner da Peça Próxima Parada Anos 2000!" class="mx-auto mb-6 y2k-border w-full max-w-3xl h-auto">
-        <h2 class="font-y2k-title text-4xl md:text-5xl mb-4 text-[#0FF]">Próxima Parada Anos 2000!</h2>
-        <p class="text-xl md:text-2xl mb-8 text-gray-300">A trama acompanha um grupo de adolescentes vivendo intensamente aquela época, marcada pelo som do modem discado e longas conversas noturnas no MSN.</p>
-        <button onclick="document.getElementById('local').scrollIntoView({ behavior: 'smooth' });" class="y2k-button text-xl">
-            Ver Datas e Comprar Ingressos!
-        </button>
-    </section>
+        <main class="space-y-12">
+            <section id="hero-buttons" class="flex justify-center items-center gap-6">
+                <img src="https://i.postimg.cc/LnjJJHKf/7df3a655-1926-4cc7-9c17-6990c2461c93.gif" alt="GIF Orkut" class="retro-gif hidden md:block">
+                <button onclick="document.getElementById('local').scrollIntoView({ behavior: 'smooth' });" class="retrowave-button">Comprar Ingressos</button>
+                <button onclick="document.getElementById('sobre').scrollIntoView({ behavior: 'smooth' });" class="retrowave-button">Saiba Mais</button>
+                <img src="https://i.postimg.cc/zfHB7s76/download.gif" alt="GIF Download" class="retro-gif hidden md:block">
+            </section>
 
-    <section id="sobre" class="container mx-auto py-16 px-4">
-        <div class="y2k-border y2k-card p-6 md:p-8">
-            <h2 class="font-y2k-title text-3xl mb-6 text-center text-[#FF00FF]">Sobre a Peça: "Próxima Parada Anos 2000!"</h2>
-            <div class="flex justify-center my-4">
-                <img src="https://i.postimg.cc/LnjJJHKf/7df3a655-1926-4cc7-9c17-6990c2461c93.gif" alt="GIF Animado Orkut" class="y2k-gif">
-            </div>
-            <div class="grid md:grid-cols-2 gap-6 items-center">
-                <div>
-                    <img src="https://placehold.co/400x300/00FF00/000020?text=Foto+Promocional+da+Peça" alt="Foto promocional da peça Próxima Parada Anos 2000!" class="mx-auto mb-4 y2k-border w-full h-auto">
-                </div>
-                <div class="text-lg space-y-4 text-gray-200">
-                    <p>A trama acompanha um grupo de adolescentes – Bruno, Juliana, Raquel, Fernando, Luana e Marcelo – vivendo intensamente aquela época, marcada pelo som do modem discado, pôsteres colados com durex na parede, testes da revista Capricho e longas conversas noturnas no MSN.</p>
-                    <p>O cenário principal é um quarto cheio de memórias, onde a vida gira em torno de bandas escolares e amizades dramáticas. A rotina da turma é abalada com a chegada de Sofia, uma visitante misteriosa vinda do futuro com a missão de "atualizar o sistema".</p>
-                    <p>A peça explora, com humor e afeto, temas como identidade, futuro, pertencimento e o impacto da tecnologia nas relações humanas, tudo isso ambientado na cultura pop e nos desafios daquela década. É descrita como uma carta de amor aos anos 2000, buscando provocar risos, emoção e identificação no público que viveu ou tem curiosidade sobre esse período.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <hr class="border-pink-500/50">
 
-    <section id="elenco" class="container mx-auto py-16 px-4">
-        <div class="y2k-border y2k-card p-6 md:p-8">
-            <h2 class="font-y2k-title text-3xl mb-8 text-center text-[#0FF]">Conheça Nosso Elenco Estelar!</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/FF00FF/000020?text=Ator+1" alt="Foto Ator 1">
-                    <h4>Nome Ator/Atriz 1</h4>
-                    <p>Personagem 1</p>
-                </div>
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/00FF00/000020?text=Ator+2" alt="Foto Ator 2">
-                    <h4>Nome Ator/Atriz 2</h4>
-                    <p>Personagem 2</p>
-                </div>
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/FFFF00/000020?text=Ator+3" alt="Foto Ator 3">
-                    <h4>Nome Ator/Atriz 3</h4>
-                    <p>Personagem 3</p>
-                </div>
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/00FFFF/000020?text=Ator+4" alt="Foto Ator 4">
-                    <h4>Nome Ator/Atriz 4</h4>
-                    <p>Personagem 4</p>
-                </div>
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/FF00FF/000020?text=Ator+5" alt="Foto Ator 5">
-                    <h4>Nome Ator/Atriz 5</h4>
-                    <p>Personagem 5</p>
-                </div>
-                <div class="elenco-membro">
-                    <img src="https://placehold.co/120x120/00FF00/000020?text=Ator+6" alt="Foto Ator 6">
-                    <h4>Nome Ator/Atriz 6</h4>
-                    <p>Personagem 6</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="produtora" class="container mx-auto py-16 px-4">
-        <div class="y2k-border y2k-card p-6 md:p-8">
-            <h2 class="font-y2k-title text-3xl mb-6 text-center text-[#FF00FF]">Realização</h2>
-            <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="produtora-logo">
-            <h3 class="font-y2k-title text-2xl text-center text-[#0FF] mb-4">Auriem Produções Artísticas</h3>
-            <div class="text-lg text-gray-200 space-y-4 text-center md:text-left md:w-3/4 mx-auto">
-                <p>A Auriem Produções Artísticas é um coletivo apaixonado por contar histórias que ressoam com o público, combinando nostalgia, humor e reflexão. Com um olhar atento às narrativas que marcaram gerações e um toque de criatividade contemporânea, buscamos criar experiências teatrais memoráveis e envolventes.</p>
-                <p>Nossa missão é levar ao palco produções que não apenas entretenham, mas também provoquem o pensamento e celebrem a riqueza da cultura pop e das conexões humanas. "Próxima Parada Anos 2000!" é o nosso mais recente convite para uma viagem divertida e emocionante pelo tempo.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="local" class="container mx-auto py-16 px-4">
-         <div class="y2k-border y2k-card p-6 md:p-8">
-            <h2 class="font-y2k-title text-3xl mb-6 text-center text-[#FF00FF]">Local, Datas & Ingressos ::: SAVE THE DATE!</h2>
-            <div class="grid md:grid-cols-2 gap-8 items-start">
-                <div class="text-lg text-gray-200">
-                    <p><strong class="text-[#0FF]">Local:</strong> Teatro [Nome do Teatro Aqui]</p>
-                    <p class="mb-4"><strong class="text-[#0FF]">Endereço:</strong> Seu Endereço Completo Aqui</p>
-                    <p class="mt-4 mb-2 text-xl text-[#FFFF00]">Escolha sua sessão abaixo:</p>
-                    
-                    <div class="sessao-item">
-                        <p class="text-xl">Sexta, 13 de Setembro - 20:00h</p>
-                        <button class="y2k-button open-modal-sessao-btn mt-2 text-sm" data-sessao="Sexta, 13 de Setembro - 20:00h">Selecionar Sessão e Comprar</button>
-                    </div>
-                    <div class="sessao-item">
-                        <p class="text-xl">Sábado, 14 de Setembro - 19:00h</p>
-                        <button class="y2k-button open-modal-sessao-btn mt-2 text-sm" data-sessao="Sábado, 14 de Setembro - 19:00h">Selecionar Sessão e Comprar</button>
-                    </div>
-                     <div class="sessao-item">
-                        <p class="text-xl">Sábado, 14 de Setembro - 21:00h</p>
-                        <button class="y2k-button open-modal-sessao-btn mt-2 text-sm" data-sessao="Sábado, 14 de Setembro - 21:00h">Selecionar Sessão e Comprar</button>
-                    </div>
-                    <div class="sessao-item">
-                        <p class="text-xl">Domingo, 15 de Setembro - 18:00h</p>
-                        <button class="y2k-button open-modal-sessao-btn mt-2 text-sm" data-sessao="Domingo, 15 de Setembro - 18:00h">Selecionar Sessão e Comprar</button>
-                    </div>
-                    <p class="mt-6 text-sm text-gray-400">Admissão geral (sem assentos marcados). Máximo de 120 ingressos por sessão.</p>
-                </div>
-                <div>
-                    <img src="https://placehold.co/400x300/FF00FF/000000?text=MAPA+OU+FACHADA+Y2K" alt="Mapa do Local" class="mx-auto y2k-border w-full h-auto">
-                    <div class="flex flex-col items-center my-6"> 
-                        <img src="https://i.postimg.cc/LnjJJHKf/7df3a655-1926-4cc7-9c17-6990c2461c93.gif" alt="GIF Animado Logo Orkut" class="y2k-gif mb-2"> 
-                        <img src="https://i.postimg.cc/zfHB7s76/download.gif" alt="GIF Animado Adicional" class="y2k-gif">
+            <section id="sobre">
+                <h2 class="section-title text-xl">A Peça</h2>
+                <div class="flex flex-col items-center text-center gap-8">
+                    <img src="https://i.postimg.cc/258zB93f/C-pia-de-material-pe-a-Apresenta-o.png" alt="Foto promocional da peça" class="w-full max-w-2xl h-auto rounded-md border-2 border-cyan-500/50">
+                    <div class="space-y-4 text-gray-300 max-w-3xl">
+                        <p>Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração.</p>
+                        <p>Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira.</p>
+                        <p>Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
+                        <p>"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas.</p>
+                        <p>Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps.</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <section id="contato" class="container mx-auto py-16 px-4">
-        <div class="y2k-border y2k-card p-6 md:p-8 text-center">
-            <h2 class="font-y2k-title text-3xl mb-6 text-[#0FF]">Fale Conosco ::: Mande um Scrap!</h2>
-            <p class="text-lg mb-4 text-gray-200">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
-            <p class="text-xl mb-2"><strong class="text-[#FF00FF]">E-mail:</strong> <a href="mailto:auriemcompany@gmail.com" class="hover:underline">auriemcompany@gmail.com</a></p>
-            <p class="text-xl mb-6"><strong class="text-[#FF00FF]">ZapZap (WhatsApp):</strong> <a href="https://wa.me/5541985031409" target="_blank" class="hover:underline"> (41) 98503-1409</a></p>
-            <div class="flex justify-center space-x-4">
-                <a href="https://www.instagram.com/auriem_company/" target="_blank"><img src="https://placehold.co/50x50/000000/FFFFFF?text=Insta" alt="Instagram Auriem Company" class="y2k-border hover:opacity-75 transition-opacity"></a>
-                <a href="https://www.youtube.com/@auriemcompany" target="_blank"><img src="https://placehold.co/50x50/000000/FFFFFF?text=YT" alt="YouTube Auriem Company" class="y2k-border hover:opacity-75 transition-opacity"></a>
-                <a href="https://tiktok.com/@auriemcompany" target="_blank"><img src="https://placehold.co/50x50/000000/FFFFFF?text=Tik" alt="TikTok @auriemcompany" class="y2k-border hover:opacity-75 transition-opacity"></a>
-            </div>
-        </div>
-    </section>
+            <hr class="border-cyan-500/50">
 
-    <footer class="text-center py-8 px-4 border-t-2 border-[#FF00FF] mt-8">
-        <p class="text-sm text-gray-400">© 2024 Auriem Produções Artísticas. Todos os direitos reservados.</p>
-        <p class="text-sm text-gray-500">Diretamente do túnel do tempo para sua tela!</p>
-        <div class="visitor-counter mt-4">VISITORS: 002005</div>
-        <img src="https://placehold.co/100x50/000000/FFFF00?text=Loading..." alt="Em Construção Y2K" class="mx-auto mt-2 opacity-50">
-    </footer>
+            <section id="elenco">
+                <h2 class="section-title text-xl">Elenco</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-x-4 gap-y-6">
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg" alt="Foto Antônia Montemezzo">
+                        <h4>Antônia Montemezzo</h4>
+                        <p>como Juliana</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg" alt="Foto Evelyn Muller">
+                        <h4>Evelyn Muller</h4>
+                        <p>como Luana</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg" alt="Foto Carolina Ribas">
+                        <h4>Carolina Ribas</h4>
+                        <p>como Raquel</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg" alt="Foto Jessica Nayara">
+                        <h4>Jessica Nayara</h4>
+                        <p>como Sofia</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg" alt="Foto Aquiles Amendola">
+                        <h4>Aquiles Amendola</h4>
+                        <p>como Fernando</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg" alt="Foto Anthony Braga">
+                        <h4>Anthony Braga</h4>
+                        <p>como Bruno</p>
+                    </div>
+                    <div class="elenco-membro">
+                        <img src="https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg" alt="Foto Pedro Ferraz">
+                        <h4>Pedro Ferraz</h4>
+                        <p>como Marcelo</p>
+                    </div>
+                </div>
+            </section>
+            
+            <hr class="border-pink-500/50">
 
-    <div id="ticketModal" class="modal">
-        <div class="modal-content y2k-border">
-            <span class="close-button" id="closeModalBtn">×</span>
+            <section id="produtora">
+                <h2 class="section-title text-xl">Realização</h2>
+                <div class="flex flex-col items-center text-center">
+                    <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="max-w-[200px] h-auto mb-4">
+                     <div class="max-w-xl space-y-4 text-gray-300">
+                        <p>A Auriem Produções Artísticas é um coletivo apaixonado por contar histórias que ressoam com o público, combinando nostalgia, humor e reflexão. Com um olhar atento às narrativas que marcaram gerações e um toque de criatividade contemporânea, buscamos criar experiências teatrais memoráveis e envolventes.</p>
+                        <p>Nossa missão é levar ao palco produções que não apenas entretenham, mas também provoquem o pensamento e celebrem a riqueza da cultura pop e das conexões humanas. "Próxima Parada Anos 2000!" é o nosso mais recente convite para uma viagem divertida e emocionante pelo tempo.</p>
+                     </div>
+                </div>
+            </section>
 
+            <hr class="border-cyan-500/50">
+
+            <section id="local">
+                <h2 class="section-title text-xl">Confira as datas das apresentações!!!</h2>
+                 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
+                    <div class="ticket-card">
+                        <div class="ticket-card-header">03/10/2025 - 19:30</div>
+                        <div class="ticket-card-body">
+                            <p><strong>Sessão de Sexta</strong></p>
+                            <p class="text-sm">Disponibilidade: Aberta</p>
+                            <button class="ticket-button" data-sessao="Sexta, 03/10/2025 - 19:30">Comprar Ingresso</button>
+                        </div>
+                    </div>
+                    <div class="ticket-card">
+                        <div class="ticket-card-header">04/10/2025 - 16:00</div>
+                        <div class="ticket-card-body">
+                            <p><strong>Sessão de Sábado</strong></p>
+                            <p class="text-sm">Disponibilidade: Aberta</p>
+                            <button class="ticket-button" data-sessao="Sábado, 04/10/2025 - 16:00">Comprar Ingresso</button>
+                        </div>
+                    </div>
+                    <div class="ticket-card">
+                        <div class="ticket-card-header">04/10/2025 - 19:30</div>
+                        <div class="ticket-card-body">
+                            <p><strong>Sessão de Sábado</strong></p>
+                            <p class="text-sm">Disponibilidade: Aberta</p>
+                            <button class="ticket-button" data-sessao="Sábado, 04/10/2025 - 19:30">Comprar Ingresso</button>
+                        </div>
+                    </div>
+                    <div class="ticket-card">
+                        <div class="ticket-card-header">05/10/2025 - 16:00</div>
+                        <div class="ticket-card-body">
+                            <p><strong>Sessão de Domingo</strong></p>
+                            <p class="text-sm">Disponibilidade: Aberta</p>
+                            <button class="ticket-button" data-sessao="Domingo, 05/10/2025 - 16:00">Comprar Ingresso</button>
+                        </div>
+                    </div>
+                     <div class="ticket-card">
+                        <div class="ticket-card-header">05/10/2025 - 19:00</div>
+                        <div class="ticket-card-body">
+                            <p><strong>Sessão de Domingo</strong></p>
+                            <p class="text-sm">Disponibilidade: Aberta</p>
+                            <button class="ticket-button" data-sessao="Domingo, 05/10/2025 - 19:00">Comprar Ingresso</button>
+                        </div>
+                    </div>
+                    <!-- GIF DA TV MOVIMENTADO PARA CÁ -->
+                    <div class="hidden md:flex items-center justify-center p-4">
+                        <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="Retro TV GIF" class="max-w-full h-auto rounded-lg">
+                    </div>
+                </div>
+                <p class="text-center mt-6 text-gray-400 text-base">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
+            </section>
+             
+            <hr class="border-pink-500/50">
+
+            <section id="contato">
+                <h2 class="section-title text-xl">Fale Conosco ::: Mande um Scrap!</h2>
+                <div class="text-center text-gray-300 space-y-3">
+                    <p>Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+                    <p>
+                        <strong class="text-cyan-300">E-mail:</strong> 
+                        <a href="mailto:auriemcompany@gmail.com" class="text-pink-400 hover:underline">auriemcompany@gmail.com</a>
+                    </p>
+                    <p>
+                        <strong class="text-cyan-300">ZapZap (WhatsApp):</strong> 
+                        <a href="https://wa.me/5541985031409" target="_blank" class="text-pink-400 hover:underline">(41) 98503-1409</a>
+                    </p>
+                    <div class="pt-4">
+                        <a href="https://www.instagram.com/auriem_company/" target="_blank" class="retrowave-button social-button">Instagram</a>
+                        <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="retrowave-button social-button">YouTube</a>
+                        <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="retrowave-button social-button">TikTok</a>
+                    </div>
+                </div>
+            </section>
+             
+             <footer class="text-center pt-8 space-y-2">
+                 <p class="text-sm text-gray-400">© 2024 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+                 <p class="text-sm text-gray-500">Diretamente do túnel do tempo para sua tela!</p>
+                 <div class="visitor-counter-footer">VISITORS: 002005</div>
+             </footer>
+        </main>
+    </div>
+
+    <div id="ticketModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button id="closeModalBtn" class="close-button">×</button>
             <div id="preCadastroStep">
-                <h3 class="font-y2k-title text-2xl sm:text-3xl mb-2 text-center text-[#FF00FF]">Pré-Cadastro & Ingressos</h3>
-                <p class="mb-4 text-gray-300 text-center text-lg">Sessão Escolhida: <strong id="sessaoSelecionadaDisplay" class="text-[#FFFF00]"></strong></p>
-                
+                <h3 class="section-title text-xl mb-4">Pré-Cadastro & Ingressos</h3>
+                <p class="mb-4 text-gray-300 text-center">Sessão Escolhida: <strong id="sessaoSelecionadaDisplay" class="text-yellow-300"></strong></p>
                 <form id="preCadastroForm" action="https://formspree.io/f/mrbkgvdn" method="POST" class="space-y-4">
                     <input type="hidden" id="hiddenSessao" name="sessao_escolhida">
-                    
-                    <div class="text-xl">
-                        <label for="modalQtdInteiraInput" class="text-[#0FF] font-bold">Inteira Y2K (R$ 50,00):</label>
-                        <input type="number" id="modalQtdInteiraInput" name="modal_qtd_inteira" min="0" value="0" class="y2k-input ml-2">
+                    <div class="grid grid-cols-2 gap-4 items-center">
+                        <div>
+                            <label for="modalQtdInteiraInput" class="block text-sm text-cyan-300">Inteira (R$ 50):</label>
+                            <input type="number" id="modalQtdInteiraInput" name="modal_qtd_inteira" min="0" value="0" class="y2k-input w-full">
+                        </div>
+                        <div>
+                            <label for="modalQtdMeiaInput" class="block text-sm text-cyan-300">Meia (R$ 25):</label>
+                            <input type="number" id="modalQtdMeiaInput" name="modal_qtd_meia" min="0" value="0" class="y2k-input w-full">
+                        </div>
                     </div>
-                    <div class="text-xl">
-                        <label for="modalQtdMeiaInput" class="text-[#0FF] font-bold">Meia Nostalgia (R$ 25,00):</label>
-                        <input type="number" id="modalQtdMeiaInput" name="modal_qtd_meia" min="0" value="0" class="y2k-input ml-2">
-                        <p class="text-sm text-gray-400">(Estudantes, Idosos, etc. Apresentar comprovante.)</p>
-                    </div>
-                    <div class="text-xl mt-2">
-                        <strong class="text-[#0FF]">Total do Pedido: R$ <span id="modalValorTotalPedido">0,00</span></strong>
-                    </div>
-                    <hr class="border-[#FF00FF] my-3">
-                    
+                    <div class="text-right text-xl text-cyan-300">Total: R$ <span id="modalValorTotalPedido" class="text-yellow-300 font-bold">0,00</span></div>
+                    <hr class="border-pink-500/50 my-3">
                     <div>
-                        <label for="nomeCompleto" class="block text-[#0FF] mb-1 text-lg">Nome Completo:</label>
-                        <input type="text" id="nomeCompleto" name="nome" class="y2k-input-form" required placeholder="Seu nome aqui...">
+                        <label for="nomeCompleto" class="block text-sm text-cyan-300">Nome Completo:</label>
+                        <input type="text" id="nomeCompleto" name="nome" class="y2k-input-form" required>
                     </div>
                     <div>
-                        <label for="emailCadastro" class="block text-[#0FF] mb-1 text-lg">E-mail:</label>
-                        <input type="email" id="emailCadastro" name="email" class="y2k-input-form" required placeholder="seu_email@example.com">
+                        <label for="emailCadastro" class="block text-sm text-cyan-300">E-mail:</label>
+                        <input type="email" id="emailCadastro" name="email" class="y2k-input-form" required>
                     </div>
-                    <div>
-                        <label for="whatsappCadastro" class="block text-[#0FF] mb-1 text-lg">WhatsApp (com DDD):</label>
-                        <input type="tel" id="whatsappCadastro" name="whatsapp" class="y2k-input-form" required placeholder="(XX) XXXXX-XXXX">
+                     <div>
+                        <label for="whatsappCadastro" class="block text-sm text-cyan-300">WhatsApp (com DDD):</label>
+                        <input type="tel" id="whatsappCadastro" name="whatsapp" class="y2k-input-form" required>
                     </div>
-                    
                     <input type="hidden" id="hiddenModalQtdInteira" name="ingressos_inteira_final">
                     <input type="hidden" id="hiddenModalQtdMeia" name="ingressos_meia_final">
                     <input type="hidden" id="hiddenModalValorTotal" name="valor_total_final">
-                    
-                    <button type="submit" id="confirmCadastroBtn" class="y2k-button mt-6 w-full text-lg">Confirmar Dados e Ver Pagamento</button>
-                    <div id="formspree-feedback" class="text-gray-300"></div>
+                    <button type="submit" class="retrowave-button w-full mt-4">Confirmar e Ver Pagamento</button>
+                    <div id="formspree-feedback" class="text-center text-base mt-2"></div>
                 </form>
             </div>
-
+            
             <div id="pagamentoStep" style="display:none;">
                 <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Compra Realizada com Sucesso!" class="gif-compra-sucesso">
-                
-                <h3 class="font-y2k-title text-2xl sm:text-3xl mb-4 text-center text-[#FF00FF]">Opções de Pagamento</h3>
-                 <div class="text-lg space-y-1 text-gray-200 mb-4 text-center">
-                    <p>Sessão: <strong id="displaySessao" class="text-[#FFFF00]"></strong></p>
-                    <p>Pedido para: <strong id="displayNome" class="text-[#0FF]"></strong></p>
-                    <p>Ingressos: <strong id="displayQtdInteira" class="text-[#0FF]"></strong> Inteira(s), <strong id="displayQtdMeia" class="text-[#0FF]"></strong> Meia(s)</p>
-                    <p>Total: <strong class="text-[#FFFF00] text-xl">R$ <span id="displayValorTotal">0,00</span></strong></p>
+                <h3 class="section-title text-xl mb-4">Opções de Pagamento</h3>
+                <div class="text-lg space-y-1 text-white mb-4 text-center">
+                    <p>Sessão: <strong id="displaySessao" class="text-yellow-300"></strong></p>
+                    <p>Pedido para: <strong id="displayNome" class="text-cyan-300"></strong></p>
+                    <p>Total: <strong class="text-yellow-300 text-xl">R$ <span id="displayValorTotal">0,00</span></strong></p>
                 </div>
-                <hr class="border-[#FF00FF] my-4">
+                <hr class="border-pink-500/50 my-4">
                 
-                <p class="font-bold text-xl text-[#0FF]">Opção 1: PIX</p>
-                <div class="text-gray-200 mb-4">
-                    <p class="mb-2 text-center">Pague o <strong class="text-[#FFFF00]">VALOR TOTAL (R$ <span id="pixValorTotalDisplay">0,00</span>)</strong> para a Chave PIX Geral:</p>
-                    <p class="text-center text-xl my-2"><strong class="text-[#FFFF00]">auriemcompany@gmail.com</strong></p>
-                    <p class="text-sm text-gray-400 text-center mb-3">(Nome do Titular: Auriem Produções Artísticas)</p>
-                    <p class="text-center text-gray-300 mb-1">Ou, se preferir pagar individualmente por tipo de ingresso:</p>
+                <p class="font-bold text-center text-xl text-cyan-300">Opção 1: PIX</p>
+                <div class="text-white mb-4 text-center">
+                    <p class="mb-2">Pague o <strong class="text-yellow-300">VALOR TOTAL</strong> para a Chave PIX (E-mail):</p>
+                    <p class="text-xl my-2 text-yellow-300">auriemcompany@gmail.com</p>
+                    <p class="text-sm text-gray-400 mb-3">(Nome do Titular: Auriem Produções Artísticas)</p>
                     <div class="qr-code-container">
-                        <div class="qr-code-item">
-                            <p class="text-sm">QR Code - Ingresso(s) MEIA (R$ 25,00 cada):</p>
+                        <div class="inline-block text-center mx-2">
+                            <p class="text-sm">QR Code MEIA (R$ 25):</p>
                             <img src="https://i.postimg.cc/J7FMtDKc/my-qrcode-pagbank-meia.png" alt="QR Code PIX Meia Entrada" class="qr-code-pagamento">
-                            <p class="text-xs text-gray-400 mt-1">Chave PIX (E-mail): <strong class="text-[#FFFF00]">auriemcompany@gmail.com</strong></p>
                         </div>
-                        <div class="qr-code-item">
-                            <p class="text-sm">QR Code - Ingresso(s) INTEIRA (R$ 50,00 cada):</p>
+                        <div class="inline-block text-center mx-2">
+                            <p class="text-sm">QR Code INTEIRA (R$ 50):</p>
                             <img src="https://i.postimg.cc/xCwQxBXp/my-qrcode-pagbank-inteira.png" alt="QR Code PIX Inteira" class="qr-code-pagamento">
-                            <p class="text-xs text-gray-400 mt-1">Chave PIX (E-mail): <strong class="text-[#FFFF00]">auriemcompany@gmail.com</strong></p>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 text-center">(Se usar os QR Codes/Chaves individuais para um pedido misto, some os valores corretamente ou faça transações separadas.)</p>
                 </div>
 
-                <hr class="border-[#FF00FF] my-4">
-                <p class="font-bold text-xl text-[#0FF]">Opção 2: Mercado Pago</p>
-                <p class="text-gray-200">Para pagar com Mercado Pago (Cartão de Crédito, Saldo, etc.), clique no link abaixo. <strong class="text-[#FFFF00]">Importante:</strong> você precisará <strong class="text-[#FFFF00]">inserir manualmente o valor total do seu pedido (R$ <span id="mercadoPagoValorTotal">0,00</span>)</strong> na página do Mercado Pago.</p>
-                <a href="https://link.mercadopago.com.br/auriemcompany" target="_blank" class="y2k-button inline-block my-2">Pagar com Mercado Pago</a>
+                <hr class="border-cyan-500/50 my-4">
+                <p class="font-bold text-center text-xl text-cyan-300">Opção 2: Mercado Pago</p>
+                <div class="text-center">
+                    <p class="text-white my-2">Clique abaixo e <strong class="text-yellow-300">insira o valor total</strong> para pagar com Cartão ou Saldo:</p>
+                    <a href="https://link.mercadopago.com.br/auriemcompany" target="_blank" class="retrowave-button inline-block my-2">Pagar com Mercado Pago</a>
+                </div>
                 
-                <hr class="border-[#FF00FF] my-4">
-                <p class="font-bold text-xl text-[#0FF]">Após o Pagamento:</p>
-                <p class="text-gray-200">Envie o <strong class="text-[#0FF]">comprovante</strong> junto com os dados informados (<strong id="displayNomeComprovante" class="text-[#0FF]"></strong>, sessão <strong id="displaySessaoComprovante" class="text-[#FFFF00]"></strong>) para:</p>
-                <p class="text-gray-200">E-mail: <a href="mailto:auriemcompany@gmail.com" class="text-[#FFFF00] hover:underline">auriemcompany@gmail.com</a></p>
-                <p class="text-gray-200">Ou WhatsApp: <a href="https://wa.me/5541985031409" target="_blank" class="text-[#FFFF00] hover:underline">(41) 98503-1409</a></p>
-                <p class="text-gray-200 mt-2">Seu ingresso digital será enviado em até 24 horas.</p>
-                <p class="mt-4 text-sm text-yellow-300">IMPORTANTE: Meia Entrada - apresentar comprovante no teatro.</p>
-                <button type="button" id="voltarCadastroBtn" class="y2k-button mt-8 w-full" style="background-color: #4A004A; border-color: #7A007A;">Editar Dados/Sessão</button>
+                <hr class="border-pink-500/50 my-4">
+                <p class="font-bold text-center text-xl text-cyan-300">IMPORTANTE: Após Pagar!</p>
+                <p class="text-center text-white my-2">Envie o <strong class="text-yellow-300">comprovante</strong> com seu nome e sessão para:<br>
+                <a href="mailto:auriemcompany@gmail.com" class="text-pink-400 hover:underline">auriemcompany@gmail.com</a> ou WhatsApp</p>
             </div>
         </div>
     </div>
-
+    
     <script>
-        const openModalSessaoBtns = document.querySelectorAll('.open-modal-sessao-btn');
         const modal = document.getElementById('ticketModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
+        const openModalSessaoBtns = document.querySelectorAll('.ticket-button[data-sessao]');
         
         const preCadastroStep = document.getElementById('preCadastroStep');
+        const pagamentoStep = document.getElementById('pagamentoStep');
         const preCadastroForm = document.getElementById('preCadastroForm');
         const sessaoSelecionadaDisplay = document.getElementById('sessaoSelecionadaDisplay');
         const hiddenSessaoInput = document.getElementById('hiddenSessao');
@@ -517,179 +529,103 @@
         const modalQtdInteiraInput = document.getElementById('modalQtdInteiraInput');
         const modalQtdMeiaInput = document.getElementById('modalQtdMeiaInput');
         const modalValorTotalPedidoSpan = document.getElementById('modalValorTotalPedido');
-
-        const nomeCompletoInput = document.getElementById('nomeCompleto');
-        const emailCadastroInput = document.getElementById('emailCadastro');
-        const whatsappCadastroInput = document.getElementById('whatsappCadastro');
         
         const hiddenModalQtdInteira = document.getElementById('hiddenModalQtdInteira');
         const hiddenModalQtdMeia = document.getElementById('hiddenModalQtdMeia');
         const hiddenModalValorTotal = document.getElementById('hiddenModalValorTotal');
-        
-        const formspreeFeedback = document.getElementById('formspree-feedback');
 
-        const pagamentoStep = document.getElementById('pagamentoStep');
+        const formspreeFeedback = document.getElementById('formspree-feedback');
+        
         const displaySessao = document.getElementById('displaySessao');
         const displayNome = document.getElementById('displayNome');
-        const displayQtdInteira = document.getElementById('displayQtdInteira');
-        const displayQtdMeia = document.getElementById('displayQtdMeia');
         const displayValorTotal = document.getElementById('displayValorTotal');
-        const pixValorTotalDisplay = document.getElementById('pixValorTotalDisplay');
-        const mercadoPagoValorTotalSpan = document.getElementById('mercadoPagoValorTotal'); 
-        const displayNomeComprovante = document.getElementById('displayNomeComprovante');
-        const displaySessaoComprovante = document.getElementById('displaySessaoComprovante');
-        const voltarCadastroBtn = document.getElementById('voltarCadastroBtn');
 
         const PRECO_INTEIRA = 50.00;
         const PRECO_MEIA = 25.00;
 
-        let dadosPedidoAtual = { sessao: '', nome: '', email: '', whatsapp: '', qtdInteira: 0, qtdMeia: 0, total: 0 };
-
-        function exibirAlertaCustomizado(mensagem) {
-            const existingAlert = document.querySelector('.custom-alert');
-            if (existingAlert) existingAlert.remove();
-            const alertDiv = document.createElement('div');
-            alertDiv.textContent = mensagem;
-            alertDiv.className = 'custom-alert';
-            document.body.appendChild(alertDiv);
-            setTimeout(() => { if (document.body.contains(alertDiv)) document.body.removeChild(alertDiv); }, 3500);
-        }
+        let dadosPedidoAtual = {};
 
         function calcularTotalModal() {
             let qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
             let qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
-
             if (qtdInteira < 0) qtdInteira = 0;
             if (qtdMeia < 0) qtdMeia = 0;
-            
             modalQtdInteiraInput.value = qtdInteira;
             modalQtdMeiaInput.value = qtdMeia;
-
             const total = (qtdInteira * PRECO_INTEIRA) + (qtdMeia * PRECO_MEIA);
             modalValorTotalPedidoSpan.textContent = total.toFixed(2).replace('.', ',');
-
-            dadosPedidoAtual.qtdInteira = qtdInteira;
-            dadosPedidoAtual.qtdMeia = qtdMeia;
-            dadosPedidoAtual.total = total;
-
             hiddenModalQtdInteira.value = qtdInteira;
             hiddenModalQtdMeia.value = qtdMeia;
             hiddenModalValorTotal.value = total.toFixed(2);
         }
-        
-        modalQtdInteiraInput.addEventListener('change', calcularTotalModal);
-        modalQtdMeiaInput.addEventListener('change', calcularTotalModal);
+
+        modalQtdInteiraInput.addEventListener('input', calcularTotalModal);
+        modalQtdMeiaInput.addEventListener('input', calcularTotalModal);
 
         openModalSessaoBtns.forEach(btn => {
             btn.addEventListener('click', function() {
+                if (this.disabled) return;
                 const sessaoEscolhida = this.getAttribute('data-sessao');
-                dadosPedidoAtual.sessao = sessaoEscolhida;
-
                 sessaoSelecionadaDisplay.textContent = sessaoEscolhida;
-                hiddenSessaoInput.value = sessaoEscolhida; 
-
+                hiddenSessaoInput.value = sessaoEscolhida;
+                
                 modalQtdInteiraInput.value = 0;
                 modalQtdMeiaInput.value = 0;
-                calcularTotalModal(); 
-
-                nomeCompletoInput.value = '';
-                emailCadastroInput.value = '';
-                whatsappCadastroInput.value = '';
-                formspreeFeedback.textContent = ''; 
-
-                preCadastroStep.style.display = 'block';
+                calcularTotalModal();
+                
+                preCadastroForm.reset();
+                formspreeFeedback.textContent = '';
+                formspreeFeedback.style.color = '';
+                
                 pagamentoStep.style.display = 'none';
-                modal.style.display = 'block';
+                preCadastroStep.style.display = 'block';
+                modal.style.display = 'flex';
             });
         });
 
-        closeModalBtn.onclick = function() {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
+        closeModalBtn.onclick = () => { modal.style.display = 'none'; };
+        window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } };
 
         preCadastroForm.addEventListener('submit', async function(event) {
-            event.preventDefault(); 
-            
-            if (dadosPedidoAtual.qtdInteira === 0 && dadosPedidoAtual.qtdMeia === 0) {
-                exibirAlertaCustomizado('Selecione a quantidade de ingressos (Inteira ou Meia).');
+            event.preventDefault();
+            const submitButton = preCadastroForm.querySelector('button[type="submit"]');
+
+            if ((parseInt(modalQtdInteiraInput.value) || 0) === 0 && (parseInt(modalQtdMeiaInput.value) || 0) === 0) {
+                formspreeFeedback.textContent = 'Escolha pelo menos 1 ingresso.';
+                formspreeFeedback.style.color = '#FF00FF';
                 return;
             }
-            if (!nomeCompletoInput.value.trim()) {
-                exibirAlertaCustomizado('Por favor, preencha seu Nome Completo.');
-                nomeCompletoInput.focus(); return;
-            }
-            if (!emailCadastroInput.value.trim() || !emailCadastroInput.checkValidity()) {
-                 exibirAlertaCustomizado('Por favor, insira um E-mail válido.');
-                emailCadastroInput.focus(); return;
-            }
-            if (!whatsappCadastroInput.value.trim()) {
-                 exibirAlertaCustomizado('Por favor, preencha seu WhatsApp.');
-                whatsappCadastroInput.focus(); return;
-            }
 
-            formspreeFeedback.textContent = 'Enviando seus dados...';
-            formspreeFeedback.style.color = '#0FF';
+            formspreeFeedback.textContent = 'Enviando...';
+            formspreeFeedback.style.color = '#00FFFF';
+            submitButton.disabled = true;
 
-            dadosPedidoAtual.nome = nomeCompletoInput.value.trim();
-            dadosPedidoAtual.email = emailCadastroInput.value.trim();
-            dadosPedidoAtual.whatsapp = whatsappCadastroInput.value.trim();
-            
             const formData = new FormData(preCadastroForm);
-
             try {
                 const response = await fetch(preCadastroForm.action, {
                     method: 'POST',
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 });
-
                 if (response.ok) {
-                    formspreeFeedback.textContent = 'Dados enviados! Veja as opções de pagamento.';
-                    formspreeFeedback.style.color = '#0F0';
-
-                    displaySessao.textContent = dadosPedidoAtual.sessao;
-                    displayNome.textContent = dadosPedidoAtual.nome;
-                    displayNomeComprovante.textContent = dadosPedidoAtual.nome;
-                    displaySessaoComprovante.textContent = dadosPedidoAtual.sessao;
-                    displayQtdInteira.textContent = dadosPedidoAtual.qtdInteira;
-                    displayQtdMeia.textContent = dadosPedidoAtual.qtdMeia;
-                    const totalFormatado = dadosPedidoAtual.total.toFixed(2).replace('.', ',');
-                    displayValorTotal.textContent = totalFormatado;
-                    pixValorTotalDisplay.textContent = totalFormatado; 
-                    mercadoPagoValorTotalSpan.textContent = totalFormatado; 
-
-                    setTimeout(() => { 
-                        preCadastroStep.style.display = 'none';
-                        pagamentoStep.style.display = 'block';
-                        formspreeFeedback.textContent = ''; 
-                    }, 1500);
-
+                    displaySessao.textContent = hiddenSessaoInput.value;
+                    displayNome.textContent = formData.get('nome');
+                    displayValorTotal.textContent = parseFloat(hiddenModalValorTotal.value).toFixed(2).replace('.', ',');
+                    
+                    preCadastroStep.style.display = 'none';
+                    pagamentoStep.style.display = 'block';
                 } else {
-                    const data = await response.json();
-                    if (data.errors) {
-                        formspreeFeedback.textContent = data.errors.map(error => error.message).join(", ");
-                    } else {
-                        formspreeFeedback.textContent = 'Erro ao enviar. Tente novamente.';
-                    }
-                    formspreeFeedback.style.color = '#F00';
+                    formspreeFeedback.textContent = 'Oops! Algo deu errado. Tente de novo.';
+                    formspreeFeedback.style.color = '#FF00FF';
                 }
             } catch (error) {
-                formspreeFeedback.textContent = 'Erro de conexão. Tente novamente.';
-                formspreeFeedback.style.color = '#F00';
+                formspreeFeedback.textContent = 'Erro de conexão. Tente de novo.';
+                formspreeFeedback.style.color = '#FF00FF';
+            } finally {
+                submitButton.disabled = false;
             }
         });
-
-        voltarCadastroBtn.onclick = function() {
-            preCadastroStep.style.display = 'block';
-            pagamentoStep.style.display = 'none';
-            formspreeFeedback.textContent = ''; 
-        }
     </script>
+
 </body>
 </html>
