@@ -7,12 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* Estilo Retrowave Final v6 */
+        /* Estilo Retrowave Final v10 */
         body {
             font-family: 'VT323', monospace;
             background-color: #00008B; /* Azul Royal do fundo */
             color: #FFFFFF;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .main-frame {
@@ -34,7 +34,7 @@
             text-shadow: 2px 2px #00008B;
         }
         
-        .retrowave-button {
+        .retrowave-button, .ticket-button {
             font-family: 'Press Start 2P', cursive;
             background-color: #F81894;
             color: #FFFFFF;
@@ -48,33 +48,16 @@
             box-shadow: 0 0 8px #F81894;
             border-radius: 8px;
         }
-        .retrowave-button:hover:not(:disabled) {
+        .retrowave-button:hover:not(:disabled), .ticket-button:hover:not(:disabled) {
             background-color: #FFFFFF;
             color: #F81894;
             border-color: #F81894;
             transform: scale(1.05);
             box-shadow: 0 0 15px #FFFFFF;
         }
-        
         .ticket-button {
-            font-family: 'Press Start 2P', cursive;
-            background-color: #F81894;
-            color: #FFFFFF;
-            border: 2px solid white;
-            padding: 10px 20px;
             width: 100%;
             margin-top: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 8px #F81894;
-            border-radius: 8px;
-        }
-        .ticket-button:hover:not(:disabled) {
-            background-color: #FFFFFF;
-            color: #F81894;
-            border-color: #F81894;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #FFFFFF;
         }
         .ticket-button:disabled {
             background-color: #808080;
@@ -160,7 +143,7 @@
         }
         .elenco-membro p {
             color: #FFFFFF; 
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
         
         .ticket-card {
@@ -257,6 +240,23 @@
             border: 2px solid #555;
             font-size: 0.8rem;
         }
+        .gemini-feature-box {
+            border: 2px dashed #00FFFF;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .gemini-textarea {
+            width: 100%;
+            min-height: 120px;
+            background-color: rgba(0,0,30,0.8);
+            border: 1px solid #00FFFF;
+            color: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body class="p-4 md:p-6">
@@ -344,8 +344,7 @@
                 <div class="flex flex-col items-center text-center">
                     <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="max-w-[200px] h-auto mb-4">
                      <div class="max-w-xl space-y-4 text-gray-300">
-                        <p>A Auriem Produções Artísticas é um coletivo apaixonado por contar histórias que ressoam com o público, combinando nostalgia, humor e reflexão. Com um olhar atento às narrativas que marcaram gerações e um toque de criatividade contemporânea, buscamos criar experiências teatrais memoráveis e envolventes.</p>
-                        <p>Nossa missão é levar ao palco produções que não apenas entretenham, mas também provoquem o pensamento e celebrem a riqueza da cultura pop e das conexões humanas. "Próxima Parada Anos 2000!" é o nosso mais recente convite para uma viagem divertida e emocionante pelo tempo.</p>
+                        <p>A Auriem Produções Artísticas é uma produtora independente de Curitiba, com produções de cinema , teatro e mídias digitais.</p>
                      </div>
                 </div>
             </section>
@@ -354,7 +353,7 @@
 
             <section id="local">
                 <h2 class="section-title text-xl">Confira as datas das apresentações!!!</h2>
-                 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
+                 <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                     <div class="ticket-card">
                         <div class="ticket-card-header">03/10/2025 - 19:30</div>
                         <div class="ticket-card-body">
@@ -395,10 +394,6 @@
                             <button class="ticket-button" data-sessao="Domingo, 05/10/2025 - 19:00">Comprar Ingresso</button>
                         </div>
                     </div>
-                    <!-- GIF DA TV MOVIMENTADO PARA CÁ -->
-                    <div class="hidden md:flex items-center justify-center p-4">
-                        <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="Retro TV GIF" class="max-w-full h-auto rounded-lg">
-                    </div>
                 </div>
                 <p class="text-center mt-6 text-gray-400 text-base">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
             </section>
@@ -406,9 +401,19 @@
             <hr class="border-pink-500/50">
 
             <section id="contato">
-                <h2 class="section-title text-xl">Fale Conosco ::: Mande um Scrap!</h2>
+                <h2 class="section-title text-xl">Campanha #posteumscrap</h2>
                 <div class="text-center text-gray-300 space-y-3">
-                    <p>Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+                    <p>Sem ideias para o seu scrap? Deixe a gente te ajudar!</p>
+                    <p>Escreva um tópico, gere uma mensagem, tire um print e poste nos seus Stories com a hashtag #posteumscrap</p>
+                    
+                    <div class="gemini-feature-box">
+                        <input type="text" id="scrapTopicInput" class="y2k-input-form mb-3" placeholder="Ex: Elogiar a peça, chamar para sair...">
+                        <button id="generateScrapBtn" class="retrowave-button">✨ Gerar Scrap ✨</button>
+                        <textarea id="generatedScrap" class="gemini-textarea" readonly placeholder="Seu scrap nostálgico aparecerá aqui..."></textarea>
+                        <button id="copyScrapBtn" class="retrowave-button text-sm mt-2" style="display: none;">Copiar Scrap</button>
+                    </div>
+
+                    <p class="pt-6">Ou, se preferir, entre em contato diretamente:</p>
                     <p>
                         <strong class="text-cyan-300">E-mail:</strong> 
                         <a href="mailto:auriemcompany@gmail.com" class="text-pink-400 hover:underline">auriemcompany@gmail.com</a>
@@ -523,6 +528,7 @@
         const preCadastroStep = document.getElementById('preCadastroStep');
         const pagamentoStep = document.getElementById('pagamentoStep');
         const preCadastroForm = document.getElementById('preCadastroForm');
+        
         const sessaoSelecionadaDisplay = document.getElementById('sessaoSelecionadaDisplay');
         const hiddenSessaoInput = document.getElementById('hiddenSessao');
         
@@ -540,11 +546,18 @@
         const displayNome = document.getElementById('displayNome');
         const displayValorTotal = document.getElementById('displayValorTotal');
 
+        // --- Elementos das Features Gemini ---
+        const generateScrapBtn = document.getElementById('generateScrapBtn');
+        const scrapTopicInput = document.getElementById('scrapTopicInput');
+        const generatedScrap = document.getElementById('generatedScrap');
+        const copyScrapBtn = document.getElementById('copyScrapBtn');
+
+        // --- Constantes e Variáveis ---
         const PRECO_INTEIRA = 50.00;
         const PRECO_MEIA = 25.00;
-
         let dadosPedidoAtual = {};
 
+        // --- Funções ---
         function calcularTotalModal() {
             let qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
             let qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
@@ -559,6 +572,41 @@
             hiddenModalValorTotal.value = total.toFixed(2);
         }
 
+        async function callGemini(prompt) {
+            const apiKey = ""; // A API Key é injetada pelo ambiente
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [{ text: prompt }]
+                }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na API: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    return "Não foi possível gerar uma resposta. Tente novamente.";
+                }
+            } catch (error) {
+                console.error("Erro ao chamar a API Gemini:", error);
+                return "Erro de conexão. Verifique sua internet.";
+            }
+        }
+
+        // --- Event Listeners ---
         modalQtdInteiraInput.addEventListener('input', calcularTotalModal);
         modalQtdMeiaInput.addEventListener('input', calcularTotalModal);
 
@@ -625,6 +673,32 @@
                 submitButton.disabled = false;
             }
         });
+
+        // --- Lógica das Features Gemini ---
+        generateScrapBtn.addEventListener('click', async () => {
+            const topic = scrapTopicInput.value;
+            if (!topic.trim()) {
+                generatedScrap.value = "Por favor, escreva um tópico para o seu scrap.";
+                return;
+            }
+            generatedScrap.value = "Gerando seu scrap no estilo Orkut... Por favor, aguarde...";
+            copyScrapBtn.style.display = 'none';
+
+            const prompt = `Aja como um adolescente brasileiro dos anos 2000 escrevendo um scrap no Orkut. Escreva uma mensagem curta sobre o seguinte tópico: "${topic}". Use gírias da época (como 'migs', 'tipo assim', 'maior mico', 'add'), emoticons clássicos (como :), :(, :P, ^^, s2), e alterne letras maiúsculas e minúsculas (estilo MiGuXêS). Não adicione seu nome ou o nome do destinatário.`;
+            const scrap = await callGemini(prompt);
+            generatedScrap.value = scrap;
+            copyScrapBtn.style.display = 'inline-block';
+        });
+
+        copyScrapBtn.addEventListener('click', () => {
+            generatedScrap.select();
+            document.execCommand('copy');
+            copyScrapBtn.textContent = 'Copiado!';
+            setTimeout(() => {
+                copyScrapBtn.textContent = 'Copiar Scrap';
+            }, 2000);
+        });
+
     </script>
 
 </body>
