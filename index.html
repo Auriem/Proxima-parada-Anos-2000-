@@ -7,14 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* Estilo Retrowave Final v10 */
+        /* Estilo Retrowave Final */
         body {
             font-family: 'VT323', monospace;
-            background-color: #00008B; /* Azul Royal do fundo */
+            background-color: #00008B;
             color: #FFFFFF;
             font-size: 1.3rem;
         }
-
         .main-frame {
             background-color: rgba(0, 0, 40, 0.6);
             border: 4px solid #FF00FF;
@@ -24,24 +23,25 @@
             padding: 20px 30px;
             max-width: 1200px;
         }
-
         .section-title {
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'VT323', monospace;
+            font-weight: 700;
             color: #FFFF00;
-            font-size: 1.8rem;
+            font-size: 2.5rem;
             text-align: center;
             margin-bottom: 25px;
             text-shadow: 2px 2px #00008B;
+            letter-spacing: 2px;
         }
-        
         .retrowave-button, .ticket-button {
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'VT323', monospace;
+            font-weight: 700;
             background-color: #F81894;
             color: #FFFFFF;
             border: 2px solid white;
             padding: 12px 24px;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -66,7 +66,6 @@
             border: 2px solid #555;
             box-shadow: none;
         }
-
         .y2k-input, .y2k-input-form {
             background-color: #000030;
             border: 1px solid #00FFFF;
@@ -84,7 +83,6 @@
         .y2k-input-form::placeholder {
             color: #00AAAA;
         }
-
         .modal {
             display: none;
             position: fixed;
@@ -124,7 +122,6 @@
             color: #FFFFFF;
             transform: scale(1.1);
         }
-        
         .elenco-membro img {
             width: 120px; 
             height: 120px;
@@ -132,7 +129,7 @@
             border: 3px solid #00FFFF; 
             margin: 0 auto 10px auto;
             background-color: #000030; 
-            border-radius: 50%;
+            border-radius: 8px;
             box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
         }
         .elenco-membro h4 {
@@ -145,7 +142,6 @@
             color: #FFFFFF; 
             font-size: 1.1rem;
         }
-        
         .ticket-card {
             background-color: #CCCCCC;
             color: #000000;
@@ -156,23 +152,24 @@
             overflow: hidden;
         }
         .ticket-card-header {
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'VT323', monospace;
+            font-weight: 700;
             background-color: #A9A9A9;
             padding: 8px;
             margin: -15px -15px 15px -15px;
             text-align: center;
-            font-size: 1rem;
+            font-size: 1.2rem;
         }
         .ticket-card-body p {
             font-family: 'VT323', monospace;
             font-size: 1.3rem;
             margin-bottom: 8px;
         }
-        
         .marquee-container {
             background-color: #F81894;
             color: #FFFFFF;
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'VT323', monospace;
+            font-weight: 700;
             padding: 8px 0;
             overflow: hidden;
             white-space: nowrap;
@@ -190,34 +187,10 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
-        
-        #formspree-feedback {
+        #form-feedback {
             text-align: center;
             margin-top: 15px;
             font-size: 1.1rem;
-        }
-        
-        .qr-code-pagamento {
-            width: 140px; 
-            height: 140px;
-            background-color: #fff; 
-            margin: 5px; 
-            display: inline-block; 
-            border: 1px solid #000;
-            padding: 5px; 
-        }
-        .qr-code-container {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .qr-code-item {
-            margin-bottom: 10px;
-        }
-        .gif-compra-sucesso {
-            display: block;
-            margin: -10px auto 10px auto;
-            max-width: 250px;
-            border-radius: 5px;
         }
         .retro-gif {
             height: 60px;
@@ -240,22 +213,19 @@
             border: 2px solid #555;
             font-size: 0.8rem;
         }
-        .gemini-feature-box {
-            border: 2px dashed #00FFFF;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
+        .glowing-title {
+            animation: glowing-text 2s ease-in-out infinite alternate;
         }
-        .gemini-textarea {
-            width: 100%;
-            min-height: 120px;
-            background-color: rgba(0,0,30,0.8);
-            border: 1px solid #00FFFF;
-            color: #FFFFFF;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 1.2rem;
+        @keyframes glowing-text {
+            from { text-shadow: 2px 2px #00008B, 0 0 10px #FFFF00, 0 0 20px #FFFF00; }
+            to { text-shadow: 2px 2px #00008B, 0 0 20px #FFFF55, 0 0 30px #FFFF55; }
+        }
+        #easter-egg {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
         }
     </style>
 </head>
@@ -284,7 +254,7 @@
                 <h2 class="section-title text-xl">A Peça</h2>
                 <div class="flex flex-col items-center text-center gap-8">
                     <img src="https://i.postimg.cc/258zB93f/C-pia-de-material-pe-a-Apresenta-o.png" alt="Foto promocional da peça" class="w-full max-w-2xl h-auto rounded-md border-2 border-cyan-500/50">
-                    <div class="space-y-4 text-gray-300 max-w-3xl">
+                    <div class="space-y-4 text-gray-300 max-w-3xl leading-relaxed">
                         <p>Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração.</p>
                         <p>Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira.</p>
                         <p>Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
@@ -341,18 +311,20 @@
 
             <section id="produtora">
                 <h2 class="section-title text-xl">Realização</h2>
-                <div class="flex flex-col items-center text-center">
-                    <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="max-w-[200px] h-auto mb-4">
-                     <div class="max-w-xl space-y-4 text-gray-300">
+                <div class="flex flex-col md:flex-row items-center text-center md:text-left gap-8">
+                    <div class="flex-shrink-0">
+                        <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="max-w-[180px] h-auto">
+                    </div>
+                    <div class="space-y-4 text-gray-300">
                         <p>A Auriem Produções Artísticas é uma produtora independente de Curitiba, com produções de cinema , teatro e mídias digitais.</p>
-                     </div>
+                    </div>
                 </div>
             </section>
 
             <hr class="border-cyan-500/50">
 
             <section id="local">
-                <h2 class="section-title text-xl">Confira as datas das apresentações!!!</h2>
+                <h2 class="section-title text-xl glowing-title">Confira as datas das apresentações!!!</h2>
                  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                     <div class="ticket-card">
                         <div class="ticket-card-header">03/10/2025 - 19:30</div>
@@ -398,37 +370,7 @@
                 <p class="text-center mt-6 text-gray-400 text-base">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
             </section>
              
-            <hr class="border-pink-500/50">
-
-            <section id="contato">
-                <h2 class="section-title text-xl">Campanha #posteumscrap</h2>
-                <div class="text-center text-gray-300 space-y-3">
-                    <p>Sem ideias para o seu scrap? Deixe a gente te ajudar!</p>
-                    <p>Escreva um tópico, gere uma mensagem, tire um print e poste nos seus Stories com a hashtag #posteumscrap</p>
-                    
-                    <div class="gemini-feature-box">
-                        <input type="text" id="scrapTopicInput" class="y2k-input-form mb-3" placeholder="Ex: Elogiar a peça, chamar para sair...">
-                        <button id="generateScrapBtn" class="retrowave-button">✨ Gerar Scrap ✨</button>
-                        <textarea id="generatedScrap" class="gemini-textarea" readonly placeholder="Seu scrap nostálgico aparecerá aqui..."></textarea>
-                        <button id="copyScrapBtn" class="retrowave-button text-sm mt-2" style="display: none;">Copiar Scrap</button>
-                    </div>
-
-                    <p class="pt-6">Ou, se preferir, entre em contato diretamente:</p>
-                    <p>
-                        <strong class="text-cyan-300">E-mail:</strong> 
-                        <a href="mailto:auriemcompany@gmail.com" class="text-pink-400 hover:underline">auriemcompany@gmail.com</a>
-                    </p>
-                    <p>
-                        <strong class="text-cyan-300">ZapZap (WhatsApp):</strong> 
-                        <a href="https://wa.me/5541985031409" target="_blank" class="text-pink-400 hover:underline">(41) 98503-1409</a>
-                    </p>
-                    <div class="pt-4">
-                        <a href="https://www.instagram.com/auriem_company/" target="_blank" class="retrowave-button social-button">Instagram</a>
-                        <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="retrowave-button social-button">YouTube</a>
-                        <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="retrowave-button social-button">TikTok</a>
-                    </div>
-                </div>
-            </section>
+             <hr class="border-pink-500/50">
              
              <footer class="text-center pt-8 space-y-2">
                  <p class="text-sm text-gray-400">© 2024 Auriem Produções Artísticas. Todos os direitos reservados.</p>
@@ -441,123 +383,59 @@
     <div id="ticketModal" class="modal" style="display: none;">
         <div class="modal-content">
             <button id="closeModalBtn" class="close-button">×</button>
-            <div id="preCadastroStep">
+            <form id="checkoutForm" class="space-y-4">
                 <h3 class="section-title text-xl mb-4">Pré-Cadastro & Ingressos</h3>
                 <p class="mb-4 text-gray-300 text-center">Sessão Escolhida: <strong id="sessaoSelecionadaDisplay" class="text-yellow-300"></strong></p>
-                <form id="preCadastroForm" action="https://formspree.io/f/mrbkgvdn" method="POST" class="space-y-4">
-                    <input type="hidden" id="hiddenSessao" name="sessao_escolhida">
-                    <div class="grid grid-cols-2 gap-4 items-center">
-                        <div>
-                            <label for="modalQtdInteiraInput" class="block text-sm text-cyan-300">Inteira (R$ 50):</label>
-                            <input type="number" id="modalQtdInteiraInput" name="modal_qtd_inteira" min="0" value="0" class="y2k-input w-full">
-                        </div>
-                        <div>
-                            <label for="modalQtdMeiaInput" class="block text-sm text-cyan-300">Meia (R$ 25):</label>
-                            <input type="number" id="modalQtdMeiaInput" name="modal_qtd_meia" min="0" value="0" class="y2k-input w-full">
-                        </div>
-                    </div>
-                    <div class="text-right text-xl text-cyan-300">Total: R$ <span id="modalValorTotalPedido" class="text-yellow-300 font-bold">0,00</span></div>
-                    <hr class="border-pink-500/50 my-3">
+                <div class="grid grid-cols-2 gap-4 items-center">
                     <div>
-                        <label for="nomeCompleto" class="block text-sm text-cyan-300">Nome Completo:</label>
-                        <input type="text" id="nomeCompleto" name="nome" class="y2k-input-form" required>
+                        <label for="modalQtdInteiraInput" class="block text-sm text-cyan-300">Inteira (R$ 50):</label>
+                        <input type="number" id="modalQtdInteiraInput" min="0" value="0" class="y2k-input w-full">
                     </div>
                     <div>
-                        <label for="emailCadastro" class="block text-sm text-cyan-300">E-mail:</label>
-                        <input type="email" id="emailCadastro" name="email" class="y2k-input-form" required>
-                    </div>
-                     <div>
-                        <label for="whatsappCadastro" class="block text-sm text-cyan-300">WhatsApp (com DDD):</label>
-                        <input type="tel" id="whatsappCadastro" name="whatsapp" class="y2k-input-form" required>
-                    </div>
-                    <input type="hidden" id="hiddenModalQtdInteira" name="ingressos_inteira_final">
-                    <input type="hidden" id="hiddenModalQtdMeia" name="ingressos_meia_final">
-                    <input type="hidden" id="hiddenModalValorTotal" name="valor_total_final">
-                    <button type="submit" class="retrowave-button w-full mt-4">Confirmar e Ver Pagamento</button>
-                    <div id="formspree-feedback" class="text-center text-base mt-2"></div>
-                </form>
-            </div>
-            
-            <div id="pagamentoStep" style="display:none;">
-                <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Compra Realizada com Sucesso!" class="gif-compra-sucesso">
-                <h3 class="section-title text-xl mb-4">Opções de Pagamento</h3>
-                <div class="text-lg space-y-1 text-white mb-4 text-center">
-                    <p>Sessão: <strong id="displaySessao" class="text-yellow-300"></strong></p>
-                    <p>Pedido para: <strong id="displayNome" class="text-cyan-300"></strong></p>
-                    <p>Total: <strong class="text-yellow-300 text-xl">R$ <span id="displayValorTotal">0,00</span></strong></p>
-                </div>
-                <hr class="border-pink-500/50 my-4">
-                
-                <p class="font-bold text-center text-xl text-cyan-300">Opção 1: PIX</p>
-                <div class="text-white mb-4 text-center">
-                    <p class="mb-2">Pague o <strong class="text-yellow-300">VALOR TOTAL</strong> para a Chave PIX (E-mail):</p>
-                    <p class="text-xl my-2 text-yellow-300">auriemcompany@gmail.com</p>
-                    <p class="text-sm text-gray-400 mb-3">(Nome do Titular: Auriem Produções Artísticas)</p>
-                    <div class="qr-code-container">
-                        <div class="inline-block text-center mx-2">
-                            <p class="text-sm">QR Code MEIA (R$ 25):</p>
-                            <img src="https://i.postimg.cc/J7FMtDKc/my-qrcode-pagbank-meia.png" alt="QR Code PIX Meia Entrada" class="qr-code-pagamento">
-                        </div>
-                        <div class="inline-block text-center mx-2">
-                            <p class="text-sm">QR Code INTEIRA (R$ 50):</p>
-                            <img src="https://i.postimg.cc/xCwQxBXp/my-qrcode-pagbank-inteira.png" alt="QR Code PIX Inteira" class="qr-code-pagamento">
-                        </div>
+                        <label for="modalQtdMeiaInput" class="block text-sm text-cyan-300">Meia (R$ 25):</label>
+                        <input type="number" id="modalQtdMeiaInput" min="0" value="0" class="y2k-input w-full">
                     </div>
                 </div>
-
-                <hr class="border-cyan-500/50 my-4">
-                <p class="font-bold text-center text-xl text-cyan-300">Opção 2: Mercado Pago</p>
-                <div class="text-center">
-                    <p class="text-white my-2">Clique abaixo e <strong class="text-yellow-300">insira o valor total</strong> para pagar com Cartão ou Saldo:</p>
-                    <a href="https://link.mercadopago.com.br/auriemcompany" target="_blank" class="retrowave-button inline-block my-2">Pagar com Mercado Pago</a>
+                <div class="text-right text-xl text-cyan-300">Total: R$ <span id="modalValorTotalPedido" class="text-yellow-300 font-bold">0,00</span></div>
+                <hr class="border-pink-500/50 my-3">
+                <div>
+                    <label for="nomeCompleto" class="block text-sm text-cyan-300">Seu nome:</label>
+                    <input type="text" id="nomeCompleto" class="y2k-input-form" required>
                 </div>
-                
-                <hr class="border-pink-500/50 my-4">
-                <p class="font-bold text-center text-xl text-cyan-300">IMPORTANTE: Após Pagar!</p>
-                <p class="text-center text-white my-2">Envie o <strong class="text-yellow-300">comprovante</strong> com seu nome e sessão para:<br>
-                <a href="mailto:auriemcompany@gmail.com" class="text-pink-400 hover:underline">auriemcompany@gmail.com</a> ou WhatsApp</p>
-            </div>
+                <div>
+                    <label for="emailCadastro" class="block text-sm text-cyan-300">Seu e-mail:</label>
+                    <input type="email" id="emailCadastro" class="y2k-input-form" required>
+                </div>
+                <button type="submit" class="retrowave-button w-full mt-4">Ir para Pagamento</button>
+                <div id="form-feedback" class="text-center text-base mt-2"></div>
+            </form>
         </div>
     </div>
     
+    <div id="easter-egg">
+        <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="Easter Egg" width="200">
+    </div>
+
     <script>
         const modal = document.getElementById('ticketModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const openModalSessaoBtns = document.querySelectorAll('.ticket-button[data-sessao]');
         
-        const preCadastroStep = document.getElementById('preCadastroStep');
-        const pagamentoStep = document.getElementById('pagamentoStep');
-        const preCadastroForm = document.getElementById('preCadastroForm');
-        
+        const checkoutForm = document.getElementById('checkoutForm');
         const sessaoSelecionadaDisplay = document.getElementById('sessaoSelecionadaDisplay');
-        const hiddenSessaoInput = document.getElementById('hiddenSessao');
         
         const modalQtdInteiraInput = document.getElementById('modalQtdInteiraInput');
         const modalQtdMeiaInput = document.getElementById('modalQtdMeiaInput');
         const modalValorTotalPedidoSpan = document.getElementById('modalValorTotalPedido');
         
-        const hiddenModalQtdInteira = document.getElementById('hiddenModalQtdInteira');
-        const hiddenModalQtdMeia = document.getElementById('hiddenModalQtdMeia');
-        const hiddenModalValorTotal = document.getElementById('hiddenModalValorTotal');
+        const nomeCompletoInput = document.getElementById('nomeCompleto');
+        const emailCadastroInput = document.getElementById('emailCadastro');
+        const formFeedback = document.getElementById('form-feedback');
 
-        const formspreeFeedback = document.getElementById('formspree-feedback');
-        
-        const displaySessao = document.getElementById('displaySessao');
-        const displayNome = document.getElementById('displayNome');
-        const displayValorTotal = document.getElementById('displayValorTotal');
-
-        // --- Elementos das Features Gemini ---
-        const generateScrapBtn = document.getElementById('generateScrapBtn');
-        const scrapTopicInput = document.getElementById('scrapTopicInput');
-        const generatedScrap = document.getElementById('generatedScrap');
-        const copyScrapBtn = document.getElementById('copyScrapBtn');
-
-        // --- Constantes e Variáveis ---
         const PRECO_INTEIRA = 50.00;
         const PRECO_MEIA = 25.00;
         let dadosPedidoAtual = {};
 
-        // --- Funções ---
         function calcularTotalModal() {
             let qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
             let qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
@@ -567,66 +445,21 @@
             modalQtdMeiaInput.value = qtdMeia;
             const total = (qtdInteira * PRECO_INTEIRA) + (qtdMeia * PRECO_MEIA);
             modalValorTotalPedidoSpan.textContent = total.toFixed(2).replace('.', ',');
-            hiddenModalQtdInteira.value = qtdInteira;
-            hiddenModalQtdMeia.value = qtdMeia;
-            hiddenModalValorTotal.value = total.toFixed(2);
         }
 
-        async function callGemini(prompt) {
-            const apiKey = ""; // A API Key é injetada pelo ambiente
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{
-                    role: "user",
-                    parts: [{ text: prompt }]
-                }]
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erro na API: ${response.statusText}`);
-                }
-
-                const result = await response.json();
-                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
-                    return result.candidates[0].content.parts[0].text;
-                } else {
-                    return "Não foi possível gerar uma resposta. Tente novamente.";
-                }
-            } catch (error) {
-                console.error("Erro ao chamar a API Gemini:", error);
-                return "Erro de conexão. Verifique sua internet.";
-            }
-        }
-
-        // --- Event Listeners ---
         modalQtdInteiraInput.addEventListener('input', calcularTotalModal);
         modalQtdMeiaInput.addEventListener('input', calcularTotalModal);
 
         openModalSessaoBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 if (this.disabled) return;
-                const sessaoEscolhida = this.getAttribute('data-sessao');
-                sessaoSelecionadaDisplay.textContent = sessaoEscolhida;
-                hiddenSessaoInput.value = sessaoEscolhida;
-                
+                dadosPedidoAtual.sessao = this.getAttribute('data-sessao');
+                sessaoSelecionadaDisplay.textContent = dadosPedidoAtual.sessao;
                 modalQtdInteiraInput.value = 0;
                 modalQtdMeiaInput.value = 0;
                 calcularTotalModal();
-                
-                preCadastroForm.reset();
-                formspreeFeedback.textContent = '';
-                formspreeFeedback.style.color = '';
-                
-                pagamentoStep.style.display = 'none';
-                preCadastroStep.style.display = 'block';
+                checkoutForm.reset();
+                formFeedback.textContent = '';
                 modal.style.display = 'flex';
             });
         });
@@ -634,71 +467,68 @@
         closeModalBtn.onclick = () => { modal.style.display = 'none'; };
         window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } };
 
-        preCadastroForm.addEventListener('submit', async function(event) {
+        checkoutForm.addEventListener('submit', async function(event) {
             event.preventDefault();
-            const submitButton = preCadastroForm.querySelector('button[type="submit"]');
+            const submitButton = checkoutForm.querySelector('button[type="submit"]');
 
-            if ((parseInt(modalQtdInteiraInput.value) || 0) === 0 && (parseInt(modalQtdMeiaInput.value) || 0) === 0) {
-                formspreeFeedback.textContent = 'Escolha pelo menos 1 ingresso.';
-                formspreeFeedback.style.color = '#FF00FF';
+            const qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
+            const qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
+
+            if (qtdInteira === 0 && qtdMeia === 0) {
+                formFeedback.textContent = 'Escolha pelo menos 1 ingresso.';
+                formFeedback.style.color = '#FF00FF';
                 return;
             }
 
-            formspreeFeedback.textContent = 'Enviando...';
-            formspreeFeedback.style.color = '#00FFFF';
+            formFeedback.textContent = 'A criar link de pagamento...';
+            formFeedback.style.color = '#00FFFF';
             submitButton.disabled = true;
 
-            const formData = new FormData(preCadastroForm);
+            const pedido = {
+                nome: nomeCompletoInput.value,
+                email: emailCadastroInput.value,
+                sessao: dadosPedidoAtual.sessao,
+                qtdInteira: qtdInteira,
+                qtdMeia: qtdMeia,
+                total: (qtdInteira * PRECO_INTEIRA) + (qtdMeia * PRECO_MEIA)
+            };
+
             try {
-                const response = await fetch(preCadastroForm.action, {
+                const response = await fetch('/.netlify/functions/create-checkout', {
                     method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pedido)
                 });
-                if (response.ok) {
-                    displaySessao.textContent = hiddenSessaoInput.value;
-                    displayNome.textContent = formData.get('nome');
-                    displayValorTotal.textContent = parseFloat(hiddenModalValorTotal.value).toFixed(2).replace('.', ',');
-                    
-                    preCadastroStep.style.display = 'none';
-                    pagamentoStep.style.display = 'block';
-                } else {
-                    formspreeFeedback.textContent = 'Oops! Algo deu errado. Tente de novo.';
-                    formspreeFeedback.style.color = '#FF00FF';
-                }
+
+                if (!response.ok) throw new Error('Falha ao criar checkout.');
+                
+                const result = await response.json();
+                window.location.href = result.checkoutUrl; // Redireciona para o Mercado Pago
+
             } catch (error) {
-                formspreeFeedback.textContent = 'Erro de conexão. Tente de novo.';
-                formspreeFeedback.style.color = '#FF00FF';
-            } finally {
+                formFeedback.textContent = 'Oops! Algo deu errado. Tente de novo.';
+                formFeedback.style.color = '#FF00FF';
                 submitButton.disabled = false;
             }
         });
 
-        // --- Lógica das Features Gemini ---
-        generateScrapBtn.addEventListener('click', async () => {
-            const topic = scrapTopicInput.value;
-            if (!topic.trim()) {
-                generatedScrap.value = "Por favor, escreva um tópico para o seu scrap.";
-                return;
+        // Easter Egg
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    document.getElementById('easter-egg').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('easter-egg').style.display = 'none';
+                    }, 5000);
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
             }
-            generatedScrap.value = "Gerando seu scrap no estilo Orkut... Por favor, aguarde...";
-            copyScrapBtn.style.display = 'none';
-
-            const prompt = `Aja como um adolescente brasileiro dos anos 2000 escrevendo um scrap no Orkut. Escreva uma mensagem curta sobre o seguinte tópico: "${topic}". Use gírias da época (como 'migs', 'tipo assim', 'maior mico', 'add'), emoticons clássicos (como :), :(, :P, ^^, s2), e alterne letras maiúsculas e minúsculas (estilo MiGuXêS). Não adicione seu nome ou o nome do destinatário.`;
-            const scrap = await callGemini(prompt);
-            generatedScrap.value = scrap;
-            copyScrapBtn.style.display = 'inline-block';
         });
-
-        copyScrapBtn.addEventListener('click', () => {
-            generatedScrap.select();
-            document.execCommand('copy');
-            copyScrapBtn.textContent = 'Copiado!';
-            setTimeout(() => {
-                copyScrapBtn.textContent = 'Copiar Scrap';
-            }, 2000);
-        });
-
     </script>
 
 </body>
