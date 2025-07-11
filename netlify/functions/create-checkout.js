@@ -54,7 +54,7 @@ exports.handler = async (event) => {
             email: userEmail,
             phone: {
                 area_code: areaCode,
-                number: number,
+                number: Number(number), // CORREÇÃO: Converte o telefone para o tipo número
             },
         },
         back_urls: { success: 'https://proximaparadaanos2000.netlify.app/', failure: 'https://proximaparadaanos2000.netlify.app/', pending: 'https://proximaparadaanos2000.netlify.app/' },
