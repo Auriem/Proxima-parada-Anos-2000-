@@ -1013,16 +1013,6 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmação -->
-    <div id="confirmation-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="modal-title">Tudo Certo!</h3>
-            <p>Você será redirecionado para o pagamento. Após a confirmação, seus ingressos chegarão por e-mail!</p>
-            <img id="confirmation-gif" src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Confirmação da Compra"/>
-            <button id="confirmation-close-btn" class="action-button modal-button">Fechar</button>
-        </div>
-    </div>
-
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- DADOS ---
@@ -1118,9 +1108,6 @@
         const submitButton = document.getElementById('submit-purchase');
         const loadingSpinner = document.getElementById('loading-spinner');
 
-        const confirmationModal = document.getElementById('confirmation-modal');
-        const confirmationCloseBtn = document.getElementById('confirmation-close-btn');
-
         let currentSession = null;
 
         function updateTotalPrice() {
@@ -1154,15 +1141,11 @@
             if (e.target === purchaseModal) purchaseModal.classList.remove('visible');
         });
 
-        confirmationCloseBtn.addEventListener('click', () => confirmationModal.classList.remove('visible'));
-        confirmationModal.addEventListener('click', (e) => {
-            if (e.target === confirmationModal) confirmationModal.classList.remove('visible');
-        });
-
         qtyInteiraInput.addEventListener('input', updateTotalPrice);
         qtyMeiaInput.addEventListener('input', updateTotalPrice);
 
-        purchaseForm.addEventListener('submit', function(e) {
+        // LÓGICA FINAL DE SUBMISSÃO DO FORMULÁRIO
+        purchaseForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             if (qtyInteiraInput.valueAsNumber === 0 && qtyMeiaInput.valueAsNumber === 0) {
                 alert('Você precisa de selecionar pelo menos um ingresso!');
@@ -1171,17 +1154,45 @@
             submitButton.disabled = true;
             loadingSpinner.style.display = 'block';
 
-            // --- SIMULAÇÃO DE BACKEND PARA PRÉ-VISUALIZAÇÃO ---
-            setTimeout(() => {
-                loadingSpinner.style.display = 'none';
-                purchaseModal.classList.remove('visible');
-                
-                // Abre o novo modal de confirmação
-                confirmationModal.classList.add('visible');
+            const purchaseData = {
+                sessionId: sessionIdInput.value,
+                userName: document.getElementById('fullname').value,
+                userEmail: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                tickets: {
+                    inteira: {
+                        quantity: qtyInteiraInput.valueAsNumber,
+                        unit_price: currentSession.precoInteira,
+                    },
+                    meia: {
+                        quantity: qtyMeiaInput.valueAsNumber,
+                        unit_price: currentSession.precoMeia
+                    }
+                }
+            };
+            
+            try {
+                // Chamada para a função serverless na Netlify
+                const response = await fetch('/.netlify/functions/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(purchaseData)
+                });
 
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Falha ao criar o checkout. Tente novamente mais tarde.');
+                }
+                
+                const { init_point } = await response.json();
+                // Redireciona o utilizador para a página de pagamento do Mercado Pago
+                window.location.href = init_point;
+
+            } catch (error) {
+                alert(error.message);
                 submitButton.disabled = false;
-                purchaseForm.reset();
-            }, 2000);
+                loadingSpinner.style.display = 'none';
+            }
         });
 
         // --- NAVEGAÇÃO SUAVE ---
