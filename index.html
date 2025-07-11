@@ -3,533 +3,1200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Próxima Parada Anos 2000! - Ingressos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <title>Próxima Parada: Anos 2000 - Venda de Ingressos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
     <style>
-        /* Estilo Retrowave Final */
+        /* Estilos Globais - Tema Anos 2000 Aprimorado */
+        :root {
+            --primary-blue: #0000CD;
+            --primary-purple: #8A2BE2;
+            --neon-pink: #FF6EC7;
+            --hot-pink: #FF1493;
+            --light-pink: #FFC0CB;
+            --neon-green: #ADFF2F;
+            --white: #FFFFFF;
+            --light-gray: #DDDDDD;
+            --dark-gray: #333333;
+        }
+        
         body {
-            font-family: 'VT323', monospace;
-            background-color: #00008B;
-            color: #FFFFFF;
-            font-size: 1.3rem;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: var(--white);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-attachment: fixed;
+            overflow-x: hidden;
         }
-        .main-frame {
-            background-color: rgba(0, 0, 40, 0.6);
-            border: 4px solid #FF00FF;
-            box-shadow: 0 0 15px #FF00FF, 0 0 25px #FF00FF, inset 0 0 15px #00FFFF;
-            border-radius: 20px;
-            margin: 20px auto;
-            padding: 20px 30px;
-            max-width: 1200px;
-        }
-        .section-title {
-            font-family: 'VT323', monospace;
-            font-weight: 700;
-            color: #FFFF00;
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px #00008B;
-            letter-spacing: 2px;
-        }
-        .retrowave-button, .ticket-button {
-            font-family: 'VT323', monospace;
-            font-weight: 700;
-            background-color: #F81894;
-            color: #FFFFFF;
-            border: 2px solid white;
-            padding: 12px 24px;
-            text-transform: uppercase;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 8px #F81894;
-            border-radius: 8px;
-        }
-        .retrowave-button:hover:not(:disabled), .ticket-button:hover:not(:disabled) {
-            background-color: #FFFFFF;
-            color: #F81894;
-            border-color: #F81894;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px #FFFFFF;
-        }
-        .ticket-button {
-            width: 100%;
-            margin-top: 10px;
-        }
-        .ticket-button:disabled {
-            background-color: #808080;
-            color: #A9A9A9;
-            cursor: not-allowed;
-            border: 2px solid #555;
-            box-shadow: none;
-        }
-        .y2k-input, .y2k-input-form {
-            background-color: #000030;
-            border: 1px solid #00FFFF;
-            color: #FFFFFF;
-            padding: 10px;
-            border-radius: 4px;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            width: 100%;
-        }
-        .y2k-input {
-            width: 70px;
-            text-align: center;
-        }
-        .y2k-input-form::placeholder {
-            color: #00AAAA;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: rgba(0, 0, 40, 0.9);
-            border: 4px solid #FF00FF;
-            box-shadow: 0 0 15px #FF00FF, 0 0 25px #FF00FF, inset 0 0 15px #00FFFF;
-            border-radius: 20px;
+        
+        .container {
             width: 90%;
-            max-width: 700px;
-            padding: 25px;
-            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        .close-button {
-            color: #FF00FF;
+        
+        /* Efeitos de Texto Nostálgicos Aprimorados */
+        .glow-text {
+            text-shadow: 0 0 5px var(--white), 
+                         0 0 10px var(--white), 
+                         0 0 15px var(--neon-pink), 
+                         0 0 20px var(--neon-pink);
+            animation: textPulse 2s infinite;
+        }
+        
+        @keyframes textPulse {
+            0% { text-shadow: 0 0 5px var(--white), 0 0 10px var(--neon-pink); }
+            50% { text-shadow: 0 0 20px var(--white), 0 0 30px var(--hot-pink); }
+            100% { text-shadow: 0 0 5px var(--white), 0 0 10px var(--neon-pink); }
+        }
+        
+        /* Cabeçalho Aprimorado */
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-bottom: 3px solid var(--neon-pink);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 0 15px var(--neon-pink);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
             position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.7) 70%);
+            opacity: 0.1;
+            animation: headerGlow 10s infinite linear;
+        }
+        
+        @keyframes headerGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo {
+            font-family: 'VT323', monospace;
+            font-size: 48px;
+            margin: 0;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -30px;
+            font-size: 24px;
+            animation: sparkle 1.5s infinite;
+        }
+        
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0.8) rotate(360deg); }
+        }
+        
+        /* Navegação Aprimorada */
+        nav {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: linear-gradient(to bottom, #666, #333);
+            color: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 10px 18px;
+            margin: 5px 10px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            text-shadow: 0 0 5px #FF00FF;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
             transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
         }
-        .close-button:hover {
-            color: #FFFFFF;
-            transform: scale(1.1);
+        
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
-        .elenco-membro img {
-            width: 120px; 
-            height: 120px;
-            object-fit: cover;
-            border: 3px solid #00FFFF; 
-            margin: 0 auto 10px auto;
-            background-color: #000030; 
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        
+        .nav-button:hover::before {
+            left: 100%;
         }
-        .elenco-membro h4 {
-            font-family: 'Press Start 2P', cursive;
-            color: #FFFF00; 
-            font-size: 0.9rem;
-            margin-bottom: 4px;
+        
+        .nav-button:hover {
+            background: linear-gradient(to bottom, #777, #444);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        .elenco-membro p {
-            color: #FFFFFF; 
-            font-size: 1.1rem;
+        
+        .nav-button:active {
+            transform: translateY(2px);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        .ticket-card {
-            background-color: #CCCCCC;
-            color: #000000;
-            border: 2px solid #000000;
-            border-radius: 8px;
-            padding: 15px;
+        
+        .nav-button span {
+            margin-left: 5px;
+        }
+        
+        /* Banner Principal Aprimorado */
+        .main-banner {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 20px var(--neon-green);
             position: relative;
             overflow: hidden;
         }
-        .ticket-card-header {
-            font-family: 'VT323', monospace;
-            font-weight: 700;
-            background-color: #A9A9A9;
-            padding: 8px;
-            margin: -15px -15px 15px -15px;
-            text-align: center;
-            font-size: 1.2rem;
+        
+        .main-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 48%, var(--neon-green) 49%, var(--neon-green) 51%, transparent 52%);
+            background-size: 200% 200%;
+            opacity: 0.1;
+            animation: scanline 4s linear infinite;
         }
-        .ticket-card-body p {
-            font-family: 'VT323', monospace;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+        
+        @keyframes scanline {
+            0% { background-position: 200% 200%; }
+            100% { background-position: 0% 0%; }
         }
-        .marquee-container {
-            background-color: #F81894;
-            color: #FFFFFF;
-            font-family: 'VT323', monospace;
-            font-weight: 700;
-            padding: 8px 0;
+        
+        /* NOVO: Animação Marquee */
+        .marquee {
+            width: 100%;
             overflow: hidden;
             white-space: nowrap;
-            margin-top: 20px;
-            border-top: 2px solid #fff;
-            border-bottom: 2px solid #fff;
-            box-shadow: 0 0 10px #F81894;
+            box-sizing: border-box;
         }
+
         .marquee-text {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            color: var(--white);
+            text-shadow: 0 0 10px var(--neon-pink);
             display: inline-block;
             padding-left: 100%;
             animation: marquee 15s linear infinite;
         }
+
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
         }
-        #form-feedback {
+        
+        /* Botões de Ação Aprimorados */
+        .action-button {
+            background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 0 10px var(--neon-pink);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--hot-pink), var(--neon-pink));
+            z-index: -1;
+            transition: transform 0.5s;
+            transform-origin: 0 0;
+            transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+            transform: scaleX(0);
+        }
+        
+        .action-button:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(255,20,147,0.4);
+        }
+        
+        .action-button:active {
+            transform: translateY(2px);
+        }
+        
+        /* Contador Regressivo Aprimorado */
+        .countdown {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--hot-pink);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 30px 0;
             text-align: center;
-            margin-top: 15px;
-            font-size: 1.1rem;
+            box-shadow: 0 0 15px var(--hot-pink);
+            position: relative;
+            overflow: hidden;
         }
-        .retro-gif {
-            height: 60px;
-            margin: 0 10px;
+        
+        .countdown::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--hot-pink) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: pulseBackground 5s infinite;
         }
-        .social-button {
+        
+        @keyframes pulseBackground {
+            0% { transform: scale(0.8); opacity: 0.05; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(0.8); opacity: 0.05; }
+        }
+        
+        .countdown-title {
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--hot-pink);
+            position: relative;
             display: inline-block;
-            margin: 0 10px;
-            transition: transform 0.2s;
         }
-        .social-button:hover {
-            transform: scale(1.1);
-        }
-        .visitor-counter-footer {
+        
+        .countdown-title::before {
+            content: '⏰';
+            margin-right: 10px;
+            animation: shake 2s infinite;
             display: inline-block;
-            background-color: #000;
-            color: #00FF00;
-            font-family: 'Press Start 2P', cursive;
-            padding: 5px 10px;
-            border: 2px solid #555;
-            font-size: 0.8rem;
         }
-        .glowing-title {
-            animation: glowing-text 2s ease-in-out infinite alternate;
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+            20%, 40%, 60%, 80% { transform: rotate(10deg); }
         }
-        @keyframes glowing-text {
-            from { text-shadow: 2px 2px #00008B, 0 0 10px #FFFF00, 0 0 20px #FFFF00; }
-            to { text-shadow: 2px 2px #00008B, 0 0 20px #FFFF55, 0 0 30px #FFFF55; }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            perspective: 1000px;
+            flex-wrap: wrap;
         }
-        #easter-egg {
-            display: none;
+        
+        .countdown-box {
+            background-color: var(--dark-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 10px;
+            min-width: 60px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+        }
+        
+        .countdown-box:hover {
+            transform: rotateY(10deg);
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .countdown-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--hot-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+            position: relative;
+        }
+        
+        .countdown-label {
+            font-size: 12px;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Lista de Eventos Aprimorada */
+        .events-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--neon-green);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::before {
+            content: '🎟️';
+            margin-right: 10px;
+        }
+        
+        .section-title::after {
+            content: '🎟️';
+            margin-left: 10px;
+        }
+
+        .capacity-note {
+            text-align: center;
+            color: var(--light-gray);
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+        
+        .events-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            perspective: 1000px;
+        }
+        
+        .event-card {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-green);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.5s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--neon-pink);
+        }
+        
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(173, 255, 47, 0.1) 100%);
+            border-radius: 8px;
+            z-index: -1;
+            transition: all 0.5s;
+        }
+        
+        .event-card:hover::before {
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 110, 199, 0.1) 100%);
+        }
+        
+        .event-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--neon-green);
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-title::before {
+            content: '🎭';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-card:hover .event-title {
+            color: var(--neon-pink);
+        }
+        
+        .event-date {
+            font-size: 16px;
+            color: var(--light-gray);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-date::before {
+            content: '📅';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-price::before {
+            content: '💰';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-button {
+            background: linear-gradient(to bottom, var(--neon-green), #8aff00);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 5px var(--neon-green);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .event-button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .event-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #8aff00, var(--neon-green));
+            z-index: -1;
+            transition: transform 0.5s;
+            transform-origin: 0 0;
+            transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+            transform: scaleX(0);
+        }
+        
+        .event-button:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .event-card:hover .event-button:not(:disabled) {
+            background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
+            color: var(--white);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+        
+        .event-card:hover .event-button:not(:disabled)::before {
+            background: linear-gradient(to right, var(--hot-pink), var(--neon-pink));
+        }
+        
+        /* Sobre a Peça Aprimorado */
+        .about-section {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--neon-pink);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 110, 199, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        .about-title {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--neon-pink);
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .about-title::before {
+            content: '🎭';
+            margin-right: 10px;
+            display: inline-block;
+            animation: sway 2.5s infinite ease-in-out;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+        }
+        
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-text p {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .about-text p:first-child::before {
+            content: '💫';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .about-text p:last-child::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .about-image-container {
+            flex: 1;
+            min-width: 250px;
+            transition: all 0.5s;
+        }
+        .about-image-container:hover {
+            transform: scale(1.05);
+        }
+        .about-image-container img {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid var(--neon-pink);
+        }
+
+        /* NOVO: Seção do Local */
+        .location-section {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+        .location-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-green);
+            margin: 0 0 10px 0;
+        }
+        .location-address {
+            font-size: 18px;
+            color: var(--white);
+            margin: 0;
+        }
+        
+        /* Rodapé Aprimorado */
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-top: 3px solid var(--neon-pink);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-pink);
+            margin: 0 0 10px 0;
+        }
+        .contact-subtitle {
+            font-size: 16px;
+            color: var(--light-gray);
+            margin: 0 0 20px 0;
+        }
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .contact-buttons .action-button {
+            margin: 5px 10px;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: var(--light-gray);
+            position: relative;
+            margin-top: 30px;
+        }
+        
+        .footer-text::before {
+            content: '©️';
+            margin-right: 5px;
+        }
+        
+        /* Animações Adicionais */
+        .animate__animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        
+        .animate__fadeIn { animation-name: fadeIn; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .animate__fadeInUp { animation-name: fadeInUp; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 40px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        
+        .animate__delay-1 { animation-delay: 0.2s; }
+        .animate__delay-2 { animation-delay: 0.4s; }
+        .animate__delay-3 { animation-delay: 0.6s; }
+        
+        /* Responsividade Aprimorada */
+        @media (max-width: 768px) {
+            .logo { font-size: 36px; }
+            .nav-button { font-size: 14px; padding: 8px 12px; }
+            .marquee-text { font-size: 24px; }
+            .event-card { transform: none !important; }
+        }
+
+        /* Estilos para a Seção Elenco */
+        .cast-section {
+            margin: 40px 0;
+        }
+        .cast-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+        .cast-member {
+            background-color: rgba(0,0,0,0.7);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .cast-member:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-color: var(--neon-green);
+        }
+        .cast-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--neon-pink);
+            margin-bottom: 10px;
+            transition: border-color 0.3s;
+        }
+        .cast-member:hover .cast-photo {
+            border-color: var(--neon-green);
+        }
+        /* Ajuste de enquadramento para a primeira foto do elenco */
+        .cast-list .cast-member:nth-child(1) .cast-photo {
+            object-position: center 20%; /* Move a imagem para baixo para mostrar mais do topo */
+        }
+        .cast-name {
+            color: var(--white);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .cast-character {
+            color: var(--neon-green);
+            font-size: 14px;
+            font-family: 'VT323', monospace;
+        }
+
+        /* Estilos para o Modal de Compra e Confirmação */
+        .modal-overlay {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border: 3px solid var(--neon-pink);
+            border-radius: 15px;
+            box-shadow: 0 0 25px var(--neon-pink);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: var(--hot-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 30px;
+            text-align: center;
+        }
+        .modal-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-green);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--light-pink);
+            font-weight: bold;
+        }
+        .form-group input, .form-group .ticket-selector {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.5);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            color: var(--white);
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .ticket-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .ticket-group label {
+            flex-basis: 50%;
+        }
+        .ticket-group input[type="number"] {
+            width: 60px;
+            text-align: center;
+        }
+        .total-price {
+            text-align: right;
+            font-size: 22px;
+            font-family: 'VT323', monospace;
+            color: var(--neon-green);
+            margin-top: 20px;
+        }
+        .modal-button {
+            width: 100%;
+            margin-top: 15px;
+        }
+        #loading-spinner {
+            display: none; /* Oculto por padrão */
+            margin: 20px auto 0;
+            width: 50px;
+            height: 50px;
+        }
+        #confirmation-modal .modal-content {
+            text-align: center;
+        }
+        #confirmation-gif {
+            max-width: 80%;
+            margin: 15px 0;
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="p-4 md:p-6">
-
-    <div class="main-frame">
-        <header class="text-center mb-10">
-            <h1 class="section-title text-2xl md:text-4xl">Próxima Parada: Anos 2000</h1>
-            <p class="text-lg md:text-xl text-gray-200 leading-relaxed">E aí, galera! Preparados para a peça mais irada dos últimos tempos?<br>Use o menu aí embaixo pra navegar e comprar seus ingressos. Não mosca, senão acaba!</p>
-            <div class="marquee-container">
-                <span class="marquee-text">Garanta já seu ingresso!! ✨ Garanta já seu ingresso!! ✨ </span>
+<body>
+    <header>
+        <h1 class="logo glow-text">Próxima Parada: Anos 2000</h1>
+        <nav>
+            <a href="#" class="nav-button">Início<span>🏠</span></a>
+            <a href="#ingressos" class="nav-button">Ingressos<span>🎟️</span></a>
+            <a href="#sobre" class="nav-button">Sobre<span>ℹ️</span></a>
+            <a href="#elenco" class="nav-button">Elenco<span>🎭</span></a>
+            <a href="#contato" class="nav-button">Contato<span>📞</span></a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="main-banner animate__animated animate__fadeIn">
+             <div class="marquee">
+                <p class="marquee-text">Garanta seu ingresso! Não mosca, senão acaba! ✨ Garanta seu ingresso! Não mosca, senão acaba! ✨</p>
+             </div>
+        </div>
+        
+        <div class="countdown animate__animated animate__fadeInUp animate__delay-1">
+            <h3 class="countdown-title">A ESTREIA ACONTECE EM:</h3>
+            <div class="countdown-timer">
+                <div class="countdown-box"><div class="countdown-number" id="days">00</div><div class="countdown-label">DIAS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="hours">00</div><div class="countdown-label">HORAS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">MINUTOS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">SEGUNDOS</div></div>
             </div>
-        </header>
-
-        <main class="space-y-12">
-            <section id="hero-buttons" class="flex justify-center items-center gap-6">
-                <img src="https://i.postimg.cc/LnjJJHKf/7df3a655-1926-4cc7-9c17-6990c2461c93.gif" alt="GIF Orkut" class="retro-gif hidden md:block">
-                <button onclick="document.getElementById('local').scrollIntoView({ behavior: 'smooth' });" class="retrowave-button">Comprar Ingressos</button>
-                <button onclick="document.getElementById('sobre').scrollIntoView({ behavior: 'smooth' });" class="retrowave-button">Saiba Mais</button>
-                <img src="https://i.postimg.cc/zfHB7s76/download.gif" alt="GIF Download" class="retro-gif hidden md:block">
-            </section>
-
-            <hr class="border-pink-500/50">
-
-            <section id="sobre">
-                <h2 class="section-title text-xl">A Peça</h2>
-                <div class="flex flex-col items-center text-center gap-8">
-                    <img src="https://i.postimg.cc/258zB93f/C-pia-de-material-pe-a-Apresenta-o.png" alt="Foto promocional da peça" class="w-full max-w-2xl h-auto rounded-md border-2 border-cyan-500/50">
-                    <div class="space-y-4 text-gray-300 max-w-3xl leading-relaxed">
-                        <p>Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração.</p>
-                        <p>Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira.</p>
-                        <p>Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
-                        <p>"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas.</p>
-                        <p>Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps.</p>
-                    </div>
+        </div>
+        
+        <section id="ingressos" class="events-section animate__animated animate__fadeInUp animate__delay-2">
+            <h2 class="section-title">GARANTA SEU INGRESSO</h2>
+            <p class="capacity-note">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
+            <div id="events-list-container" class="events-list">
+                <!-- Os cards de evento serão inseridos aqui pelo JavaScript -->
+            </div>
+        </section>
+        
+        <section id="sobre" class="about-section animate__animated animate__fadeInUp animate__delay-3">
+            <h2 class="about-title">SOBRE A PEÇA</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
+                    <p>"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
                 </div>
-            </section>
-
-            <hr class="border-cyan-500/50">
-
-            <section id="elenco">
-                <h2 class="section-title text-xl">Elenco</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-x-4 gap-y-6">
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg" alt="Foto Antônia Montemezzo">
-                        <h4>Antônia Montemezzo</h4>
-                        <p>como Juliana</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg" alt="Foto Evelyn Muller">
-                        <h4>Evelyn Muller</h4>
-                        <p>como Luana</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg" alt="Foto Carolina Ribas">
-                        <h4>Carolina Ribas</h4>
-                        <p>como Raquel</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg" alt="Foto Jessica Nayara">
-                        <h4>Jessica Nayara</h4>
-                        <p>como Sofia</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg" alt="Foto Aquiles Amendola">
-                        <h4>Aquiles Amendola</h4>
-                        <p>como Fernando</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg" alt="Foto Anthony Braga">
-                        <h4>Anthony Braga</h4>
-                        <p>como Bruno</p>
-                    </div>
-                    <div class="elenco-membro">
-                        <img src="https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg" alt="Foto Pedro Ferraz">
-                        <h4>Pedro Ferraz</h4>
-                        <p>como Marcelo</p>
-                    </div>
+                <div class="about-image-container">
+                    <img src="https://i.postimg.cc/jS5HGMp7/material-pe-a-1.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
                 </div>
-            </section>
-            
-            <hr class="border-pink-500/50">
+            </div>
+        </section>
 
-            <section id="produtora">
-                <h2 class="section-title text-xl">Realização</h2>
-                <div class="flex flex-col md:flex-row items-center text-center md:text-left gap-8">
-                    <div class="flex-shrink-0">
-                        <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Company" class="max-w-[180px] h-auto">
-                    </div>
-                    <div class="space-y-4 text-gray-300">
-                        <p>A Auriem Produções Artísticas é uma produtora independente de Curitiba, com produções de cinema , teatro e mídias digitais.</p>
-                    </div>
-                </div>
-            </section>
+        <section id="local" class="location-section animate__animated animate__fadeInUp animate__delay-2">
+            <h3 class="location-title">📍 LOCAL DE APRESENTAÇÃO 📍</h3>
+            <p class="location-address">Teatro Enio Carvalho - Rua Mateus Leme, 990, Centro Cívico, Curitiba</p>
+        </section>
 
-            <hr class="border-cyan-500/50">
-
-            <section id="local">
-                <h2 class="section-title text-xl glowing-title">Confira as datas das apresentações!!!</h2>
-                 <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <div class="ticket-card">
-                        <div class="ticket-card-header">03/10/2025 - 19:30</div>
-                        <div class="ticket-card-body">
-                            <p><strong>Sessão de Sexta</strong></p>
-                            <p class="text-sm">Disponibilidade: Aberta</p>
-                            <button class="ticket-button" data-sessao="Sexta, 03/10/2025 - 19:30">Comprar Ingresso</button>
-                        </div>
-                    </div>
-                    <div class="ticket-card">
-                        <div class="ticket-card-header">04/10/2025 - 16:00</div>
-                        <div class="ticket-card-body">
-                            <p><strong>Sessão de Sábado</strong></p>
-                            <p class="text-sm">Disponibilidade: Aberta</p>
-                            <button class="ticket-button" data-sessao="Sábado, 04/10/2025 - 16:00">Comprar Ingresso</button>
-                        </div>
-                    </div>
-                    <div class="ticket-card">
-                        <div class="ticket-card-header">04/10/2025 - 19:30</div>
-                        <div class="ticket-card-body">
-                            <p><strong>Sessão de Sábado</strong></p>
-                            <p class="text-sm">Disponibilidade: Aberta</p>
-                            <button class="ticket-button" data-sessao="Sábado, 04/10/2025 - 19:30">Comprar Ingresso</button>
-                        </div>
-                    </div>
-                    <div class="ticket-card">
-                        <div class="ticket-card-header">05/10/2025 - 16:00</div>
-                        <div class="ticket-card-body">
-                            <p><strong>Sessão de Domingo</strong></p>
-                            <p class="text-sm">Disponibilidade: Aberta</p>
-                            <button class="ticket-button" data-sessao="Domingo, 05/10/2025 - 16:00">Comprar Ingresso</button>
-                        </div>
-                    </div>
-                     <div class="ticket-card">
-                        <div class="ticket-card-header">05/10/2025 - 19:00</div>
-                        <div class="ticket-card-body">
-                            <p><strong>Sessão de Domingo</strong></p>
-                            <p class="text-sm">Disponibilidade: Aberta</p>
-                            <button class="ticket-button" data-sessao="Domingo, 05/10/2025 - 19:00">Comprar Ingresso</button>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-center mt-6 text-gray-400 text-base">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
-            </section>
-             
-             <hr class="border-pink-500/50">
-             
-             <footer class="text-center pt-8 space-y-2">
-                 <p class="text-sm text-gray-400">© 2024 Auriem Produções Artísticas. Todos os direitos reservados.</p>
-                 <p class="text-sm text-gray-500">Diretamente do túnel do tempo para sua tela!</p>
-                 <div class="visitor-counter-footer">VISITORS: 002005</div>
-             </footer>
-        </main>
+        <section id="elenco" class="cast-section animate__animated animate__fadeInUp animate__delay-2">
+            <h2 class="section-title">CONHEÇA O ELENCO</h2>
+            <div id="cast-list-container" class="cast-list">
+                <!-- Os cards do elenco serão inseridos aqui pelo JavaScript -->
+            </div>
+        </section>
     </div>
+    
+    <footer id="contato">
+        <div class="container">
+             <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
+             <h3 class="contact-title">Fale Conosco ::: Mande um Scrap!</h3>
+             <p class="contact-subtitle">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+             <div class="contact-buttons">
+                <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
+                <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
+                <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
+                <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
+                <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+             </div>
+            <p class="footer-text">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
-    <div id="ticketModal" class="modal" style="display: none;">
+    <!-- Modal de Compra -->
+    <div id="purchase-modal" class="modal-overlay">
         <div class="modal-content">
-            <button id="closeModalBtn" class="close-button">×</button>
-            <form id="checkoutForm" class="space-y-4">
-                <h3 class="section-title text-xl mb-4">Pré-Cadastro & Ingressos</h3>
-                <p class="mb-4 text-gray-300 text-center">Sessão Escolhida: <strong id="sessaoSelecionadaDisplay" class="text-yellow-300"></strong></p>
-                <div class="grid grid-cols-2 gap-4 items-center">
-                    <div>
-                        <label for="modalQtdInteiraInput" class="block text-sm text-cyan-300">Inteira (R$ 50):</label>
-                        <input type="number" id="modalQtdInteiraInput" min="0" value="0" class="y2k-input w-full">
+            <button id="modal-close-btn" class="modal-close">X</button>
+            <h3 id="modal-title" class="modal-title">Comprar Ingressos</h3>
+            <form id="purchase-form">
+                <input type="hidden" id="session-id" name="sessionId">
+                <div class="form-group">
+                    <label for="fullname">Nome Completo</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail (para receber os ingressos)</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefone (WhatsApp)</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade de Ingressos</label>
+                    <div class="ticket-group">
+                        <label for="qty-inteira">Inteira (R$ <span id="price-inteira">0.00</span>)</label>
+                        <input type="number" id="qty-inteira" name="qtyInteira" min="0" value="1" max="10">
                     </div>
-                    <div>
-                        <label for="modalQtdMeiaInput" class="block text-sm text-cyan-300">Meia (R$ 25):</label>
-                        <input type="number" id="modalQtdMeiaInput" min="0" value="0" class="y2k-input w-full">
+                    <div class="ticket-group">
+                        <label for="qty-meia">Meia (R$ <span id="price-meia">0.00</span>)</label>
+                        <input type="number" id="qty-meia" name="qtyMeia" min="0" value="0" max="10">
                     </div>
                 </div>
-                <div class="text-right text-xl text-cyan-300">Total: R$ <span id="modalValorTotalPedido" class="text-yellow-300 font-bold">0,00</span></div>
-                <hr class="border-pink-500/50 my-3">
-                <div>
-                    <label for="nomeCompleto" class="block text-sm text-cyan-300">Seu nome:</label>
-                    <input type="text" id="nomeCompleto" class="y2k-input-form" required>
+                <div id="total-price" class="total-price">
+                    TOTAL: R$ 0.00
                 </div>
-                <div>
-                    <label for="emailCadastro" class="block text-sm text-cyan-300">Seu e-mail:</label>
-                    <input type="email" id="emailCadastro" class="y2k-input-form" required>
-                </div>
-                <button type="submit" class="retrowave-button w-full mt-4">Ir para Pagamento</button>
-                <div id="form-feedback" class="text-center text-base mt-2"></div>
+                <button type="submit" id="submit-purchase" class="action-button modal-button">Ir para Pagamento Seguro</button>
+                <img src="https://i.postimg.cc/zfHB7s76/download.gif" alt="Loading" id="loading-spinner">
             </form>
         </div>
     </div>
-    
-    <div id="easter-egg">
-        <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="Easter Egg" width="200">
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title">Tudo Certo!</h3>
+            <p>Você será redirecionado para o pagamento. Após a confirmação, seus ingressos chegarão por e-mail!</p>
+            <img id="confirmation-gif" src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Confirmação da Compra"/>
+            <button id="confirmation-close-btn" class="action-button modal-button">Fechar</button>
+        </div>
     </div>
 
     <script>
-        const modal = document.getElementById('ticketModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const openModalSessaoBtns = document.querySelectorAll('.ticket-button[data-sessao]');
-        
-        const checkoutForm = document.getElementById('checkoutForm');
-        const sessaoSelecionadaDisplay = document.getElementById('sessaoSelecionadaDisplay');
-        
-        const modalQtdInteiraInput = document.getElementById('modalQtdInteiraInput');
-        const modalQtdMeiaInput = document.getElementById('modalQtdMeiaInput');
-        const modalValorTotalPedidoSpan = document.getElementById('modalValorTotalPedido');
-        
-        const nomeCompletoInput = document.getElementById('nomeCompleto');
-        const emailCadastroInput = document.getElementById('emailCadastro');
-        const formFeedback = document.getElementById('form-feedback');
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- DADOS ---
+        const sessoes = [
+            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        ];
 
-        const PRECO_INTEIRA = 50.00;
-        const PRECO_MEIA = 25.00;
-        let dadosPedidoAtual = {};
+        const elenco = [
+            { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+            { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+            { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+            { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+            { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+            { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+            { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+        ];
 
-        function calcularTotalModal() {
-            let qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
-            let qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
-            if (qtdInteira < 0) qtdInteira = 0;
-            if (qtdMeia < 0) qtdMeia = 0;
-            modalQtdInteiraInput.value = qtdInteira;
-            modalQtdMeiaInput.value = qtdMeia;
-            const total = (qtdInteira * PRECO_INTEIRA) + (qtdMeia * PRECO_MEIA);
-            modalValorTotalPedidoSpan.textContent = total.toFixed(2).replace('.', ',');
-        }
+        // --- CONTADOR REGRESSIVO ---
+        const countdownTargetDate = new Date('2025-10-03T20:30:00').getTime();
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownTargetDate - now;
 
-        modalQtdInteiraInput.addEventListener('input', calcularTotalModal);
-        modalQtdMeiaInput.addEventListener('input', calcularTotalModal);
-
-        openModalSessaoBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (this.disabled) return;
-                dadosPedidoAtual.sessao = this.getAttribute('data-sessao');
-                sessaoSelecionadaDisplay.textContent = dadosPedidoAtual.sessao;
-                modalQtdInteiraInput.value = 0;
-                modalQtdMeiaInput.value = 0;
-                calcularTotalModal();
-                checkoutForm.reset();
-                formFeedback.textContent = '';
-                modal.style.display = 'flex';
-            });
-        });
-
-        closeModalBtn.onclick = () => { modal.style.display = 'none'; };
-        window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } };
-
-        checkoutForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const submitButton = checkoutForm.querySelector('button[type="submit"]');
-
-            const qtdInteira = parseInt(modalQtdInteiraInput.value) || 0;
-            const qtdMeia = parseInt(modalQtdMeiaInput.value) || 0;
-
-            if (qtdInteira === 0 && qtdMeia === 0) {
-                formFeedback.textContent = 'Escolha pelo menos 1 ingresso.';
-                formFeedback.style.color = '#FF00FF';
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector('.countdown-title').innerHTML = "A TEMPORADA COMEÇOU!";
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
                 return;
             }
 
-            formFeedback.textContent = 'A criar link de pagamento...';
-            formFeedback.style.color = '#00FFFF';
-            submitButton.disabled = true;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            const pedido = {
-                nome: nomeCompletoInput.value,
-                email: emailCadastroInput.value,
-                sessao: dadosPedidoAtual.sessao,
-                qtdInteira: qtdInteira,
-                qtdMeia: qtdMeia,
-                total: (qtdInteira * PRECO_INTEIRA) + (qtdMeia * PRECO_MEIA)
-            };
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
 
-            try {
-                const response = await fetch('/.netlify/functions/create-checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(pedido)
-                });
+        // --- RENDERIZAÇÃO DINÂMICA ---
+        const eventsContainer = document.getElementById('events-list-container');
+        sessoes.forEach(sessao => {
+            const dataObj = new Date(sessao.data);
+            const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+            const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+            const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-                if (!response.ok) throw new Error('Falha ao criar checkout.');
-                
-                const result = await response.json();
-                window.location.href = result.checkoutUrl; // Redireciona para o Mercado Pago
-
-            } catch (error) {
-                formFeedback.textContent = 'Oops! Algo deu errado. Tente de novo.';
-                formFeedback.style.color = '#FF00FF';
-                submitButton.disabled = false;
-            }
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.innerHTML = `
+                <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
+                <p class="event-date">${horaFormatada}h</p>
+                <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
+                <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
+                    ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
+                </button>
+            `;
+            eventsContainer.appendChild(card);
         });
 
-        // Easter Egg
-        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        let konamiIndex = 0;
-        document.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === konamiCode[konamiIndex]) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    document.getElementById('easter-egg').style.display = 'block';
-                    setTimeout(() => {
-                        document.getElementById('easter-egg').style.display = 'none';
-                    }, 5000);
-                    konamiIndex = 0;
+        const castContainer = document.getElementById('cast-list-container');
+        elenco.forEach(ator => {
+            const card = document.createElement('div');
+            card.className = 'cast-member';
+            card.innerHTML = `
+                <img src="${ator.foto}" alt="Foto de ${ator.nome}" class="cast-photo">
+                <div class="cast-name">${ator.nome}</div>
+                <div class="cast-character">${ator.personagem}</div>
+            `;
+            castContainer.appendChild(card);
+        });
+
+        // --- LÓGICA DOS MODAIS ---
+        const purchaseModal = document.getElementById('purchase-modal');
+        const purchaseCloseBtn = document.getElementById('modal-close-btn');
+        const purchaseForm = document.getElementById('purchase-form');
+        const modalTitle = document.getElementById('modal-title');
+        const sessionIdInput = document.getElementById('session-id');
+        const qtyInteiraInput = document.getElementById('qty-inteira');
+        const qtyMeiaInput = document.getElementById('qty-meia');
+        const priceInteiraSpan = document.getElementById('price-inteira');
+        const priceMeiaSpan = document.getElementById('price-meia');
+        const totalPriceDiv = document.getElementById('total-price');
+        const submitButton = document.getElementById('submit-purchase');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const confirmationCloseBtn = document.getElementById('confirmation-close-btn');
+
+        let currentSession = null;
+
+        function updateTotalPrice() {
+            if (!currentSession) return;
+            const total = (qtyInteiraInput.value * currentSession.precoInteira) + (qtyMeiaInput.value * currentSession.precoMeia);
+            totalPriceDiv.innerText = `TOTAL: R$ ${total.toFixed(2).replace('.',',')}`;
+        }
+        
+        document.querySelectorAll('.event-button').forEach(button => {
+            if(button.disabled) return;
+            button.addEventListener('click', (e) => {
+                const sessionId = e.target.getAttribute('data-session-id');
+                currentSession = sessoes.find(s => s.id === sessionId);
+                if (currentSession) {
+                    const dataObj = new Date(currentSession.data);
+                    const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                    const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    
+                    modalTitle.innerText = `Sessão ${dataFormatada} - ${horaFormatada}h`;
+                    sessionIdInput.value = currentSession.id;
+                    priceInteiraSpan.innerText = currentSession.precoInteira.toFixed(2).replace('.',',');
+                    priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
+                    updateTotalPrice();
+                    purchaseModal.classList.add('visible');
                 }
-            } else {
-                konamiIndex = 0;
-            }
+            });
         });
-    </script>
 
+        purchaseCloseBtn.addEventListener('click', () => purchaseModal.classList.remove('visible'));
+        purchaseModal.addEventListener('click', (e) => {
+            if (e.target === purchaseModal) purchaseModal.classList.remove('visible');
+        });
+
+        confirmationCloseBtn.addEventListener('click', () => confirmationModal.classList.remove('visible'));
+        confirmationModal.addEventListener('click', (e) => {
+            if (e.target === confirmationModal) confirmationModal.classList.remove('visible');
+        });
+
+        qtyInteiraInput.addEventListener('input', updateTotalPrice);
+        qtyMeiaInput.addEventListener('input', updateTotalPrice);
+
+        purchaseForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (qtyInteiraInput.valueAsNumber === 0 && qtyMeiaInput.valueAsNumber === 0) {
+                alert('Você precisa de selecionar pelo menos um ingresso!');
+                return;
+            }
+            submitButton.disabled = true;
+            loadingSpinner.style.display = 'block';
+
+            // --- SIMULAÇÃO DE BACKEND PARA PRÉ-VISUALIZAÇÃO ---
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                purchaseModal.classList.remove('visible');
+                
+                // Abre o novo modal de confirmação
+                confirmationModal.classList.add('visible');
+
+                submitButton.disabled = false;
+                purchaseForm.reset();
+            }, 2000);
+        });
+
+        // --- NAVEGAÇÃO SUAVE ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
