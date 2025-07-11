@@ -1091,14 +1091,14 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', function() {
         // --- DADOS ESTÁTICOS ---
-        const sessoesBase = [
-            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
-            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00 },
-            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
-            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00 },
-            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
+        const sessoes = [
+            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false }, // Manter como 'false' para controle manual
         ];
 
         const elenco = [
@@ -1147,29 +1147,10 @@
                 castContainer.appendChild(card);
             });
             
-            // Re-adiciona os event listeners para os botões de compra
             addPurchaseButtonListeners(sessoes);
         }
 
-        // --- BUSCAR ESTADO DAS SESSÕES (CONTADOR DE INGRESSOS) ---
-        try {
-            const response = await fetch('https://proximaparadaanos2000.netlify.app/.netlify/functions/get-session-status');
-            const sessionStatus = await response.json();
-            
-            const sessoesAtualizadas = sessoesBase.map(sessao => ({
-                ...sessao,
-                esgotado: sessionStatus[sessao.id] ? sessionStatus[sessao.id].sold_tickets >= 110 : false
-            }));
-            
-            renderContent(sessoesAtualizadas);
-
-        } catch (error) {
-            console.error("Erro ao buscar o estado das sessões. Usando dados estáticos.", error);
-            // Em caso de erro, renderiza com os dados base (nenhum esgotado)
-            const sessoesComErro = sessoesBase.map(s => ({...s, esgotado: false}));
-            renderContent(sessoesComErro);
-        }
-
+        renderContent(sessoes);
 
         // --- CONTADOR REGRESSIVO ---
         const countdownTargetDate = new Date('2025-10-03T20:30:00').getTime();
@@ -1382,3 +1363,20 @@
     </script>
 </body>
 </html>
+```
+
+### **2. Ficheiros de Backend Simplificados**
+
+Como removemos o Firebase, só precisa destes dois ficheiros na sua pasta `netlify/functions/`. O ficheiro `get-session-status.js` já não é necessário.
+
+
+```json
+{
+  "name": "proxima-parada-backend",
+  "version": "1.0.0",
+  "description": "Funções Serverless para venda de ingressos",
+  "dependencies": {
+    "mercadopago": "^1.5.17",
+    "resend": "^3.2.0"
+  }
+}
