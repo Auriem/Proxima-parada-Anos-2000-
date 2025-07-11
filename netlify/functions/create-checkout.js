@@ -10,7 +10,7 @@ exports.handler = async (event) => {
 
     // Configura o Mercado Pago com a sua chave de acesso (que estará na Netlify)
     mercadopago.configure({
-        access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
+        access_token: process.env.APP_USR-3475882271576066-052416-ddfd2e22860ca6d54a0221eba076d0f8-416678309
     });
 
     // Obtém os dados enviados do formulário do site
