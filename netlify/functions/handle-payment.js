@@ -41,7 +41,7 @@ exports.handler = async function(event) {
       </div>
     `;`; //
 
-        const pdfUrl = `https://SEU-SITE.netlify.app/assets/modelo_ingresso.pdf`;
+        const pdfUrl = `https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf`;
         const pdfResponse = await fetch(pdfUrl);
         const pdfArrayBuffer = await pdfResponse.arrayBuffer();
         const pdfBase64 = Buffer.from(pdfArrayBuffer).toString('base64');
@@ -55,7 +55,7 @@ exports.handler = async function(event) {
           body: JSON.stringify({
             from: 'Próxima Parada 2000 <onboarding@resend.dev>',
             to: [email],
-            subject: `<a href='https://postimg.cc/ykDFBYv2' target='_blank'><img src='https://i.postimg.cc/28wTQ1vj/modelo-ingresso.png' border='0' alt='modelo-ingresso'/></a>`,
+            subject: `<https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf' border='0' alt='modelo-ingresso'/></a>`,
             html: emailHtml,
             attachments: [{ filename: 'Seu_Ingresso.pdf', content: pdfBase64 }],
           }),
