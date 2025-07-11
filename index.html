@@ -845,7 +845,7 @@
             color: var(--light-pink);
             font-weight: bold;
         }
-        .form-group input, .form-group .ticket-selector {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 10px;
             background-color: rgba(0,0,0,0.5);
@@ -854,6 +854,7 @@
             color: var(--white);
             font-size: 16px;
             box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
         .ticket-group {
             display: flex;
@@ -892,6 +893,61 @@
             max-width: 80%;
             margin: 15px 0;
             border-radius: 10px;
+        }
+
+        /* Seção do Gerador de Scrap */
+        .scrap-section {
+            background-color: rgba(227, 239, 255, 0.9); /* Orkut blueish background */
+            border: 3px solid #ED88B4; /* Orkut pink */
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #333;
+        }
+        .scrap-section .section-title {
+            color: #8A2BE2; /* Purple to match theme */
+        }
+        .scrap-section .capacity-note {
+            color: #555;
+            font-style: normal;
+        }
+        .scrap-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .scrap-form .form-group {
+            width: 100%;
+            max-width: 600px;
+        }
+        .scrap-form label {
+            color: var(--primary-purple);
+        }
+        .scrap-form textarea {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-color: #ED88B4;
+            color: #333;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .scrap-box {
+            background: #FFF;
+            border: 1px solid #D9E6F7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            color: #555;
+            font-family: 'Tahoma', sans-serif;
+            line-height: 1.5;
+            text-align: left;
+            white-space: pre-wrap; /* Mantém a formatação do texto gerado */
+        }
+        #scrap-result-container {
+            text-align: center;
         }
     </style>
 </head>
@@ -956,6 +1012,27 @@
                 <!-- Os cards do elenco serão inseridos aqui pelo JavaScript -->
             </div>
         </section>
+
+        <section id="gerador-scrap" class="scrap-section animate__animated animate__fadeInUp">
+            <h2 class="section-title">✨ Poste o scrap nos stories! ✨</h2>
+            <p class="capacity-note">Crie um scrap nostálgico que seja sua cara e poste nos stories marcando o nosso perfil: <strong>@auriemcompany</strong></p>
+            <div class="scrap-form">
+                <div class="form-group">
+                    <label for="scrap-prompt">Coloque: um scrap falando sobre... e veja a mágica acontecer!</label>
+                    <textarea id="scrap-prompt" placeholder="Ex: um scrap super fofo de amizade para a minha migs, convidando pra peça!" rows="3"></textarea>
+                </div>
+                <button id="generate-scrap-btn" class="action-button">Gerar Scrap!</button>
+            </div>
+            <div id="scrap-result-container" style="display: none;">
+                <div id="scrap-loading" style="display: none;">
+                    <p>Gerando scrap... Por favor, aguarde!</p>
+                </div>
+                <div id="scrap-result" class="scrap-box">
+                    <!-- O scrap gerado aparecerá aqui -->
+                </div>
+                <button id="copy-scrap-btn" class="nav-button" style="margin-top: 15px;">Copiar Texto 📋</button>
+            </div>
+        </section>
     </div>
     
     <footer id="contato">
@@ -1014,14 +1091,14 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- DADOS ---
-        const sessoes = [
-            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- DADOS ESTÁTICOS ---
+        const sessoesBase = [
+            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
+            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00 },
+            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
+            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00 },
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00 },
         ];
 
         const elenco = [
@@ -1033,6 +1110,66 @@
             { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
             { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
         ];
+
+        // --- FUNÇÃO PARA RENDERIZAR CONTEÚDO DINÂMICO ---
+        function renderContent(sessoes) {
+            const eventsContainer = document.getElementById('events-list-container');
+            eventsContainer.innerHTML = ''; // Limpa antes de renderizar
+            sessoes.forEach(sessao => {
+                const dataObj = new Date(sessao.data);
+                const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `
+                    <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
+                    <p class="event-date">${horaFormatada}h</p>
+                    <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
+                    <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
+                        ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
+                    </button>
+                `;
+                eventsContainer.appendChild(card);
+            });
+
+            const castContainer = document.getElementById('cast-list-container');
+            castContainer.innerHTML = '';
+            elenco.forEach(ator => {
+                const card = document.createElement('div');
+                card.className = 'cast-member';
+                card.innerHTML = `
+                    <img src="${ator.foto}" alt="Foto de ${ator.nome}" class="cast-photo">
+                    <div class="cast-name">${ator.nome}</div>
+                    <div class="cast-character">${ator.personagem}</div>
+                `;
+                castContainer.appendChild(card);
+            });
+            
+            // Re-adiciona os event listeners para os botões de compra
+            addPurchaseButtonListeners(sessoes);
+        }
+
+        // --- BUSCAR ESTADO DAS SESSÕES (CONTADOR DE INGRESSOS) ---
+        try {
+            const response = await fetch('https://proximaparadaanos2000.netlify.app/.netlify/functions/get-session-status');
+            const sessionStatus = await response.json();
+            
+            const sessoesAtualizadas = sessoesBase.map(sessao => ({
+                ...sessao,
+                esgotado: sessionStatus[sessao.id] ? sessionStatus[sessao.id].sold_tickets >= 110 : false
+            }));
+            
+            renderContent(sessoesAtualizadas);
+
+        } catch (error) {
+            console.error("Erro ao buscar o estado das sessões. Usando dados estáticos.", error);
+            // Em caso de erro, renderiza com os dados base (nenhum esgotado)
+            const sessoesComErro = sessoesBase.map(s => ({...s, esgotado: false}));
+            renderContent(sessoesComErro);
+        }
+
 
         // --- CONTADOR REGRESSIVO ---
         const countdownTargetDate = new Date('2025-10-03T20:30:00').getTime();
@@ -1060,41 +1197,8 @@
             document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
-
-        // --- RENDERIZAÇÃO DINÂMICA ---
-        const eventsContainer = document.getElementById('events-list-container');
-        sessoes.forEach(sessao => {
-            const dataObj = new Date(sessao.data);
-            const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
-            const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-            const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-            const card = document.createElement('div');
-            card.className = 'event-card';
-            card.innerHTML = `
-                <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
-                <p class="event-date">${horaFormatada}h</p>
-                <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
-                <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
-                    ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
-                </button>
-            `;
-            eventsContainer.appendChild(card);
-        });
-
-        const castContainer = document.getElementById('cast-list-container');
-        elenco.forEach(ator => {
-            const card = document.createElement('div');
-            card.className = 'cast-member';
-            card.innerHTML = `
-                <img src="${ator.foto}" alt="Foto de ${ator.nome}" class="cast-photo">
-                <div class="cast-name">${ator.nome}</div>
-                <div class="cast-character">${ator.personagem}</div>
-            `;
-            castContainer.appendChild(card);
-        });
-
-        // --- LÓGICA DOS MODAIS ---
+        
+        // --- LÓGICA DO MODAL DE COMPRA ---
         const purchaseModal = document.getElementById('purchase-modal');
         const purchaseCloseBtn = document.getElementById('modal-close-btn');
         const purchaseForm = document.getElementById('purchase-form');
@@ -1116,25 +1220,27 @@
             totalPriceDiv.innerText = `TOTAL: R$ ${total.toFixed(2).replace('.',',')}`;
         }
         
-        document.querySelectorAll('.event-button').forEach(button => {
-            if(button.disabled) return;
-            button.addEventListener('click', (e) => {
-                const sessionId = e.target.getAttribute('data-session-id');
-                currentSession = sessoes.find(s => s.id === sessionId);
-                if (currentSession) {
-                    const dataObj = new Date(currentSession.data);
-                    const dataFormatada = dataObj.toLocaleDateString('pt-BR');
-                    const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                    
-                    modalTitle.innerText = `Sessão ${dataFormatada} - ${horaFormatada}h`;
-                    sessionIdInput.value = currentSession.id;
-                    priceInteiraSpan.innerText = currentSession.precoInteira.toFixed(2).replace('.',',');
-                    priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
-                    updateTotalPrice();
-                    purchaseModal.classList.add('visible');
-                }
+        function addPurchaseButtonListeners(sessoes) {
+            document.querySelectorAll('.event-button').forEach(button => {
+                if(button.disabled) return;
+                button.addEventListener('click', (e) => {
+                    const sessionId = e.target.getAttribute('data-session-id');
+                    currentSession = sessoes.find(s => s.id === sessionId);
+                    if (currentSession) {
+                        const dataObj = new Date(currentSession.data);
+                        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                        const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                        
+                        modalTitle.innerText = `Sessão ${dataFormatada} - ${horaFormatada}h`;
+                        sessionIdInput.value = currentSession.id;
+                        priceInteiraSpan.innerText = currentSession.precoInteira.toFixed(2).replace('.',',');
+                        priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
+                        updateTotalPrice();
+                        purchaseModal.classList.add('visible');
+                    }
+                });
             });
-        });
+        }
 
         purchaseCloseBtn.addEventListener('click', () => purchaseModal.classList.remove('visible'));
         purchaseModal.addEventListener('click', (e) => {
@@ -1144,7 +1250,6 @@
         qtyInteiraInput.addEventListener('input', updateTotalPrice);
         qtyMeiaInput.addEventListener('input', updateTotalPrice);
 
-        // LÓGICA FINAL DE SUBMISSÃO DO FORMULÁRIO
         purchaseForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             if (qtyInteiraInput.valueAsNumber === 0 && qtyMeiaInput.valueAsNumber === 0) {
@@ -1172,8 +1277,7 @@
             };
             
             try {
-                // Chamada para a função serverless na Netlify
-                const response = await fetch('/.netlify/functions/create-checkout', {
+                const response = await fetch('https://proximaparadaanos2000.netlify.app/.netlify/functions/create-checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(purchaseData)
@@ -1185,7 +1289,6 @@
                 }
                 
                 const { init_point } = await response.json();
-                // Redireciona o utilizador para a página de pagamento do Mercado Pago
                 window.location.href = init_point;
 
             } catch (error) {
@@ -1194,6 +1297,74 @@
                 loadingSpinner.style.display = 'none';
             }
         });
+
+        // --- LÓGICA DO GERADOR DE SCRAP (GEMINI API) ---
+        const generateScrapBtn = document.getElementById('generate-scrap-btn');
+        const scrapResultContainer = document.getElementById('scrap-result-container');
+        const scrapResultDiv = document.getElementById('scrap-result');
+        const scrapLoadingDiv = document.getElementById('scrap-loading');
+        const copyScrapBtn = document.getElementById('copy-scrap-btn');
+
+        generateScrapBtn.addEventListener('click', async () => {
+            const userPrompt = document.getElementById('scrap-prompt').value;
+
+            if (!userPrompt) {
+                alert('Por favor, descreva sobre o que deve ser o scrap!');
+                return;
+            }
+
+            scrapResultContainer.style.display = 'block';
+            scrapResultDiv.style.display = 'none';
+            scrapLoadingDiv.style.display = 'block';
+            generateScrapBtn.disabled = true;
+
+            const prompt = `Aja como um adolescente brasileiro em 2006, usando o Orkut. Crie um 'scrap' (depoimento) curto, divertido e com no máximo 60 palavras. O tema do scrap é: '${userPrompt}'. O scrap também deve convidar para a peça de teatro 'Próxima Parada: Anos 2000'. Use gírias da época como 'migs', 'tipo assim', 'balada', 'top', 'pagar mico'. Use emoticons como :), :P, ;), s2. Seja criativo e nostálgico. Não use hashtags.`;
+
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // A chave será injetada pelo ambiente
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Não foi possível gerar o scrap. Tente novamente.');
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    scrapResultDiv.innerText = text;
+                } else {
+                    throw new Error('Resposta inválida da IA. Tente novamente.');
+                }
+
+            } catch (error) {
+                scrapResultDiv.innerText = `Erro: ${error.message}`;
+            } finally {
+                scrapLoadingDiv.style.display = 'none';
+                scrapResultDiv.style.display = 'block';
+                generateScrapBtn.disabled = false;
+            }
+        });
+
+        copyScrapBtn.addEventListener('click', () => {
+            const textToCopy = scrapResultDiv.innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Scrap copiado para a área de transferência!');
+        });
+
 
         // --- NAVEGAÇÃO SUAVE ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

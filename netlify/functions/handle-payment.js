@@ -1,70 +1,70 @@
-// netlify/functions/handle-payment.js
-exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') return { statusCode: 405 };
-  const paymentData = JSON.parse(event.body);
+// Importa os SDKs do Resend e Mercado Pago
+const { Resend } = require('resend');
+const mercadopago = require('mercadopago');
 
-  if (paymentData.action === 'payment.updated' && paymentData.data.id) {
-    try {
-      const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
-      const resendApiKey = process.env.RESEND_API_KEY;
-
-      const paymentInfoResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentData.data.id}`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      });
-      const paymentInfo = await paymentInfoResponse.json();
-
-      if (paymentInfo.status === 'approved') {
-        const externalRef = JSON.parse(paymentInfo.external_reference);
-        const { nome, email, sessao, qtdInteira, qtdMeia, total } = externalRef;
-
-        const timestamp = Date.now().toString(36).slice(-4).toUpperCase();
-        const randomPart = Math.random().toString(36).slice(2, 6).toUpperCase();
-        const ticketCode = `A2K-${timestamp}-${randomPart}`;
-
-        const emailHtml = ` <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h1 style="color: #F81894;">Vc está dentro! ✨</h1>
-        <p>Olá, ${nome}!</p>
-        <p>Seu pré-cadastro para a peça <strong>Próxima Parada: Anos 2000</strong> foi um sucesso! 🎉</p>
-        <p>Aqui estão os detalhes do seu pedido e o seu código de bilhete único. O seu bilhete oficial também está em anexo neste e-mail.</p>
-        <div style="background-color: #f4f4f4; border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-top: 20px;">
-          <h2 style="color: #00008B;">Seu Bilhete</h2>
-          <p><strong>Sessão:</strong> ${sessao_escolhida}</p>
-          <p><strong>Ingressos:</strong> ${ingressos_inteira_final} Inteira(s), ${ingressos_meia_final} Meia(s)</p>
-          <p><strong>Valor Total (referência):</strong> R$ ${valor_total_final}</p>
-          <p style="font-size: 1.5em; font-weight: bold; color: #F81894; text-align: center; margin: 20px 0; border: 2px dashed #F81894; padding: 10px;">
-            CÓDIGO: ${ticketCode}
-          </p>
-        </div>
-        <p style="margin-top: 25px;"><strong>Importante:</strong> Este e-mail confirma o seu bilhete. Se o pagamento ainda não foi efetuado, por favor, realize-o e envie o comprovativo para <a href="mailto:auriemcompany@gmail.com">auriemcompany@gmail.com</a> para validar a sua entrada.</p>
-        <p>Nos vemos no teatro!</p>
-        <p><em>- Auriem Produções Artísticas</em></p>
-      </div>
-    `;`; //
-
-        const pdfUrl = `https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf`;
-        const pdfResponse = await fetch(pdfUrl);
-        const pdfArrayBuffer = await pdfResponse.arrayBuffer();
-        const pdfBase64 = Buffer.from(pdfArrayBuffer).toString('base64');
-
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${resendApiKey}`,
-          },
-          body: JSON.stringify({
-            from: 'Próxima Parada 2000 <onboarding@resend.dev>',
-            to: [email],
-            subject: `<https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf' border='0' alt='modelo-ingresso'/></a>`,
-            html: emailHtml,
-            attachments: [{ filename: 'Seu_Ingresso.pdf', content: pdfBase64 }],
-          }),
-        });
-      }
-      return { statusCode: 200, body: 'OK' };
-    } catch (error) {
-      return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+exports.handler = async (event) => {
+    // Garante que a requisição é um POST
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
     }
-  }
-  return { statusCode: 200, body: 'Not a payment update' };
+
+    // Configura as chaves de API (que estarão na Netlify)
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    mercadopago.configure({
+        access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
+    });
+
+    try {
+        const notification = JSON.parse(event.body);
+
+        // Verifica se é uma notificação de pagamento
+        if (notification.type === 'payment' && notification.data && notification.data.id) {
+            // Busca os detalhes completos do pagamento
+            const payment = await mercadopago.payment.findById(notification.data.id);
+            
+            // Se o pagamento foi aprovado
+            if (payment.body.status === 'approved') {
+                // Recupera os dados do cliente que guardámos
+                const { userName, userEmail, tickets } = JSON.parse(payment.body.external_reference);
+                
+                // Gera um código único para o ingresso
+                const uniqueCode = `A2K-${Date.now().toString(36).toUpperCase()}`;
+
+                // Monta a lista de ingressos para o e-mail
+                let ticketDetails = '';
+                if (tickets.inteira.quantity > 0) ticketDetails += `<li>${tickets.inteira.quantity}x Ingresso(s) Inteira</li>`;
+                if (tickets.meia.quantity > 0) ticketDetails += `<li>${tickets.meia.quantity}x Ingresso(s) Meia</li>`;
+
+                // Envia o e-mail com o Resend
+                await resend.emails.send({
+                    from: 'Auriem Company <contato@auriem.com.br>', // **IMPORTANTE: Use um domínio verificado no Resend**
+                    to: userEmail,
+                    subject: `Seu ingresso para Próxima Parada: Anos 2000! ✨`,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; color: #333;">
+                            <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem" style="width:100px;">
+                            <h1 style="color: #8A2BE2;">Compra Aprovada, ${userName}!</h1>
+                            <p>Seu passaporte para os anos 2000 está garantido!</p>
+                            <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Confirmação" style="max-width: 300px; border-radius: 10px;">
+                            <h2 style="color: #FF1493;">Detalhes do Pedido:</h2>
+                            <ul style="list-style: none; padding: 0;">${ticketDetails}</ul>
+                            <p><strong>Seu Código Único de Entrada:</strong></p>
+                            <h2 style="background-color: #f0f0f0; padding: 15px; border-radius: 5px; border: 2px dashed #FF6EC7;">${uniqueCode}</h2>
+                            <p>Apresente este e-mail (ou o código) na entrada do teatro.</p>
+                            <hr style="border: 1px solid #ddd;">
+                            <p>Atenciosamente,<br><strong>Auriem Produções Artísticas</strong></p>
+                        </div>
+                    `,
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Erro no webhook:', error);
+        // Retorna 200 mesmo em caso de erro para não sobrecarregar o Mercado Pago com retentativas.
+        // O erro será visível nos logs da função na Netlify para depuração.
+        return { statusCode: 200, body: JSON.stringify({ status: "error", message: error.message }) };
+    }
+
+    // Responde ao Mercado Pago que a notificação foi recebida com sucesso
+    return { statusCode: 200, body: 'Notificação recebida.' };
 };

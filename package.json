@@ -1,0 +1,9 @@
+{
+  "name": "proxima-parada-backend",
+  "version": "1.0.0",
+  "description": "Funções Serverless para venda de ingressos",
+  "dependencies": {
+    "mercadopago": "^1.5.17",
+    "resend": "^3.2.0"
+  }
+}
