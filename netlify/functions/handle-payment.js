@@ -1,43 +1,44 @@
-// Importa os SDKs do Resend e Mercado Pago
+// netlify/functions/handle-payment.js
 const { Resend } = require('resend');
 const mercadopago = require('mercadopago');
 
+// Inicialize os SDKs fora do handler para reutilização
+const resend = new Resend(process.env.RESEND_API_KEY);
+mercadopago.configure({ access_token: process.env.MERCADOPAGO_ACCESS_TOKEN });
+
 exports.handler = async (event) => {
-    // Garante que a requisição é um POST
+    console.log("Webhook 'handle-payment' acionado.");
+
     if (event.httpMethod !== 'POST') {
+        console.log("Método não permitido:", event.httpMethod);
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    // Configura as chaves de API (que estarão na Netlify)
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    mercadopago.configure({
-        access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
-    });
-
     try {
         const notification = JSON.parse(event.body);
+        console.log("Notificação recebida do Mercado Pago:", JSON.stringify(notification, null, 2));
 
-        // Verifica se é uma notificação de pagamento
         if (notification.type === 'payment' && notification.data && notification.data.id) {
-            // Busca os detalhes completos do pagamento
+            console.log(`Buscando detalhes do pagamento ID: ${notification.data.id}`);
             const payment = await mercadopago.payment.findById(notification.data.id);
+            console.log("Detalhes do pagamento obtidos com sucesso.");
             
-            // Se o pagamento foi aprovado
             if (payment.body.status === 'approved') {
-                // Recupera os dados do cliente que guardámos
-                const { userName, userEmail, tickets } = JSON.parse(payment.body.external_reference);
+                console.log("Pagamento APROVADO. Processando e-mails.");
+                const { userName, userEmail, phone, sessionId, tickets } = JSON.parse(payment.body.external_reference);
                 
-                // Gera um código único para o ingresso
                 const uniqueCode = `A2K-${Date.now().toString(36).toUpperCase()}`;
-
-                // Monta a lista de ingressos para o e-mail
                 let ticketDetails = '';
                 if (tickets.inteira.quantity > 0) ticketDetails += `<li>${tickets.inteira.quantity}x Ingresso(s) Inteira</li>`;
                 if (tickets.meia.quantity > 0) ticketDetails += `<li>${tickets.meia.quantity}x Ingresso(s) Meia</li>`;
 
-                // Envia o e-mail com o Resend
+                const emailFrom = 'Auriem Company <contato@auriem.com.br>'; // **IMPORTANTE: Use um domínio verificado no Resend**
+                const productionEmail = 'auriemcompany@gmail.com';
+
+                // 1. ENVIA E-MAIL PARA O CLIENTE
+                console.log(`Tentando enviar e-mail para o cliente: ${userEmail}`);
                 await resend.emails.send({
-                    from: 'Auriem Company <contato@auriem.com.br>', // **IMPORTANTE: Use um domínio verificado no Resend**
+                    from: emailFrom,
                     to: userEmail,
                     subject: `Seu ingresso para Próxima Parada: Anos 2000! ✨`,
                     html: `
@@ -55,16 +56,46 @@ exports.handler = async (event) => {
                             <p>Atenciosamente,<br><strong>Auriem Produções Artísticas</strong></p>
                         </div>
                     `,
+                    attachments: [
+                        {
+                            filename: 'modelo_ingresso_anos2000.pdf',
+                            path: 'https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf'
+                        }
+                    ]
                 });
+                console.log("E-mail para o cliente enviado com sucesso.");
+
+                // 2. ENVIA E-MAIL DE NOTIFICAÇÃO PARA A PRODUÇÃO
+                console.log(`Tentando enviar e-mail de notificação para: ${productionEmail}`);
+                await resend.emails.send({
+                    from: emailFrom,
+                    to: productionEmail,
+                    subject: `✅ Nova Venda Realizada! - Próxima Parada: Anos 2000`,
+                    html: `
+                        <h2>Nova Venda Confirmada!</h2>
+                        <p><strong>Comprador:</strong> ${userName}</p>
+                        <p><strong>E-mail:</strong> ${userEmail}</p>
+                        <p><strong>Telefone:</strong> ${phone}</p>
+                        <p><strong>Sessão ID:</strong> ${sessionId}</p>
+                        <p><strong>Ingressos:</strong></p>
+                        <ul>${ticketDetails}</ul>
+                        <p><strong>Código Único:</strong> ${uniqueCode}</p>
+                    `
+                });
+                console.log("E-mail de notificação enviado com sucesso.");
+
+            } else {
+                console.log(`Pagamento não aprovado. Status: ${payment.body.status}`);
             }
+        } else {
+            console.log("Notificação recebida não é do tipo 'payment' ou não contém dados válidos.");
         }
     } catch (error) {
-        console.error('Erro no webhook:', error);
-        // Retorna 200 mesmo em caso de erro para não sobrecarregar o Mercado Pago com retentativas.
-        // O erro será visível nos logs da função na Netlify para depuração.
+        console.error('ERRO GERAL NO WEBHOOK:', error);
+        // Responde 200 para o Mercado Pago não reenviar a notificação, mas o erro fica registado para nós.
         return { statusCode: 200, body: JSON.stringify({ status: "error", message: error.message }) };
     }
 
-    // Responde ao Mercado Pago que a notificação foi recebida com sucesso
-    return { statusCode: 200, body: 'Notificação recebida.' };
+    console.log("Processamento do webhook concluído com sucesso.");
+    return { statusCode: 200, body: 'Notificação recebida e processada.' };
 };
