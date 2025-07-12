@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
     <style>
+        /* [COLE AQUI TODO O BLOCO <style> DO SEU TEMPLATE ORIGINAL] */
+        /* ... (O bloco CSS é muito grande para ser repetido, use o original) ... */
         /* Estilos Globais - Tema Anos 2000 Aprimorado */
         :root {
             --primary-blue: #0000CD;
@@ -1258,7 +1260,7 @@
             };
             
             try {
-                const response = await fetch('https://proximaparadaanos2000.netlify.app/.netlify/functions/create-checkout', {
+                const response = await fetch('/.netlify/functions/create-checkout', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(purchaseData)
@@ -1363,20 +1365,4 @@
     </script>
 </body>
 </html>
-```
 
-### **2. Ficheiros de Backend Simplificados**
-
-Como removemos o Firebase, só precisa destes dois ficheiros na sua pasta `netlify/functions/`. O ficheiro `get-session-status.js` já não é necessário.
-
-
-```json
-{
-  "name": "proxima-parada-backend",
-  "version": "1.0.0",
-  "description": "Funções Serverless para venda de ingressos",
-  "dependencies": {
-    "mercadopago": "^1.5.17",
-    "resend": "^3.2.0"
-  }
-}
