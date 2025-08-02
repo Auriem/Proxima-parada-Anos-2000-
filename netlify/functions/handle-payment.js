@@ -2,29 +2,21 @@
 const { Resend } = require('resend');
 const mercadopago = require('mercadopago');
 
-// Inicialize os SDKs fora do handler para reutilização
 const resend = new Resend(process.env.RESEND_API_KEY);
 mercadopago.configure({ access_token: process.env.MERCADOPAGO_ACCESS_TOKEN });
 
 exports.handler = async (event) => {
-    console.log("Webhook 'handle-payment' acionado.");
-
     if (event.httpMethod !== 'POST') {
-        console.log("Método não permitido:", event.httpMethod);
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
     try {
         const notification = JSON.parse(event.body);
-        console.log("Notificação recebida do Mercado Pago:", JSON.stringify(notification, null, 2));
 
         if (notification.type === 'payment' && notification.data && notification.data.id) {
-            console.log(`Buscando detalhes do pagamento ID: ${notification.data.id}`);
             const payment = await mercadopago.payment.findById(notification.data.id);
-            console.log("Detalhes do pagamento obtidos com sucesso.");
             
             if (payment.body.status === 'approved') {
-                console.log("Pagamento APROVADO. Processando e-mails.");
                 const { userName, userEmail, phone, sessionId, tickets } = JSON.parse(payment.body.external_reference);
                 
                 const uniqueCode = `A2K-${Date.now().toString(36).toUpperCase()}`;
@@ -32,13 +24,9 @@ exports.handler = async (event) => {
                 if (tickets.inteira.quantity > 0) ticketDetails += `<li>${tickets.inteira.quantity}x Ingresso(s) Inteira</li>`;
                 if (tickets.meia.quantity > 0) ticketDetails += `<li>${tickets.meia.quantity}x Ingresso(s) Meia</li>`;
 
-                const emailFrom = 'Auriem Company <contato@auriem.com.br>'; // **IMPORTANTE: Use um domínio verificado no Resend**
-                const productionEmail = 'auriemcompany@gmail.com';
-
-                // 1. ENVIA E-MAIL PARA O CLIENTE
-                console.log(`Tentando enviar e-mail para o cliente: ${userEmail}`);
+                // ENVIA E-MAIL PARA O CLIENTE
                 await resend.emails.send({
-                    from: emailFrom,
+                    from: 'Auriem Company <contato@proximaparadaanos2000.online>', // **Use o seu domínio verificado**
                     to: userEmail,
                     subject: `Seu ingresso para Próxima Parada: Anos 2000! ✨`,
                     html: `
@@ -59,17 +47,15 @@ exports.handler = async (event) => {
                     attachments: [
                         {
                             filename: 'modelo_ingresso_anos2000.pdf',
-                            path: 'https://proximaparadaanos2000.online/assets/modelo_ingresso.pdf'
+                            path: 'https://proximaparadaanos2000.online/assets/modelo_ingresso.pdf' // **Use o seu novo domínio aqui também**
                         }
                     ]
                 });
-                console.log("E-mail para o cliente enviado com sucesso.");
 
-                // 2. ENVIA E-MAIL DE NOTIFICAÇÃO PARA A PRODUÇÃO
-                console.log(`Tentando enviar e-mail de notificação para: ${productionEmail}`);
+                // ENVIA E-MAIL DE NOTIFICAÇÃO PARA A PRODUÇÃO
                 await resend.emails.send({
-                    from: emailFrom,
-                    to: productionEmail,
+                    from: 'Sistema de Vendas <vendas@proximaparadaanos2000.online>', // **Use o seu domínio verificado**
+                    to: 'auriemcompany@gmail.com',
                     subject: `✅ Nova Venda Realizada! - Próxima Parada: Anos 2000`,
                     html: `
                         <h2>Nova Venda Confirmada!</h2>
@@ -82,21 +68,12 @@ exports.handler = async (event) => {
                         <p><strong>Código Único:</strong> ${uniqueCode}</p>
                     `
                 });
-                console.log("E-mail de notificação enviado com sucesso.");
-
-            } else {
-                console.log(`Pagamento não aprovado. Status: ${payment.body.status}`);
             }
-        } else {
-            console.log("Notificação recebida não é do tipo 'payment' ou não contém dados válidos.");
         }
     } catch (error) {
-        console.error('ERRO GERAL NO WEBHOOK:', error);
-        // Responde 200 para o Mercado Pago não reenviar a notificação, mas o erro fica registado para nós.
+        console.error('Erro no webhook:', error);
         return { statusCode: 200, body: JSON.stringify({ status: "error", message: error.message }) };
     }
 
-    console.log("Processamento do webhook concluído com sucesso.");
-    return { statusCode: 200, body: 'Notificação recebida e processada.' };
+    return { statusCode: 200, body: 'Notificação recebida.' };
 };
-
