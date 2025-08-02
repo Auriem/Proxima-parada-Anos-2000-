@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
     <style>
-        /* [COLE AQUI TODO O BLOCO <style> DO SEU TEMPLATE ORIGINAL] */
-        /* ... (O bloco CSS é muito grande para ser repetido, use o original) ... */
         /* Estilos Globais - Tema Anos 2000 Aprimorado */
         :root {
             --primary-blue: #0000CD;
@@ -616,13 +614,6 @@
             top: 0;
         }
         
-        .about-text p:last-child::before {
-            content: '✨';
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        
         .about-image-container {
             flex: 1;
             min-width: 250px;
@@ -636,6 +627,25 @@
             border-radius: 10px;
             border: 2px solid var(--neon-pink);
         }
+
+        /* Estilo para o texto destacado */
+        .highlight-box {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid var(--neon-pink);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 20px 20px 25px;
+            margin-top: 25px;
+            font-style: italic;
+            font-size: 19px;
+            line-height: 1.7;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 3px var(--dark-gray);
+        }
+        /* Remove o emoji '✨' herdado da regra p:last-child */
+        .highlight-box::before {
+            content: none !important;
+        }
+
 
         /* NOVO: Seção do Local */
         .location-section {
@@ -738,6 +748,7 @@
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 25px;
             justify-items: center;
+            align-items: start;
         }
         .cast-member {
             background-color: rgba(0,0,0,0.7);
@@ -747,6 +758,8 @@
             text-align: center;
             transition: all 0.3s ease;
             width: 100%;
+            height: 100%;
+            box-sizing: border-box;
         }
         .cast-member:hover {
             transform: translateY(-8px);
@@ -762,7 +775,14 @@
             margin-bottom: 10px;
             transition: border-color 0.3s;
         }
-        .cast-member:hover .cast-photo {
+        .cast-gif {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid var(--neon-pink);
+        }
+        .cast-member:hover .cast-photo, .cast-member:hover .cast-gif {
             border-color: var(--neon-green);
         }
         /* Ajuste de enquadramento para a primeira foto do elenco */
@@ -888,13 +908,17 @@
             width: 50px;
             height: 50px;
         }
-        #confirmation-modal .modal-content {
-            text-align: center;
+        #error-modal .modal-content {
+            border-color: #ff4d4d;
+            box-shadow: 0 0 25px #ff4d4d;
         }
-        #confirmation-gif {
-            max-width: 80%;
-            margin: 15px 0;
-            border-radius: 10px;
+        #error-modal .modal-title {
+            color: #ff4d4d;
+        }
+        #error-message {
+            color: var(--white);
+            font-size: 16px;
+            word-wrap: break-word;
         }
 
         /* Seção do Gerador de Scrap */
@@ -995,10 +1019,10 @@
             <div class="about-content">
                 <div class="about-text">
                     <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
-                    <p>"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
+                    <p class="highlight-box">"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
                 </div>
                 <div class="about-image-container">
-                    <img src="https://i.postimg.cc/jS5HGMp7/material-pe-a-1.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
+                    <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
                 </div>
             </div>
         </section>
@@ -1092,6 +1116,15 @@
         </div>
     </div>
 
+    <!-- NOVO: Modal de Erro -->
+    <div id="error-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="error-close-btn" class="modal-close">X</button>
+            <h3 class="modal-title">Ops! Ocorreu um Erro</h3>
+            <p id="error-message">Não foi possível processar o seu pedido. Por favor, tente novamente.</p>
+        </div>
+    </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- DADOS ESTÁTICOS ---
@@ -1149,6 +1182,18 @@
                 castContainer.appendChild(card);
             });
             
+            // Adiciona o GIF no final da lista do elenco
+            const gifCard = document.createElement('div');
+            gifCard.className = 'cast-member';
+            gifCard.innerHTML = `
+                <a href="https://postimages.org/" target="_blank">
+                    <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô GIF" class="cast-gif">
+                </a>
+                <div class="cast-name" style="height: 19px;">&nbsp;</div>
+                <div class="cast-character" style="height: 17px;">&nbsp;</div>
+            `;
+            castContainer.appendChild(gifCard);
+            
             addPurchaseButtonListeners(sessoes);
         }
 
@@ -1181,7 +1226,7 @@
             document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
         
-        // --- LÓGICA DO MODAL DE COMPRA ---
+        // --- LÓGICA DOS MODAIS ---
         const purchaseModal = document.getElementById('purchase-modal');
         const purchaseCloseBtn = document.getElementById('modal-close-btn');
         const purchaseForm = document.getElementById('purchase-form');
@@ -1195,7 +1240,16 @@
         const submitButton = document.getElementById('submit-purchase');
         const loadingSpinner = document.getElementById('loading-spinner');
 
+        const errorModal = document.getElementById('error-modal');
+        const errorCloseBtn = document.getElementById('error-close-btn');
+        const errorMessageP = document.getElementById('error-message');
+
         let currentSession = null;
+
+        function showErrorModal(message) {
+            errorMessageP.textContent = message;
+            errorModal.classList.add('visible');
+        }
 
         function updateTotalPrice() {
             if (!currentSession) return;
@@ -1230,13 +1284,18 @@
             if (e.target === purchaseModal) purchaseModal.classList.remove('visible');
         });
 
+        errorCloseBtn.addEventListener('click', () => errorModal.classList.remove('visible'));
+        errorModal.addEventListener('click', (e) => {
+            if (e.target === errorModal) errorModal.classList.remove('visible');
+        });
+
         qtyInteiraInput.addEventListener('input', updateTotalPrice);
         qtyMeiaInput.addEventListener('input', updateTotalPrice);
 
         purchaseForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             if (qtyInteiraInput.valueAsNumber === 0 && qtyMeiaInput.valueAsNumber === 0) {
-                alert('Você precisa de selecionar pelo menos um ingresso!');
+                showErrorModal('Você precisa de selecionar pelo menos um ingresso!');
                 return;
             }
             submitButton.disabled = true;
@@ -1275,7 +1334,7 @@
                 window.location.href = init_point;
 
             } catch (error) {
-                alert(error.message);
+                showErrorModal(error.message);
                 submitButton.disabled = false;
                 loadingSpinner.style.display = 'none';
             }
@@ -1292,7 +1351,7 @@
             const userPrompt = document.getElementById('scrap-prompt').value;
 
             if (!userPrompt) {
-                alert('Por favor, descreva sobre o que deve ser o scrap!');
+                showErrorModal('Por favor, descreva sobre o que deve ser o scrap!');
                 return;
             }
 
