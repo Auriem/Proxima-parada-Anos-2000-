@@ -54,13 +54,18 @@ exports.handler = async (event) => {
             email: userEmail,
             phone: {
                 area_code: areaCode,
-                number: Number(number), // CORREÇÃO: Converte o telefone para o tipo número
+                number: Number(number),
             },
         },
-        back_urls: { success: 'https://proximaparadaanos2000.online/', failure: 'https://proximaparadaanos2000.online/', pending: 'https://proximaparadaanos2000.online/' },
+        back_urls: { 
+            success: 'https://proximaparadaanos2000.online/', 
+            failure: 'https://proximaparadaanos2000.online/', 
+            pending: 'https://proximaparadaanos2000.online/' 
+        },
         auto_return: 'approved',
         notification_url: `https://proximaparadaanos2000.online/.netlify/functions/handle-payment`,
         external_reference: externalReference,
+        purpose: 'wallet_purchase',
     };
 
     try {
@@ -69,7 +74,6 @@ exports.handler = async (event) => {
     } catch (error) {
         console.error('ERRO DETALHADO DO MERCADO PAGO:', JSON.stringify(error, null, 2));
         
-        // Retorna uma mensagem de erro mais específica para o frontend
         const errorMessage = error.cause?.[0]?.description || error.message || 'Falha ao comunicar com o sistema de pagamento.';
         return {
             statusCode: 500,
