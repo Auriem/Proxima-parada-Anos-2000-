@@ -57,9 +57,9 @@ exports.handler = async (event) => {
                 number: Number(number), // CORREÇÃO: Converte o telefone para o tipo número
             },
         },
-        back_urls: { success: 'https://proximaparadaanos2000.netlify.app/', failure: 'https://proximaparadaanos2000.netlify.app/', pending: 'https://proximaparadaanos2000.netlify.app/' },
+        back_urls: { success: 'https://proximaparadaanos2000.online/', failure: 'https://proximaparadaanos2000.online/', pending: 'https://proximaparadaanos2000.online/' },
         auto_return: 'approved',
-        notification_url: `https://proximaparadaanos2000.netlify.app/.netlify/functions/handle-payment`,
+        notification_url: `https://proximaparadaanos2000.online/.netlify/functions/handle-payment`,
         external_reference: externalReference,
     };
 
@@ -77,3 +77,4 @@ exports.handler = async (event) => {
         };
     }
 };
+
