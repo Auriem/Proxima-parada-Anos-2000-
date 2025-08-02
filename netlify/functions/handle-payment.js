@@ -59,7 +59,7 @@ exports.handler = async (event) => {
                     attachments: [
                         {
                             filename: 'modelo_ingresso_anos2000.pdf',
-                            path: 'https://proximaparadaanos2000.netlify.app/assets/modelo_ingresso.pdf'
+                            path: 'https://proximaparadaanos2000.online/assets/modelo_ingresso.pdf'
                         }
                     ]
                 });
@@ -99,3 +99,4 @@ exports.handler = async (event) => {
     console.log("Processamento do webhook concluído com sucesso.");
     return { statusCode: 200, body: 'Notificação recebida e processada.' };
 };
+
