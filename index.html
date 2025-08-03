@@ -1412,7 +1412,7 @@
             scrapLoadingDiv.style.display = 'block';
             generateScrapBtn.disabled = true;
 
-            const prompt = `Aja como um adolescente brasileiro em 2006, usando o Orkut. Crie um 'scrap' (depoimento) curto, divertido e com no máximo 60 palavras. O tema do scrap é: '${userPrompt}'. O scrap também deve convidar para a peça de teatro 'Próxima Parada: Anos 2000'. Use gírias da época como 'migs', 'tipo assim', 'balada', 'top', 'pagar mico'. Use emoticons como :), :P, ;), s2. Seja criativo e nostálgico. Não use hashtags.`;
+            const prompt = `Aja como um adolescente brasileiro em 2006, usando o Orkut. Crie um 'scrap' (depoimento) curto e nostálgico, com no máximo 60 palavras, sobre o seguinte tema: '${userPrompt}'. Use gírias da época como 'migs', 'tipo assim', 'balada', 'top', 'pagar mico' e emoticons como :), :P, ;), s2. No final, adicione um convite casual para a peça de teatro 'Próxima Parada: Anos 2000'. Seja criativo. Não use hashtags.`;
 
             try {
                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
@@ -1430,7 +1430,7 @@
 
                 const result = await response.json();
                 
-                if (result.candidates && result.candidates.length > 0) {
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
                     const text = result.candidates[0].content.parts[0].text;
                     scrapResultDiv.innerText = text;
                 } else {
@@ -1472,3 +1472,4 @@
     </script>
 </body>
 </html>
+
