@@ -1161,7 +1161,7 @@
         ];
 
         // --- FUNÇÃO PARA RENDERIZAR CONTEÚDO DINÂMICO ---
-        function renderContent(sessoes) {
+        function renderContent() {
             const eventsContainer = document.getElementById('events-list-container');
             eventsContainer.innerHTML = ''; // Limpa antes de renderizar
             sessoes.forEach(sessao => {
@@ -1210,7 +1210,7 @@
             addPurchaseButtonListeners(sessoes);
         }
 
-        renderContent(sessoes);
+        renderContent();
 
         // --- CONTADOR REGRESSIVO ---
         const countdownTargetDate = new Date('2025-10-03T20:30:00').getTime();
@@ -1336,8 +1336,6 @@
                                 "base-color": "var(--neon-pink)"
                             }
                         },
-                        buttonBackground: 'custom',
-                        buttonCustomText: 'Garantir meu ingresso!',
                     },
                     paymentMethods: {
                         ticket: "all",
