@@ -979,6 +979,11 @@
         #scrap-result-container {
             text-align: center;
         }
+        
+        /* Checkout Transparente */
+        #payment-bricks-container {
+            display: none; /* Começa escondido */
+        }
     </style>
 </head>
 <body>
@@ -1086,8 +1091,8 @@
         <div class="modal-content">
             <button id="modal-close-btn" class="modal-close">X</button>
             <h3 id="modal-title" class="modal-title">Comprar Ingressos</h3>
-            <form id="purchase-form">
-                <input type="hidden" id="session-id" name="sessionId">
+            
+            <div id="form-step-1">
                 <div class="form-group">
                     <label for="fullname">Nome Completo</label>
                     <input type="text" id="fullname" name="fullname" required>
@@ -1114,9 +1119,16 @@
                 <div id="total-price" class="total-price">
                     TOTAL: R$ 0.00
                 </div>
-                <button type="submit" id="submit-purchase" class="action-button modal-button">Ir para Pagamento Seguro</button>
-                <img src="https://i.postimg.cc/zfHB7s76/download.gif" alt="Loading" id="loading-spinner">
-            </form>
+                <button id="continue-to-payment" class="action-button modal-button">Ir para Pagamento</button>
+            </div>
+
+            <div id="payment-bricks-container">
+                <form id="payment-form" action="/process-payment" method="post">
+                    <!-- Estes divs serão preenchidos pelo Mercado Pago -->
+                    <div id="paymentBrick_container"></div>
+                    <div id="statusScreenBrick_container"></div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -1137,7 +1149,7 @@
             { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
             { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
             { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false }, // Manter como 'false' para controle manual
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
         ];
 
         const elenco = [
@@ -1186,7 +1198,6 @@
                 castContainer.appendChild(card);
             });
             
-            // Adiciona o GIF no final da lista do elenco
             const gifCard = document.createElement('div');
             gifCard.className = 'cast-member';
             gifCard.innerHTML = `
@@ -1230,25 +1241,28 @@
             document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
         
-        // --- LÓGICA DOS MODAIS ---
+        // --- LÓGICA DO CHECKOUT TRANSPARENTE ---
         const purchaseModal = document.getElementById('purchase-modal');
         const purchaseCloseBtn = document.getElementById('modal-close-btn');
-        const purchaseForm = document.getElementById('purchase-form');
         const modalTitle = document.getElementById('modal-title');
-        const sessionIdInput = document.getElementById('session-id');
         const qtyInteiraInput = document.getElementById('qty-inteira');
         const qtyMeiaInput = document.getElementById('qty-meia');
         const priceInteiraSpan = document.getElementById('price-inteira');
         const priceMeiaSpan = document.getElementById('price-meia');
         const totalPriceDiv = document.getElementById('total-price');
-        const submitButton = document.getElementById('submit-purchase');
-        const loadingSpinner = document.getElementById('loading-spinner');
+        
+        const formStep1 = document.getElementById('form-step-1');
+        const paymentContainer = document.getElementById('payment-bricks-container');
+        const continueToPaymentBtn = document.getElementById('continue-to-payment');
 
         const errorModal = document.getElementById('error-modal');
         const errorCloseBtn = document.getElementById('error-close-btn');
         const errorMessageP = document.getElementById('error-message');
 
         let currentSession = null;
+        let totalAmount = 0;
+
+        const mp = new MercadoPago('APP_USR-23cc60e6-e8fd-4a06-b5c7-cbcd786764ab', { locale: 'pt-BR' });
 
         function showErrorModal(message) {
             errorMessageP.textContent = message;
@@ -1257,8 +1271,8 @@
 
         function updateTotalPrice() {
             if (!currentSession) return;
-            const total = (qtyInteiraInput.value * currentSession.precoInteira) + (qtyMeiaInput.value * currentSession.precoMeia);
-            totalPriceDiv.innerText = `TOTAL: R$ ${total.toFixed(2).replace('.',',')}`;
+            totalAmount = (qtyInteiraInput.value * currentSession.precoInteira) + (qtyMeiaInput.value * currentSession.precoMeia);
+            totalPriceDiv.innerText = `TOTAL: R$ ${totalAmount.toFixed(2).replace('.',',')}`;
         }
         
         function addPurchaseButtonListeners(sessoes) {
@@ -1273,10 +1287,13 @@
                         const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                         
                         modalTitle.innerText = `Sessão ${dataFormatada} - ${horaFormatada}h`;
-                        sessionIdInput.value = currentSession.id;
                         priceInteiraSpan.innerText = currentSession.precoInteira.toFixed(2).replace('.',',');
                         priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
                         updateTotalPrice();
+                        
+                        formStep1.style.display = 'block';
+                        paymentContainer.style.display = 'none';
+                        
                         purchaseModal.classList.add('visible');
                     }
                 });
@@ -1284,65 +1301,90 @@
         }
 
         purchaseCloseBtn.addEventListener('click', () => purchaseModal.classList.remove('visible'));
-        purchaseModal.addEventListener('click', (e) => {
-            if (e.target === purchaseModal) purchaseModal.classList.remove('visible');
-        });
-
         errorCloseBtn.addEventListener('click', () => errorModal.classList.remove('visible'));
-        errorModal.addEventListener('click', (e) => {
-            if (e.target === errorModal) errorModal.classList.remove('visible');
-        });
 
         qtyInteiraInput.addEventListener('input', updateTotalPrice);
         qtyMeiaInput.addEventListener('input', updateTotalPrice);
 
-        purchaseForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (qtyInteiraInput.valueAsNumber === 0 && qtyMeiaInput.valueAsNumber === 0) {
-                showErrorModal('Você precisa de selecionar pelo menos um ingresso!');
+        continueToPaymentBtn.addEventListener('click', () => {
+            if (!document.getElementById('fullname').value || !document.getElementById('email').value || !document.getElementById('phone').value) {
+                showErrorModal("Por favor, preencha todos os seus dados antes de continuar.");
                 return;
             }
-            submitButton.disabled = true;
-            loadingSpinner.style.display = 'block';
-
-            const purchaseData = {
-                sessionId: sessionIdInput.value,
-                userName: document.getElementById('fullname').value,
-                userEmail: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                tickets: {
-                    inteira: {
-                        quantity: qtyInteiraInput.valueAsNumber,
-                        unit_price: currentSession.precoInteira,
-                    },
-                    meia: {
-                        quantity: qtyMeiaInput.valueAsNumber,
-                        unit_price: currentSession.precoMeia
-                    }
-                }
-            };
-            
-            try {
-                const response = await fetch('/.netlify/functions/create-checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(purchaseData)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Falha ao criar o checkout. Tente novamente mais tarde.');
-                }
-                
-                const { init_point } = await response.json();
-                window.location.href = init_point;
-
-            } catch (error) {
-                showErrorModal(error.message);
-                submitButton.disabled = false;
-                loadingSpinner.style.display = 'none';
+            if (totalAmount <= 0) {
+                showErrorModal("Você precisa selecionar pelo menos um ingresso.");
+                return;
             }
+
+            formStep1.style.display = 'none';
+            paymentContainer.style.display = 'block';
+            renderPaymentBrick();
         });
+
+        async function renderPaymentBrick() {
+            const bricksBuilder = mp.bricks();
+            const settings = {
+                initialization: {
+                    amount: totalAmount,
+                    payer: {
+                        email: document.getElementById('email').value,
+                    },
+                },
+                customization: {
+                    visual: {
+                        style: {
+                            theme: 'dark'
+                        }
+                    },
+                    paymentMethods: {
+                        creditCard: 'all',
+                        pix: 'all',
+                        maxInstallments: 1
+                    },
+                },
+                callbacks: {
+                    onReady: () => {},
+                    onSubmit: async (cardFormData) => {
+                        const purchaseData = {
+                            sessionId: currentSession.id,
+                            userName: document.getElementById('fullname').value,
+                            userEmail: document.getElementById('email').value,
+                            phone: document.getElementById('phone').value,
+                            tickets: {
+                                inteira: { quantity: qtyInteiraInput.valueAsNumber, unit_price: currentSession.precoInteira },
+                                meia: { quantity: qtyMeiaInput.valueAsNumber, unit_price: currentSession.precoMeia }
+                            },
+                            paymentData: cardFormData
+                        };
+
+                        try {
+                            const response = await fetch('/.netlify/functions/process-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(purchaseData)
+                            });
+
+                            if (!response.ok) {
+                                const errorData = await response.json();
+                                throw new Error(errorData.error || 'Falha ao processar o pagamento.');
+                            }
+                            
+                            const result = await response.json();
+                            purchaseModal.classList.remove('visible');
+                            alert(`Pagamento aprovado! ID: ${result.paymentId}. Você receberá a confirmação por e-mail.`);
+
+                        } catch (error) {
+                            showErrorModal(error.message);
+                        }
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        showErrorModal("Ocorreu um erro com o pagamento. Verifique os dados e tente novamente.");
+                    },
+                },
+            };
+            window.paymentBrickController = await bricksBuilder.create('payment', 'paymentBrick_container', settings);
+        }
 
         // --- LÓGICA DO GERADOR DE SCRAP (GEMINI API) ---
         const generateScrapBtn = document.getElementById('generate-scrap-btn');
@@ -1353,12 +1395,10 @@
 
         generateScrapBtn.addEventListener('click', async () => {
             const userPrompt = document.getElementById('scrap-prompt').value;
-
             if (!userPrompt) {
                 showErrorModal('Por favor, descreva sobre o que deve ser o scrap!');
                 return;
             }
-
             scrapResultContainer.style.display = 'block';
             scrapResultDiv.style.display = 'none';
             scrapLoadingDiv.style.display = 'block';
@@ -1369,7 +1409,7 @@
             try {
                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
-                const apiKey = ""; // A chave será injetada pelo ambiente
+                const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
                 const response = await fetch(apiUrl, {
@@ -1378,9 +1418,7 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error('Não foi possível gerar o scrap. Tente novamente.');
-                }
+                if (!response.ok) throw new Error('Não foi possível gerar o scrap. Tente novamente.');
 
                 const result = await response.json();
                 
@@ -1390,7 +1428,6 @@
                 } else {
                     throw new Error('Resposta inválida da IA. Tente novamente.');
                 }
-
             } catch (error) {
                 scrapResultDiv.innerText = `Erro: ${error.message}`;
             } finally {
@@ -1410,7 +1447,6 @@
             document.body.removeChild(tempTextArea);
             alert('Scrap copiado para a área de transferência!');
         });
-
 
         // --- NAVEGAÇÃO SUAVE ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
