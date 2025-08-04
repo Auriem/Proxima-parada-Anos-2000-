@@ -1262,7 +1262,7 @@
         let currentSession = null;
         let totalAmount = 0;
 
-        const mp = new MercadoPago('TEST-68c5d4a6-cd0e-4ef1-81bb-bceb5c57145c', { locale: 'pt-BR' });
+        const mp = new MercadoPago('APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837', { locale: 'pt-BR' });
 
         function showErrorModal(message) {
             errorMessageP.textContent = message;
@@ -1334,13 +1334,22 @@
                     visual: {
                         style: {
                             theme: 'dark',
-                        }
+                            customVariables: {
+                                "base-color": "var(--neon-pink)"
+                            }
+                        },
+                        buttonBackground: 'custom',
+                        buttonCustomText: 'Garantir meu ingresso!',
                     },
                     paymentMethods: {
                         ticket: "all",
                         debitCard: 'all',
                         creditCard: 'all',
                         pix: 'all',
+                        maxInstallments: 1,
+                        defaultPaymentOption: {
+                            pix: 'all'
+                        }
                     },
                 },
                 callbacks: {
