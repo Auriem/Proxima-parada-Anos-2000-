@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Próxima Parada: Anos 2000 - Venda de Ingressos</title>
+    <!-- SDK DO MERCADO PAGO -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+    <style>
+        /* [COLE AQUI TODO O BLOCO <style> DO SEU TEMPLATE ORIGINAL] */
+        /* ... (O bloco CSS é muito grande para ser repetido, use o original) ... */
+        /* Estilos Globais - Tema Anos 2000 Aprimorado */
+        :root {
+            --primary-blue: #0000CD;
+            --primary-purple: #8A2BE2;
+            --neon-pink: #FF6EC7;
+            --hot-pink: #FF1493;
+            --light-pink: #FFC0CB;
+            --neon-green: #ADFF2F;
+            --white: #FFFFFF;
+            --light-gray: #DDDDDD;
+            --dark-gray: #333333;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: var(--white);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Efeitos de Texto Nostálgicos Aprimorados */
+        .glow-text {
+            text-shadow: 0 0 5px var(--white), 
+                         0 0 10px var(--white), 
+                         0 0 15px var(--neon-pink), 
+                         0 0 20px var(--neon-pink);
+            animation: textPulse 2s infinite;
+        }
+        
+        @keyframes textPulse {
+            0% { text-shadow: 0 0 5px var(--white), 0 0 10px var(--neon-pink); }
+            50% { text-shadow: 0 0 20px var(--white), 0 0 30px var(--hot-pink); }
+            100% { text-shadow: 0 0 5px var(--white), 0 0 10px var(--neon-pink); }
+        }
+        
+        /* Cabeçalho Aprimorado */
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-bottom: 3px solid var(--neon-pink);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 0 15px var(--neon-pink);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.7) 70%);
+            opacity: 0.1;
+            animation: headerGlow 10s infinite linear;
+        }
+        
+        @keyframes headerGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo {
+            font-family: 'VT323', monospace;
+            font-size: 48px;
+            margin: 0;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: '✨';
+            position: absolute;
+            top: -10px;
+            right: -30px;
+            font-size: 24px;
+            animation: sparkle 1.5s infinite;
+        }
+        
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0.8) rotate(360deg); }
+        }
+        
+        /* Navegação Aprimorada */
+        nav {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: linear-gradient(to bottom, #666, #333);
+            color: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 10px 18px;
+            margin: 5px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .nav-button:hover::before {
+            left: 100%;
+        }
+        
+        .nav-button:hover {
+            background: linear-gradient(to bottom, #777, #444);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .nav-button:active {
+            transform: translateY(2px);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .nav-button span {
+            margin-left: 5px;
+        }
+        
+        /* Banner Principal Aprimorado */
+        .main-banner {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 20px var(--neon-green);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 48%, var(--neon-green) 49%, var(--neon-green) 51%, transparent 52%);
+            background-size: 200% 200%;
+            opacity: 0.1;
+            animation: scanline 4s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { background-position: 200% 200%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        /* NOVO: Animação Marquee */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+        .marquee-text {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            color: var(--white);
+            text-shadow: 0 0 10px var(--neon-pink);
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Botões de Ação Aprimorados */
+        .action-button {
+            background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 0 10px var(--neon-pink);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--hot-pink), var(--neon-pink));
+            z-index: -1;
+            transition: transform 0.5s;
+            transform-origin: 0 0;
+            transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+            transform: scaleX(0);
+        }
+        
+        .action-button:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 20px rgba(255,20,147,0.4);
+        }
+        
+        .action-button:active {
+            transform: translateY(2px);
+        }
+        
+        /* Contador Regressivo Aprimorado */
+        .countdown {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--hot-pink);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 15px var(--hot-pink);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--hot-pink) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: pulseBackground 5s infinite;
+        }
+        
+        @keyframes pulseBackground {
+            0% { transform: scale(0.8); opacity: 0.05; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(0.8); opacity: 0.05; }
+        }
+        
+        .countdown-title {
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--hot-pink);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .countdown-title::before {
+            content: '⏰';
+            margin-right: 10px;
+            animation: shake 2s infinite;
+            display: inline-block;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+            20%, 40%, 60%, 80% { transform: rotate(10deg); }
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            perspective: 1000px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-box {
+            background-color: var(--dark-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 10px;
+            min-width: 60px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+        }
+        
+        .countdown-box:hover {
+            transform: rotateY(10deg);
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .countdown-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--hot-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+            position: relative;
+        }
+        
+        .countdown-label {
+            font-size: 12px;
+            color: var(--light-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Lista de Eventos Aprimorada */
+        .events-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--neon-green);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::before {
+            content: '🎟️';
+            margin-right: 10px;
+        }
+        
+        .section-title::after {
+            content: '🎟️';
+            margin-left: 10px;
+        }
+
+        .capacity-note {
+            text-align: center;
+            color: var(--light-gray);
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+        
+        .events-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            perspective: 1000px;
+        }
+        
+        .event-card {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-green);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.5s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--neon-pink);
+        }
+        
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(173, 255, 47, 0.1) 100%);
+            border-radius: 8px;
+            z-index: -1;
+            transition: all 0.5s;
+        }
+        
+        .event-card:hover::before {
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 110, 199, 0.1) 100%);
+        }
+        
+        .event-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--neon-green);
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-title::before {
+            content: '🎭';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-card:hover .event-title {
+            color: var(--neon-pink);
+        }
+        
+        .event-date {
+            font-size: 16px;
+            color: var(--light-gray);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-date::before {
+            content: '📅';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        .event-price::before {
+            content: '💰';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .event-button {
+            background: linear-gradient(to bottom, var(--neon-green), #8aff00);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 5px var(--neon-green);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .event-button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .event-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #8aff00, var(--neon-green));
+            z-index: -1;
+            transition: transform 0.5s;
+            transform-origin: 0 0;
+            transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+            transform: scaleX(0);
+        }
+        
+        .event-button:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .event-card:hover .event-button:not(:disabled) {
+            background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
+            color: var(--white);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+        
+        .event-card:hover .event-button:not(:disabled)::before {
+            background: linear-gradient(to right, var(--hot-pink), var(--neon-pink));
+        }
+        
+        /* Sobre a Peça Aprimorado */
+        .about-section {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--neon-pink);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 110, 199, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 20, 147, 0.15) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        .about-title {
+            font-family: 'VT323', monospace;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--neon-pink);
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .about-title::before {
+            content: '🎭';
+            margin-right: 10px;
+            display: inline-block;
+            animation: sway 2.5s infinite ease-in-out;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+        }
+        
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-text p {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .about-text p:first-child::before {
+            content: '💫';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .about-image-container {
+            flex: 1;
+            min-width: 250px;
+            transition: all 0.5s;
+        }
+        .about-image-container:hover {
+            transform: scale(1.05);
+        }
+        .about-image-container img {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid var(--neon-pink);
+        }
+
+        /* Estilo para o texto destacado */
+        .highlight-box {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid var(--neon-pink);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 20px 20px 25px;
+            margin-top: 25px;
+            font-style: italic;
+            font-size: 19px;
+            line-height: 1.7;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 3px var(--dark-gray);
+        }
+        /* Remove o emoji '✨' herdado da regra p:last-child */
+        .highlight-box::before {
+            content: none !important;
+        }
+
+
+        /* NOVO: Seção do Local */
+        .location-section {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+        .location-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-green);
+            margin: 0 0 10px 0;
+        }
+        .location-address {
+            font-size: 18px;
+            color: var(--white);
+            margin: 0;
+        }
+        
+        /* Rodapé Aprimorado */
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-top: 3px solid var(--neon-pink);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-pink);
+            margin: 0 0 10px 0;
+        }
+        .contact-subtitle {
+            font-size: 16px;
+            color: var(--light-gray);
+            margin: 0 0 20px 0;
+        }
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .contact-buttons .action-button {
+            margin: 5px 10px;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            color: var(--light-gray);
+            position: relative;
+            margin-top: 30px;
+        }
+        
+        .footer-text::before {
+            content: '©️';
+            margin-right: 5px;
+        }
+        
+        /* Animações Adicionais */
+        .animate__animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        
+        .animate__fadeIn { animation-name: fadeIn; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .animate__fadeInUp { animation-name: fadeInUp; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 40px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        
+        .animate__delay-1 { animation-delay: 0.2s; }
+        .animate__delay-2 { animation-delay: 0.4s; }
+        .animate__delay-3 { animation-delay: 0.6s; }
+        
+        /* Responsividade Aprimorada */
+        @media (max-width: 768px) {
+            .logo { font-size: 36px; }
+            .nav-button { font-size: 14px; padding: 8px 12px; }
+            .marquee-text { font-size: 24px; }
+            .event-card { transform: none !important; }
+        }
+
+        /* Estilos para a Seção Elenco */
+        .cast-section {
+            margin: 40px 0;
+        }
+        .cast-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 25px;
+            justify-items: center;
+            align-items: start;
+        }
+        .cast-member {
+            background-color: rgba(0,0,0,0.7);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .cast-member:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-color: var(--neon-green);
+        }
+        .cast-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--neon-pink);
+            margin-bottom: 10px;
+            transition: border-color 0.3s;
+        }
+        .cast-gif {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid var(--neon-pink);
+        }
+        .cast-member:hover .cast-photo, .cast-member:hover .cast-gif {
+            border-color: var(--neon-green);
+        }
+        /* Ajuste de enquadramento para a primeira foto do elenco */
+        .cast-list .cast-member:nth-child(1) .cast-photo {
+            object-position: center 20%; /* Move a imagem para baixo para mostrar mais do topo */
+        }
+        .cast-name {
+            color: var(--white);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .cast-character {
+            color: var(--neon-green);
+            font-size: 14px;
+            font-family: 'VT323', monospace;
+        }
+
+        /* Estilos para o Modal de Compra e Confirmação */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border: 3px solid var(--neon-pink);
+            border-radius: 15px;
+            box-shadow: 0 0 25px var(--neon-pink);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: var(--hot-pink);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 30px;
+            text-align: center;
+        }
+        .modal-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-green);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--light-pink);
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.5);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            color: var(--white);
+            font-size: 16px;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        .ticket-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .ticket-group label {
+            flex-basis: 50%;
+        }
+        .ticket-group input[type="number"] {
+            width: 60px;
+            text-align: center;
+        }
+        .total-price {
+            text-align: right;
+            font-size: 22px;
+            font-family: 'VT323', monospace;
+            color: var(--neon-green);
+            margin-top: 20px;
+        }
+        .modal-button {
+            width: 100%;
+            margin-top: 15px;
+        }
+        #loading-spinner {
+            display: none; /* Oculto por padrão */
+            margin: 20px auto 0;
+            width: 50px;
+            height: 50px;
+        }
+        #error-modal .modal-content {
+            border-color: #ff4d4d;
+            box-shadow: 0 0 25px #ff4d4d;
+        }
+        #error-modal .modal-title {
+            color: #ff4d4d;
+        }
+        #error-message {
+            color: var(--white);
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        /* Seção do Gerador de Scrap */
+        .scrap-section {
+            background-color: rgba(227, 239, 255, 0.9); /* Orkut blueish background */
+            border: 3px solid #ED88B4; /* Orkut pink */
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #333;
+        }
+        .scrap-section .section-title {
+            color: #8A2BE2; /* Purple to match theme */
+        }
+        .scrap-section .capacity-note {
+            color: #555;
+            font-style: normal;
+        }
+        .scrap-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .scrap-form .form-group {
+            width: 100%;
+            max-width: 600px;
+        }
+        .scrap-form label {
+            color: var(--primary-purple);
+        }
+        .scrap-form textarea {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-color: #ED88B4;
+            color: #333;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .scrap-box {
+            background: #FFF;
+            border: 1px solid #D9E6F7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            color: #555;
+            font-family: 'Tahoma', sans-serif;
+            line-height: 1.5;
+            text-align: left;
+            white-space: pre-wrap; /* Mantém a formatação do texto gerado */
+        }
+        #scrap-result-container {
+            text-align: center;
+        }
+        
+        #pix-payment-container {
+            display: none;
+            text-align: center;
+        }
+        #pix-qr-code {
+            max-width: 250px;
+            margin: 15px auto;
+            border: 5px solid white;
+            border-radius: 10px;
+        }
+        #pix-copy-paste {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            color: var(--white);
+            font-size: 14px;
+            box-sizing: border-box;
+            text-align: center;
+            word-wrap: break-word;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="logo glow-text">Próxima Parada: Anos 2000</h1>
+        <nav>
+            <a href="#" class="nav-button">Início<span>🏠</span></a>
+            <a href="#ingressos" class="nav-button">Ingressos<span>🎟️</span></a>
+            <a href="#sobre" class="nav-button">Sobre<span>ℹ️</span></a>
+            <a href="#elenco" class="nav-button">Elenco<span>🎭</span></a>
+            <a href="#contato" class="nav-button">Contato<span>📞</span></a>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="main-banner animate__animated animate__fadeIn">
+             <div class="marquee">
+                <p class="marquee-text">Garanta seu ingresso! Não mosca, senão acaba! ✨ Garanta seu ingresso! Não mosca, senão acaba! ✨</p>
+             </div>
+        </div>
+        
+        <div class="countdown animate__animated animate__fadeInUp animate__delay-1">
+            <h3 class="countdown-title">A ESTREIA ACONTECE EM:</h3>
+            <div class="countdown-timer">
+                <div class="countdown-box"><div class="countdown-number" id="days">00</div><div class="countdown-label">DIAS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="hours">00</div><div class="countdown-label">HORAS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">MINUTOS</div></div>
+                <div class="countdown-box"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">SEGUNDOS</div></div>
+            </div>
+        </div>
+        
+        <section id="ingressos" class="events-section animate__animated animate__fadeInUp animate__delay-2">
+            <h2 class="section-title">GARANTA SEU INGRESSO</h2>
+            <p class="capacity-note">Capacidade por sessão: 110 lugares. Admissão geral (sem assentos marcados).</p>
+            <div id="events-list-container" class="events-list">
+                <!-- Os cards de evento serão inseridos aqui pelo JavaScript -->
+            </div>
+        </section>
+        
+        <section id="sobre" class="about-section animate__animated animate__fadeInUp animate__delay-3">
+            <h2 class="about-title">SOBRE A PEÇA</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
+                    <p class="highlight-box">"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
+                </div>
+                <div class="about-image-container">
+                    <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
+                </div>
+            </div>
+        </section>
+
+        <section id="local" class="location-section animate__animated animate__fadeInUp animate__delay-2">
+            <h3 class="location-title">📍 LOCAL DE APRESENTAÇÃO 📍</h3>
+            <p class="location-address">Teatro Enio Carvalho - Rua Mateus Leme, 990, Centro Cívico, Curitiba</p>
+        </section>
+
+        <section id="elenco" class="cast-section animate__animated animate__fadeInUp animate__delay-2">
+            <h2 class="section-title">CONHEÇA O ELENCO</h2>
+            <div id="cast-list-container" class="cast-list">
+                <!-- Os cards do elenco serão inseridos aqui pelo JavaScript -->
+            </div>
+        </section>
+
+        <section id="gerador-scrap" class="scrap-section animate__animated animate__fadeInUp">
+            <h2 class="section-title">✨ Poste o scrap nos stories! ✨</h2>
+            <p class="capacity-note">Crie um scrap nostálgico que seja sua cara e poste nos stories marcando o nosso perfil: <strong>@auriemcompany</strong></p>
+            <div class="scrap-form">
+                <div class="form-group">
+                    <label for="scrap-prompt">Coloque: um scrap falando sobre... e veja a mágica acontecer!</label>
+                    <textarea id="scrap-prompt" placeholder="Ex: um scrap super fofo de amizade para a minha migs, convidando pra peça!" rows="3"></textarea>
+                </div>
+                <button id="generate-scrap-btn" class="action-button">Gerar Scrap!</button>
+            </div>
+            <div id="scrap-result-container" style="display: none;">
+                <div id="scrap-loading" style="display: none;">
+                    <p>Gerando scrap... Por favor, aguarde!</p>
+                </div>
+                <div id="scrap-result" class="scrap-box">
+                    <!-- O scrap gerado aparecerá aqui -->
+                </div>
+                <button id="copy-scrap-btn" class="nav-button" style="margin-top: 15px;">Copiar Texto 📋</button>
+            </div>
+        </section>
+    </div>
+    
+    <footer id="contato">
+        <div class="container">
+             <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
+             <h3 class="contact-title">Fale Conosco ::: Mande um Scrap!</h3>
+             <p class="contact-subtitle">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+             <div class="contact-buttons">
+                <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
+                <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
+                <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
+                <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
+                <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+             </div>
+            <p class="footer-text">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Compra -->
+    <div id="purchase-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close">X</button>
+            <h3 id="modal-title" class="modal-title">Comprar Ingressos</h3>
+            
+            <form id="form-checkout">
+                <div id="form-checkout__header">
+                    <div class="form-group">
+                        <label for="payerFirstName">Nome</label>
+                        <input id="form-checkout__payerFirstName" name="payerFirstName" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="payerLastName">Sobrenome</label>
+                        <input id="form-checkout__payerLastName" name="payerLastName" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input id="form-checkout__email" name="email" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="identificationType">Tipo de documento</label>
+                        <select id="form-checkout__identificationType" name="identificationType" type="text"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="identificationNumber">Número do documento</label>
+                        <input id="form-checkout__identificationNumber" name="identificationNumber" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantidade de Ingressos</label>
+                    <div class="ticket-group">
+                        <label for="qty-inteira">Inteira (R$ <span id="price-inteira">0.00</span>)</label>
+                        <input type="number" id="qty-inteira" name="qtyInteira" min="0" value="1" max="10">
+                    </div>
+                    <div class="ticket-group">
+                        <label for="qty-meia">Meia (R$ <span id="price-meia">0.00</span>)</label>
+                        <input type="number" id="qty-meia" name="qtyMeia" min="0" value="0" max="10">
+                    </div>
+                </div>
+                <div id="total-price" class="total-price">
+                    TOTAL: R$ 0.00
+                </div>
+                <button type="submit" class="action-button modal-button">Pagar com PIX</button>
+            </form>
+            
+            <div id="pix-payment-container">
+                <h4>Pagamento com PIX</h4>
+                <p>Escaneie o código QR com o seu app de pagamentos:</p>
+                <img id="pix-qr-code" src="" alt="PIX QR Code">
+                <p>Ou use o PIX Copia e Cola:</p>
+                <input type="text" id="pix-copy-paste" readonly>
+                <button id="copy-pix-btn" class="nav-button">Copiar Código</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO: Modal de Erro -->
+    <div id="error-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="error-close-btn" class="modal-close">X</button>
+            <h3 class="modal-title">Ops! Ocorreu um Erro</h3>
+            <p id="error-message">Não foi possível processar o seu pedido. Por favor, tente novamente.</p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- DADOS ESTÁTICOS ---
+        const sessoes = [
+            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        ];
+
+        const elenco = [
+            { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+            { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+            { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+            { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+            { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+            { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+            { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+        ];
+
+        // --- FUNÇÃO PARA RENDERIZAR CONTEÚDO DINÂMICO ---
+        function renderContent() {
+            const eventsContainer = document.getElementById('events-list-container');
+            eventsContainer.innerHTML = ''; // Limpa antes de renderizar
+            sessoes.forEach(sessao => {
+                const dataObj = new Date(sessao.data);
+                const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `
+                    <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
+                    <p class="event-date">${horaFormatada}h</p>
+                    <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
+                    <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
+                        ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
+                    </button>
+                `;
+                eventsContainer.appendChild(card);
+            });
+
+            const castContainer = document.getElementById('cast-list-container');
+            castContainer.innerHTML = '';
+            elenco.forEach(ator => {
+                const card = document.createElement('div');
+                card.className = 'cast-member';
+                card.innerHTML = `
+                    <img src="${ator.foto}" alt="Foto de ${ator.nome}" class="cast-photo">
+                    <div class="cast-name">${ator.nome}</div>
+                    <div class="cast-character">${ator.personagem}</div>
+                `;
+                castContainer.appendChild(card);
+            });
+            
+            const gifCard = document.createElement('div');
+            gifCard.className = 'cast-member';
+            gifCard.innerHTML = `
+                <a href="https://postimages.org/" target="_blank">
+                    <img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô GIF" class="cast-gif">
+                </a>
+                <div class="cast-name" style="height: 19px;">&nbsp;</div>
+                <div class="cast-character" style="height: 17px;">&nbsp;</div>
+            `;
+            castContainer.appendChild(gifCard);
+            
+            addPurchaseButtonListeners();
+        }
+
+        renderContent();
+
+        // --- CONTADOR REGRESSIVO ---
+        const countdownTargetDate = new Date('2025-10-03T20:30:00').getTime();
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownTargetDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector('.countdown-title').innerHTML = "A TEMPORADA COMEÇOU!";
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+        
+        // --- LÓGICA DO CHECKOUT TRANSPARENTE ---
+        const purchaseModal = document.getElementById('purchase-modal');
+        const purchaseCloseBtn = document.getElementById('modal-close-btn');
+        const modalTitle = document.getElementById('modal-title');
+        const qtyInteiraInput = document.getElementById('qty-inteira');
+        const qtyMeiaInput = document.getElementById('qty-meia');
+        const priceInteiraSpan = document.getElementById('price-inteira');
+        const priceMeiaSpan = document.getElementById('price-meia');
+        const totalPriceDiv = document.getElementById('total-price');
+        const formCheckout = document.getElementById('form-checkout');
+        const pixContainer = document.getElementById('pix-payment-container');
+
+        const errorModal = document.getElementById('error-modal');
+        const errorCloseBtn = document.getElementById('error-close-btn');
+        const errorMessageP = document.getElementById('error-message');
+
+        let currentSession = null;
+        let totalAmount = 0;
+
+        const mp = new MercadoPago('APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837', { locale: 'pt-BR' });
+
+        function showErrorModal(message) {
+            errorMessageP.textContent = message;
+            errorModal.classList.add('visible');
+        }
+
+        function updateTotalPrice() {
+            if (!currentSession) return;
+            totalAmount = (qtyInteiraInput.value * currentSession.precoInteira) + (qtyMeiaInput.value * currentSession.precoMeia);
+            totalPriceDiv.innerText = `TOTAL: R$ ${totalAmount.toFixed(2).replace('.',',')}`;
+        }
+        
+        function addPurchaseButtonListeners() {
+            document.querySelectorAll('.event-button').forEach(button => {
+                if(button.disabled) return;
+                button.addEventListener('click', (e) => {
+                    const sessionId = e.target.getAttribute('data-session-id');
+                    currentSession = sessoes.find(s => s.id === sessionId);
+                    if (currentSession) {
+                        const dataObj = new Date(currentSession.data);
+                        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                        const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                        
+                        modalTitle.innerText = `Sessão ${dataFormatada} - ${horaFormatada}h`;
+                        priceInteiraSpan.innerText = currentSession.precoInteira.toFixed(2).replace('.',',');
+                        priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
+                        updateTotalPrice();
+                        
+                        formCheckout.style.display = 'block';
+                        pixContainer.style.display = 'none';
+                        
+                        getIdentificationTypes();
+                        purchaseModal.classList.add('visible');
+                    }
+                });
+            });
+        }
+
+        purchaseCloseBtn.addEventListener('click', () => purchaseModal.classList.remove('visible'));
+        errorCloseBtn.addEventListener('click', () => errorModal.classList.remove('visible'));
+
+        qtyInteiraInput.addEventListener('input', updateTotalPrice);
+        qtyMeiaInput.addEventListener('input', updateTotalPrice);
+
+        async function getIdentificationTypes() {
+            try {
+                const identificationTypes = await mp.getIdentificationTypes();
+                const identificationTypeElement = document.getElementById('form-checkout__identificationType');
+                
+                const fragment = document.createDocumentFragment();
+                identificationTypes.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type.id;
+                    option.textContent = type.name;
+                    fragment.appendChild(option);
+                });
+                identificationTypeElement.innerHTML = '';
+                identificationTypeElement.appendChild(fragment);
+            } catch (e) {
+                console.error('Error getting identificationTypes: ', e);
+            }
+        }
+        
+        formCheckout.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const paymentData = {
+                transaction_amount: totalAmount,
+                description: `Ingressos para ${currentSession.id}`,
+                payment_method_id: 'pix',
+                payer: {
+                    email: document.getElementById('form-checkout__email').value,
+                    first_name: document.getElementById('form-checkout__payerFirstName').value,
+                    last_name: document.getElementById('form-checkout__payerLastName').value,
+                    identification: {
+                        type: document.getElementById('form-checkout__identificationType').value,
+                        number: document.getElementById('form-checkout__identificationNumber').value
+                    }
+                },
+                extra_info: {
+                    sessionId: currentSession.id,
+                    phone: 'N/A' // Adicionar campo de telefone se necessário
+                }
+            };
+
+            try {
+                const response = await fetch('/.netlify/functions/process-payment-transparente', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Falha ao processar o pagamento.');
+                }
+                
+                const result = await response.json();
+                
+                formCheckout.style.display = 'none';
+                document.getElementById('pix-qr-code').src = `data:image/jpeg;base64,${result.qr_code_base64}`;
+                document.getElementById('pix-copy-paste').value = result.qr_code;
+                pixContainer.style.display = 'block';
+
+            } catch (error) {
+                showErrorModal(error.message);
+            }
+        });
+
+        document.getElementById('copy-pix-btn').addEventListener('click', () => {
+            const pixCode = document.getElementById('pix-copy-paste');
+            pixCode.select();
+            document.execCommand('copy');
+            alert('Código PIX copiado!');
+        });
+        
+        // --- LÓGICA DO GERADOR DE SCRAP (GEMINI API) ---
+        const generateScrapBtn = document.getElementById('generate-scrap-btn');
+        const scrapResultContainer = document.getElementById('scrap-result-container');
+        const scrapResultDiv = document.getElementById('scrap-result');
+        const scrapLoadingDiv = document.getElementById('scrap-loading');
+        const copyScrapBtn = document.getElementById('copy-scrap-btn');
+
+        generateScrapBtn.addEventListener('click', async () => {
+            const userPrompt = document.getElementById('scrap-prompt').value;
+            if (!userPrompt) {
+                showErrorModal('Por favor, descreva sobre o que deve ser o scrap!');
+                return;
+            }
+            scrapResultContainer.style.display = 'block';
+            scrapResultDiv.style.display = 'none';
+            scrapLoadingDiv.style.display = 'block';
+            generateScrapBtn.disabled = true;
+
+            const prompt = `Aja como um adolescente brasileiro em 2006, usando o Orkut. Crie um 'scrap' (depoimento) curto e nostálgico, com no máximo 60 palavras, sobre o seguinte tema: '${userPrompt}'. Use gírias da época como 'migs', 'tipo assim', 'balada', 'top', 'pagar mico' e emoticons como :), :P, ;), s2. No final, adicione um convite casual para a peça de teatro 'Próxima Parada: Anos 2000'. Seja criativo. Não use hashtags.`;
+
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('Não foi possível gerar o scrap. Tente novamente.');
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    scrapResultDiv.innerText = text;
+                } else {
+                    throw new Error('Resposta inválida da IA. Tente novamente.');
+                }
+            } catch (error) {
+                scrapResultDiv.innerText = `Erro: ${error.message}`;
+            } finally {
+                scrapLoadingDiv.style.display = 'none';
+                scrapResultDiv.style.display = 'block';
+                generateScrapBtn.disabled = false;
+            }
+        });
+
+        copyScrapBtn.addEventListener('click', () => {
+            const textToCopy = scrapResultDiv.innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Scrap copiado para a área de transferência!');
+        });
+
+        // --- NAVEGAÇÃO SUAVE ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
