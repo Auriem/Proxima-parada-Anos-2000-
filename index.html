@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
     <style>
-        /* [COLE AQUI TODO O BLOCO <style> DO SEU TEMPLATE ORIGINAL] */
-        /* ... (O bloco CSS é muito grande para ser repetido, use o original) ... */
         /* Estilos Globais - Tema Anos 2000 Aprimorado */
         :root {
             --primary-blue: #0000CD;
@@ -33,6 +31,70 @@
             line-height: 1.6;
             background-attachment: fixed;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fundo animado com scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlines 2s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        /* Container de partículas */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-pink);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-10px) translateX(100px);
+                opacity: 0;
+            }
         }
         
         .container {
@@ -40,6 +102,8 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 10;
         }
         
         /* Efeitos de Texto Nostálgicos Aprimorados */
@@ -92,6 +156,41 @@
             letter-spacing: 2px;
             position: relative;
             display: inline-block;
+        }
+
+        .logo.glitch {
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+            10% {
+                transform: translate(-2px, 2px);
+                filter: hue-rotate(90deg);
+            }
+            20% {
+                transform: translate(2px, -2px);
+                filter: hue-rotate(180deg);
+            }
+            30% {
+                transform: translate(-2px, -2px);
+                filter: hue-rotate(270deg);
+            }
+            40% {
+                transform: translate(2px, 2px);
+                filter: hue-rotate(360deg);
+            }
+            50% {
+                transform: translate(-2px, 2px);
+                filter: hue-rotate(90deg);
+            }
+            60% {
+                transform: translate(2px, -2px);
+                filter: hue-rotate(180deg);
+            }
         }
         
         .logo::after {
@@ -1006,8 +1105,11 @@
     </style>
 </head>
 <body>
+    <!-- Container de partículas -->
+    <div id="particles-container"></div>
+
     <header>
-        <h1 class="logo glow-text">Próxima Parada: Anos 2000</h1>
+        <h1 class="logo glow-text glitch">Próxima Parada: Anos 2000</h1>
         <nav>
             <a href="#" class="nav-button">Início<span>🏠</span></a>
             <a href="#ingressos" class="nav-button">Ingressos<span>🎟️</span></a>
@@ -1466,7 +1568,6 @@
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
             document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
             alert('Scrap copiado para a área de transferência!');
         });
 
