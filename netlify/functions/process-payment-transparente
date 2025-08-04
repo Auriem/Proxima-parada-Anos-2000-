@@ -1,0 +1,212 @@
+// netlify/functions/process-payment-transparente.js
+const mercadopago = require('mercadopago');
+const { Resend } = require('resend');
+
+exports.handler = async (event) => {
+    // CORS headers
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+    };
+
+    if (event.httpMethod === 'OPTIONS') {
+        return { statusCode: 200, headers, body: '' };
+    }
+
+    if (event.httpMethod !== 'POST') {
+        return { 
+            statusCode: 405, 
+            headers,
+            body: JSON.stringify({ error: 'Method Not Allowed' })
+        };
+    }
+
+    try {
+        // Configurar Mercado Pago
+        mercadopago.configure({ 
+            access_token: process.env.MERCADOPAGO_ACCESS_TOKEN 
+        });
+
+        const data = JSON.parse(event.body);
+        console.log('Dados recebidos:', data);
+
+        // Validar dados obrigatórios
+        if (!data.transaction_amount || !data.description || !data.payer) {
+            throw new Error('Dados obrigatórios não fornecidos');
+        }
+
+        // Preparar dados do pagamento
+        const paymentData = {
+            transaction_amount: parseFloat(data.transaction_amount),
+            description: data.description,
+            payment_method_id: data.payment_method_id || 'pix',
+            payer: {
+                email: data.payer.email,
+                first_name: data.payer.first_name,
+                last_name: data.payer.last_name,
+                identification: {
+                    type: data.payer.identification.type,
+                    number: data.payer.identification.number
+                }
+            },
+            notification_url: `${process.env.URL || 'https://proximaparadaanos2000.online'}/.netlify/functions/handle-payment`,
+            additional_info: {
+                items: [{
+                    id: data.additional_info?.session_id || 'ingresso',
+                    title: data.description,
+                    quantity: (data.additional_info?.qty_inteira || 0) + (data.additional_info?.qty_meia || 0),
+                    unit_price: parseFloat(data.transaction_amount)
+                }],
+                payer: {
+                    phone: data.payer.phone || {}
+                }
+            }
+        };
+
+        // Se for pagamento com cartão, adicionar dados do cartão
+        if (data.payment_method_id && data.payment_method_id !== 'pix') {
+            paymentData.token = data.token;
+            paymentData.installments = parseInt(data.installments) || 1;
+            paymentData.issuer_id = data.issuer_id;
+            
+            if (data.payer.identification) {
+                paymentData.payer.identification = data.payer.identification;
+            }
+        }
+
+        console.log('Dados do pagamento:', JSON.stringify(paymentData, null, 2));
+
+        // Processar pagamento
+        const payment = await mercadopago.payment.save(paymentData);
+        console.log('Resposta do Mercado Pago:', payment);
+
+        if (payment.body) {
+            const paymentResult = payment.body;
+            
+            // Para PIX
+            if (paymentData.payment_method_id === 'pix' && paymentResult.status === 'pending') {
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({
+                        status: 'pending',
+                        paymentId: paymentResult.id,
+                        qr_code_base64: paymentResult.point_of_interaction?.transaction_data?.qr_code_base64,
+                        qr_code: paymentResult.point_of_interaction?.transaction_data?.qr_code
+                    })
+                };
+            }
+            
+            // Para cartão
+            if (paymentData.payment_method_id !== 'pix') {
+                if (paymentResult.status === 'approved') {
+                    // Enviar e-mails imediatamente para pagamentos aprovados
+                    await sendConfirmationEmails(paymentResult, data);
+                    
+                    return {
+                        statusCode: 200,
+                        headers,
+                        body: JSON.stringify({
+                            status: 'approved',
+                            paymentId: paymentResult.id,
+                            message: 'Pagamento aprovado com sucesso!'
+                        })
+                    };
+                } else if (paymentResult.status === 'pending') {
+                    return {
+                        statusCode: 200,
+                        headers,
+                        body: JSON.stringify({
+                            status: 'pending',
+                            paymentId: paymentResult.id,
+                            message: 'Pagamento pendente de aprovação'
+                        })
+                    };
+                } else {
+                    throw new Error(paymentResult.status_detail || 'Pagamento rejeitado');
+                }
+            }
+            
+            throw new Error('Tipo de pagamento não reconhecido');
+        } else {
+            throw new Error('Resposta inválida do Mercado Pago');
+        }
+
+    } catch (error) {
+        console.error("Erro ao processar pagamento:", error);
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ 
+                error: error.message || 'Ocorreu um erro interno.',
+                details: error.cause || error.stack
+            })
+        };
+    }
+};
+
+// Função para enviar e-mails de confirmação
+async function sendConfirmationEmails(paymentResult, originalData) {
+    try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const { payer } = paymentResult;
+        const userName = `${payer.first_name} ${payer.last_name}`;
+        const userEmail = payer.email;
+        const uniqueCode = `A2K-${Date.now().toString(36).toUpperCase()}`;
+
+        // E-mail para o cliente
+        await resend.emails.send({
+            from: 'Auriem Company <contato@proximaparadaanos2000.online>',
+            to: userEmail,
+            subject: `Seu ingresso para Próxima Parada: Anos 2000! ✨`,
+            html: `
+                <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; color: #333;">
+                    <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem" style="width:100px;">
+                    <h1 style="color: #8A2BE2;">Compra Aprovada, ${userName}!</h1>
+                    <p>Seu passaporte para os anos 2000 está garantido!</p>
+                    <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Confirmação" style="max-width: 300px; border-radius: 10px;">
+                    <p><strong>Seu Código Único de Entrada:</strong></p>
+                    <h2 style="background-color: #f0f0f0; padding: 15px; border-radius: 5px; border: 2px dashed #FF6EC7;">${uniqueCode}</h2>
+                    <p><strong>Detalhes da Compra:</strong></p>
+                    <p>${paymentResult.description}</p>
+                    <p><strong>Valor Pago:</strong> R$ ${paymentResult.transaction_amount.toFixed(2)}</p>
+                    <p>Apresente este e-mail (ou o código) na entrada do teatro.</p>
+                    <hr style="border: 1px solid #ddd;">
+                    <p>Atenciosamente,<br><strong>Auriem Produções Artísticas</strong></p>
+                </div>
+            `,
+            attachments: [{
+                filename: 'modelo_ingresso_anos2000.pdf',
+                path: 'https://proximaparadaanos2000.online/assets/modelo_ingresso.pdf'
+            }]
+        });
+
+        // E-mail para a produção
+        await resend.emails.send({
+            from: 'Sistema de Vendas <vendas@proximaparadaanos2000.online>',
+            to: 'auriemcompany@gmail.com',
+            subject: `✅ Nova Venda Realizada! - Próxima Parada: Anos 2000`,
+            html: `
+                <h2>Nova Venda Confirmada!</h2>
+                <p><strong>Comprador:</strong> ${userName}</p>
+                <p><strong>E-mail:</strong> ${userEmail}</p>
+                <p><strong>Telefone:</strong> ${originalData.payer.phone?.area_code || ''} ${originalData.payer.phone?.number || ''}</p>
+                <p><strong>Descrição da Compra:</strong> ${paymentResult.description}</p>
+                <p><strong>Valor:</strong> R$ ${paymentResult.transaction_amount.toFixed(2)}</p>
+                <p><strong>Código Único:</strong> ${uniqueCode}</p>
+                <p><strong>ID do Pagamento:</strong> ${paymentResult.id}</p>
+                <p><strong>Status:</strong> ${paymentResult.status}</p>
+                <p><strong>Sessão:</strong> ${originalData.additional_info?.session_id || 'N/A'}</p>
+                <p><strong>Quantidade Inteira:</strong> ${originalData.additional_info?.qty_inteira || 0}</p>
+                <p><strong>Quantidade Meia:</strong> ${originalData.additional_info?.qty_meia || 0}</p>
+            `
+        });
+
+        console.log('E-mails enviados com sucesso');
+    } catch (emailError) {
+        console.error('Erro ao enviar e-mails:', emailError);
+        // Não falhar o pagamento por causa do e-mail
+    }
+}
+
