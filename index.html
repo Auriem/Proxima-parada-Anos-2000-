@@ -871,7 +871,7 @@
             color: var(--light-pink);
             font-weight: bold;
         }
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 10px;
             background-color: rgba(0,0,0,0.5);
@@ -980,9 +980,28 @@
             text-align: center;
         }
         
-        /* Checkout Transparente */
-        #payment-bricks-container {
-            display: none; /* Começa escondido */
+        #pix-payment-container {
+            display: none;
+            text-align: center;
+        }
+        #pix-qr-code {
+            max-width: 250px;
+            margin: 15px auto;
+            border: 5px solid white;
+            border-radius: 10px;
+        }
+        #pix-copy-paste {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            color: var(--white);
+            font-size: 14px;
+            box-sizing: border-box;
+            text-align: center;
+            word-wrap: break-word;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -1092,19 +1111,30 @@
             <button id="modal-close-btn" class="modal-close">X</button>
             <h3 id="modal-title" class="modal-title">Comprar Ingressos</h3>
             
-            <div id="form-step-1">
-                <div class="form-group">
-                    <label for="fullname">Nome Completo</label>
-                    <input type="text" id="fullname" name="fullname" required>
+            <form id="form-checkout">
+                <div id="form-checkout__header">
+                    <div class="form-group">
+                        <label for="payerFirstName">Nome</label>
+                        <input id="form-checkout__payerFirstName" name="payerFirstName" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="payerLastName">Sobrenome</label>
+                        <input id="form-checkout__payerLastName" name="payerLastName" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input id="form-checkout__email" name="email" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="identificationType">Tipo de documento</label>
+                        <select id="form-checkout__identificationType" name="identificationType" type="text"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="identificationNumber">Número do documento</label>
+                        <input id="form-checkout__identificationNumber" name="identificationNumber" type="text">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">E-mail (para receber os ingressos)</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Telefone (WhatsApp)</label>
-                    <input type="tel" id="phone" name="phone" placeholder="(XX) XXXXX-XXXX" required>
-                </div>
+
                 <div class="form-group">
                     <label>Quantidade de Ingressos</label>
                     <div class="ticket-group">
@@ -1119,15 +1149,16 @@
                 <div id="total-price" class="total-price">
                     TOTAL: R$ 0.00
                 </div>
-                <button id="continue-to-payment" class="action-button modal-button">Ir para Pagamento</button>
-            </div>
-
-            <div id="payment-bricks-container">
-                <form id="payment-form" action="/process-payment" method="post">
-                    <!-- Estes divs serão preenchidos pelo Mercado Pago -->
-                    <div id="paymentBrick_container"></div>
-                    <div id="statusScreenBrick_container"></div>
-                </form>
+                <button type="submit" class="action-button modal-button">Pagar com PIX</button>
+            </form>
+            
+            <div id="pix-payment-container">
+                <h4>Pagamento com PIX</h4>
+                <p>Escaneie o código QR com o seu app de pagamentos:</p>
+                <img id="pix-qr-code" src="" alt="PIX QR Code">
+                <p>Ou use o PIX Copia e Cola:</p>
+                <input type="text" id="pix-copy-paste" readonly>
+                <button id="copy-pix-btn" class="nav-button">Copiar Código</button>
             </div>
         </div>
     </div>
@@ -1250,10 +1281,8 @@
         const priceInteiraSpan = document.getElementById('price-inteira');
         const priceMeiaSpan = document.getElementById('price-meia');
         const totalPriceDiv = document.getElementById('total-price');
-        
-        const formStep1 = document.getElementById('form-step-1');
-        const paymentContainer = document.getElementById('payment-bricks-container');
-        const continueToPaymentBtn = document.getElementById('continue-to-payment');
+        const formCheckout = document.getElementById('form-checkout');
+        const pixContainer = document.getElementById('pix-payment-container');
 
         const errorModal = document.getElementById('error-modal');
         const errorCloseBtn = document.getElementById('error-close-btn');
@@ -1291,9 +1320,10 @@
                         priceMeiaSpan.innerText = currentSession.precoMeia.toFixed(2).replace('.',',');
                         updateTotalPrice();
                         
-                        formStep1.style.display = 'block';
-                        paymentContainer.style.display = 'none';
+                        formCheckout.style.display = 'block';
+                        pixContainer.style.display = 'none';
                         
+                        getIdentificationTypes();
                         purchaseModal.classList.add('visible');
                     }
                 });
@@ -1306,96 +1336,78 @@
         qtyInteiraInput.addEventListener('input', updateTotalPrice);
         qtyMeiaInput.addEventListener('input', updateTotalPrice);
 
-        continueToPaymentBtn.addEventListener('click', () => {
-            if (!document.getElementById('fullname').value || !document.getElementById('email').value || !document.getElementById('phone').value) {
-                showErrorModal("Por favor, preencha todos os seus dados antes de continuar.");
-                return;
+        async function getIdentificationTypes() {
+            try {
+                const identificationTypes = await mp.getIdentificationTypes();
+                const identificationTypeElement = document.getElementById('form-checkout__identificationType');
+                
+                const fragment = document.createDocumentFragment();
+                identificationTypes.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type.id;
+                    option.textContent = type.name;
+                    fragment.appendChild(option);
+                });
+                identificationTypeElement.innerHTML = '';
+                identificationTypeElement.appendChild(fragment);
+            } catch (e) {
+                console.error('Error getting identificationTypes: ', e);
             }
-            if (totalAmount <= 0) {
-                showErrorModal("Você precisa selecionar pelo menos um ingresso.");
-                return;
-            }
+        }
+        
+        formCheckout.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const paymentData = {
+                transaction_amount: totalAmount,
+                description: `Ingressos para ${currentSession.id}`,
+                payment_method_id: 'pix',
+                payer: {
+                    email: document.getElementById('form-checkout__email').value,
+                    first_name: document.getElementById('form-checkout__payerFirstName').value,
+                    last_name: document.getElementById('form-checkout__payerLastName').value,
+                    identification: {
+                        type: document.getElementById('form-checkout__identificationType').value,
+                        number: document.getElementById('form-checkout__identificationNumber').value
+                    }
+                },
+                extra_info: {
+                    sessionId: currentSession.id,
+                    phone: 'N/A' // Adicionar campo de telefone se necessário
+                }
+            };
 
-            formStep1.style.display = 'none';
-            paymentContainer.style.display = 'block';
-            renderPaymentBrick();
+            try {
+                const response = await fetch('/.netlify/functions/process-payment-transparente', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Falha ao processar o pagamento.');
+                }
+                
+                const result = await response.json();
+                
+                formCheckout.style.display = 'none';
+                document.getElementById('pix-qr-code').src = `data:image/jpeg;base64,${result.qr_code_base64}`;
+                document.getElementById('pix-copy-paste').value = result.qr_code;
+                pixContainer.style.display = 'block';
+
+            } catch (error) {
+                showErrorModal(error.message);
+            }
         });
 
-        async function renderPaymentBrick() {
-            const bricksBuilder = mp.bricks();
-            const settings = {
-                initialization: {
-                    amount: totalAmount,
-                    payer: {
-                        email: document.getElementById('email').value,
-                    },
-                },
-                customization: {
-                    visual: {
-                        style: {
-                            theme: 'dark',
-                            customVariables: {
-                                "base-color": "var(--neon-pink)"
-                            }
-                        },
-                        buttonBackground: 'custom',
-                        buttonCustomText: 'Garantir meu ingresso!',
-                    },
-                    paymentMethods: {
-                        ticket: "all",
-                        debitCard: 'all',
-                        creditCard: 'all',
-                        pix: 'all',
-                        maxInstallments: 1,
-                        defaultPaymentOption: {
-                            pix: 'all'
-                        }
-                    },
-                },
-                callbacks: {
-                    onReady: () => {},
-                    onSubmit: async (cardFormData) => {
-                        const purchaseData = {
-                            sessionId: currentSession.id,
-                            userName: document.getElementById('fullname').value,
-                            userEmail: document.getElementById('email').value,
-                            phone: document.getElementById('phone').value,
-                            tickets: {
-                                inteira: { quantity: qtyInteiraInput.valueAsNumber, unit_price: currentSession.precoInteira },
-                                meia: { quantity: qtyMeiaInput.valueAsNumber, unit_price: currentSession.precoMeia }
-                            },
-                            paymentData: cardFormData
-                        };
-
-                        try {
-                            const response = await fetch('/.netlify/functions/process-payment', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(purchaseData)
-                            });
-
-                            if (!response.ok) {
-                                const errorData = await response.json();
-                                throw new Error(errorData.error || 'Falha ao processar o pagamento.');
-                            }
-                            
-                            const result = await response.json();
-                            purchaseModal.classList.remove('visible');
-                            alert(`Pagamento aprovado! ID: ${result.paymentId}. Você receberá a confirmação por e-mail.`);
-
-                        } catch (error) {
-                            showErrorModal(error.message);
-                        }
-                    },
-                    onError: (error) => {
-                        console.error(error);
-                        showErrorModal("Ocorreu um erro com o pagamento. Verifique os dados e tente novamente.");
-                    },
-                },
-            };
-            window.paymentBrickController = await bricksBuilder.create('payment', 'paymentBrick_container', settings);
-        }
-
+        document.getElementById('copy-pix-btn').addEventListener('click', () => {
+            const pixCode = document.getElementById('pix-copy-paste');
+            pixCode.select();
+            document.execCommand('copy');
+            alert('Código PIX copiado!');
+        });
+        
         // --- LÓGICA DO GERADOR DE SCRAP (GEMINI API) ---
         const generateScrapBtn = document.getElementById('generate-scrap-btn');
         const scrapResultContainer = document.getElementById('scrap-result-container');
