@@ -1209,7 +1209,7 @@
             `;
             castContainer.appendChild(gifCard);
             
-            addPurchaseButtonListeners(sessoes);
+            addPurchaseButtonListeners();
         }
 
         renderContent();
@@ -1262,7 +1262,7 @@
         let currentSession = null;
         let totalAmount = 0;
 
-        const mp = new MercadoPago('APP_USR-23cc60e6-e8fd-4a06-b5c7-cbcd786764ab', { locale: 'pt-BR' });
+        const mp = new MercadoPago('TEST-68c5d4a6-cd0e-4ef1-81bb-bceb5c57145c', { locale: 'pt-BR' });
 
         function showErrorModal(message) {
             errorMessageP.textContent = message;
@@ -1275,7 +1275,7 @@
             totalPriceDiv.innerText = `TOTAL: R$ ${totalAmount.toFixed(2).replace('.',',')}`;
         }
         
-        function addPurchaseButtonListeners(sessoes) {
+        function addPurchaseButtonListeners() {
             document.querySelectorAll('.event-button').forEach(button => {
                 if(button.disabled) return;
                 button.addEventListener('click', (e) => {
@@ -1334,22 +1334,13 @@
                     visual: {
                         style: {
                             theme: 'dark',
-                            customVariables: {
-                                "base-color": "var(--neon-pink)"
-                            }
-                        },
-                        buttonBackground: 'custom',
-                        buttonCustomText: 'Garantir meu ingresso!',
+                        }
                     },
                     paymentMethods: {
                         ticket: "all",
                         debitCard: 'all',
                         creditCard: 'all',
                         pix: 'all',
-                        maxInstallments: 1,
-                        defaultPaymentOption: {
-                            pix: 'all'
-                        }
                     },
                 },
                 callbacks: {
@@ -1474,4 +1465,3 @@
     </script>
 </body>
 </html>
-
