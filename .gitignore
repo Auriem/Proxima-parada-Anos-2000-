@@ -1,0 +1,14 @@
+# Ignorar a pasta de dependências do Node.js
+/node_modules
+
+# Ignorar arquivos de configuração de build e deploy do Netlify
+/.netlify
+
+# Ignorar arquivos de variáveis de ambiente (MUITO IMPORTANTE para segurança)
+.env
+.env.*
+!.env.example
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
