@@ -1,9 +1,17 @@
 {
-  "name": "proxima-parada-backend",
+  "name": "proxima-parada",
   "version": "1.0.0",
-  "description": "Funções Serverless para venda de ingressos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "mercadopago": "^1.5.17",
-    "resend": "^3.2.0"
+    "mercadopago": "^2.8.0",
+    "pdf-lib": "^1.17.1",
+    "resend": "^6.0.1"
   }
 }

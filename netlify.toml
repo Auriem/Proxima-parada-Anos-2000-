@@ -1,2 +1,10 @@
-[build]
-  functions = "netlify/functions"
+# Este arquivo diz ao Netlify onde encontrar nossas funções de backend.
+[functions]
+  directory = "netlify/functions/"
+  node_bundler = "esbuild"
+
+# Esta regra redireciona as chamadas para nossas funções.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
