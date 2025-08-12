@@ -1105,73 +1105,74 @@
             <button id="modal-close-btn" class="modal-close">×</button>
             <h3 class="modal-title">Comprar Ingresso</h3>
             
-            <!-- Formulário de Dados Pessoais -->
             <div id="personal-data-form">
                 <div class="form-group">
                     <label for="full-name">Nome Completo:</label>
                     <input type="text" id="full-name" required>
                 </div>
-                
                 <div class="form-group">
                     <label for="email">E-mail:</label>
                     <input type="email" id="email" required>
                 </div>
-                
                 <div class="form-group">
                     <label for="phone">Telefone:</label>
                     <input type="tel" id="phone" required>
                 </div>
-                
                 <div class="form-group">
                     <label>Tipo de Ingresso:</label>
                     <div class="ticket-group">
                         <label for="qty-inteira">Inteira (R$ 50,00)</label>
-                        <input type="number" id="qty-inteira" min="0" value="1" max="10">
+                        <input type="number" id="qty-inteira" min="0" value="1" max="4">
                     </div>
                     <div class="ticket-group">
                         <label for="qty-meia">Meia (R$ 25,00)</label>
-                        <input type="number" id="qty-meia" min="0" value="0" max="10">
+                        <input type="number" id="qty-meia" min="0" value="0" max="4">
                     </div>
                 </div>
-
                 <div class="total-section">
                     <div class="total-amount" id="total-amount">R$ 50,00</div>
                 </div>
-                
-                <button id="continue-to-payment" class="continue-button">Pagar com PIX</button>
+                <button id="continue-to-payment" class="continue-button">Continuar</button>
             </div>
             
-            <!-- ======================================================= -->
-            <!-- SEÇÃO DE PAGAMENTO PIX DIRETO -->
-            <!-- ======================================================= -->
-            <div id="payment-section" class="payment-section">
-                <h4 style="color: var(--neon-pink); text-align: center; margin-bottom: 20px;">Pague com PIX</h4>
-                
-                <!-- Container para o QR Code e Copia/Cola -->
-                <div id="pix-container" style="text-align: center; display: none;">
-                    <p>Escaneie o QR Code abaixo com seu app do banco:</p>
-                    <img id="pix-qrcode" src="" alt="QR Code PIX" style="max-width: 250px; margin: 10px auto; border: 5px solid white; border-radius: 8px;">
-                    <p>Ou use o PIX Copia e Cola:</p>
-                    <textarea id="pix-copia-cola" rows="4" style="width: 100%; background: #333; color: white; border-radius: 5px; padding: 10px; box-sizing: border-box; font-size: 14px; word-wrap: break-word;" readonly></textarea>
-                    <button id="copy-pix-button" class="action-button" style="margin-top: 10px;">Copiar Código</button>
-                    <p id="copy-success-message" style="color: var(--neon-green); display: none; margin-top: 10px;">Copiado!</p>
-                </div>
-            
-                <!-- Mensagem de carregamento -->
-                <div id="loader-container" class="retro-loader" style="display: none;">
-                    <span class="loader-icon">💿</span>
-                    <span class="loader-text">Gerando código PIX...</span>
-                </div>
-            
-                <!-- Container para exibir o status do pagamento -->
-                <div id="status-screen" style="display: none; text-align: center; padding: 20px;"></div>
+            <div id="payment-choice-section" style="display: none; text-align: center;">
+                <h4 style="color: var(--neon-pink); margin-bottom: 20px;">Escolha como pagar:</h4>
+                <button id="pay-with-pix-btn" class="action-button">Pagar com PIX</button>
+                <button id="pay-with-mp-btn" class="action-button">Pagar com Mercado Pago (Cartão, etc)</button>
             </div>
+
+            <div id="pix-manual-payment" style="display: none; text-align: center;">
+                 <h4 style="color: var(--neon-pink);">Pague com PIX</h4>
+                 <p>O valor total da sua compra é: <b id="pix-total-value" style="font-size: 1.2em;"></b></p>
+                 <p>Use o QR Code ou a chave abaixo:</p>
+                 <img id="pix-qr-code-img" src="" alt="QR Code PIX" style="max-width: 250px; margin: 10px auto; border: 5px solid white; border-radius: 8px;">
+                 <p>Chave PIX (Copia e Cola):</p>
+                 <input id="pix-key-input" type="text" value="" readonly style="width: 100%; text-align: center; background: #333; color: white; border: 1px solid var(--neon-pink); padding: 8px; box-sizing: border-box; margin-bottom: 10px;">
+                 <hr style="border-color: var(--neon-pink); margin: 20px 0;">
+                 <p style="font-weight: bold;">Após fazer o pagamento, clique no botão abaixo para receber seu ingresso.</p>
+                 <button id="confirm-pix-payment-btn" class="continue-button">Já paguei, enviar ingresso!</button>
+                 <div id="sending-loader" class="retro-loader" style="display: none;">Enviando seu ingresso...</div>
+            </div>
+
+             <div id="final-status-screen" style="display: none; text-align: center; padding: 20px;"></div>
 
         </div>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // =======================================================
+        // PASSO 1: CONFIGURE SEUS DADOS AQUI
+        // =======================================================
+        const paymentLinks = {
+            // Cole aqui o link direto da IMAGEM do seu QR Code estático
+            qrCodeImageUrl: 'https://i.postimg.cc/X7h7ZJjW/image-1.png',
+            
+            // Cole aqui a sua CHAVE PIX (o texto para copia e cola)
+            pixKey: '+5541985031409'
+        };
+        // =======================================================
+
         // --- DADOS ESTÁTICOS ---
         const sessoes = [
             { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
@@ -1195,21 +1196,23 @@
         const closeBtn = document.getElementById('modal-close-btn');
         const continueBtn = document.getElementById('continue-to-payment');
         const personalDataForm = document.getElementById('personal-data-form');
-        const paymentSection = document.getElementById('payment-section');
-        const loaderContainer = document.getElementById('loader-container');
-        const statusScreen = document.getElementById('status-screen');
         const qtyInteira = document.getElementById('qty-inteira');
         const qtyMeia = document.getElementById('qty-meia');
         const totalAmountDiv = document.getElementById('total-amount');
-        const pixContainer = document.getElementById('pix-container');
-        const pixQrCodeImg = document.getElementById('pix-qrcode');
-        const pixCopyPasteInput = document.getElementById('pix-copia-cola');
-        const copyPixButton = document.getElementById('copy-pix-button');
-        const copySuccessMessage = document.getElementById('copy-success-message');
+        const paymentChoiceSection = document.getElementById('payment-choice-section');
+        const payWithPixBtn = document.getElementById('pay-with-pix-btn');
+        const payWithMpBtn = document.getElementById('pay-with-mp-btn');
+        const pixManualPaymentSection = document.getElementById('pix-manual-payment');
+        const pixTotalValue = document.getElementById('pix-total-value');
+        const pixQrCodeImg = document.getElementById('pix-qr-code-img');
+        const pixKeyInput = document.getElementById('pix-key-input');
+        const confirmPixPaymentBtn = document.getElementById('confirm-pix-payment-btn');
+        const sendingLoader = document.getElementById('sending-loader');
+        const finalStatusScreen = document.getElementById('final-status-screen');
 
         let selectedSession = null;
 
-        // --- FUNÇÕES DE RENDERIZAÇÃO E UTILITÁRIAS (Mantidas como as suas) ---
+        // --- FUNÇÕES DE RENDERIZAÇÃO E UTILITÁRIAS ---
         function renderContent() {
             const eventsContainer = document.getElementById('events-list-container');
             eventsContainer.innerHTML = '';
@@ -1264,14 +1267,7 @@
             }
         }
 
-        function addClickEffect(element) {
-            element.addEventListener('click', function() {
-                this.classList.add('clicked');
-                setTimeout(() => { this.classList.remove('clicked'); }, 300);
-            });
-        }
-
-        // --- LÓGICA DO MODAL ---
+        // --- LÓGICA DO MODAL E PAGAMENTO ---
         function openModal(sessionId) {
             selectedSession = sessoes.find(s => s.id === sessionId);
             modal.style.display = 'flex';
@@ -1282,83 +1278,102 @@
         function closeModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            // Reseta o modal para o estado inicial
             personalDataForm.style.display = 'block';
-            paymentSection.style.display = 'none';
-            pixContainer.style.display = 'none';
-            statusScreen.style.display = 'none';
+            paymentChoiceSection.style.display = 'none';
+            pixManualPaymentSection.style.display = 'none';
+            finalStatusScreen.style.display = 'none';
         }
 
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-        
-        // --- VALIDAÇÃO E FLUXO DE PAGAMENTO ---
-        continueBtn.addEventListener('click', async () => {
+        continueBtn.addEventListener('click', () => {
             if (!validateForm()) return;
-
             personalDataForm.style.display = 'none';
-            paymentSection.style.display = 'block';
-            loaderContainer.style.display = 'block';
-            pixContainer.style.display = 'none';
-            statusScreen.style.display = 'none';
+            paymentChoiceSection.style.display = 'block';
+        });
+
+        payWithPixBtn.addEventListener('click', () => {
+            paymentChoiceSection.style.display = 'none';
+            pixTotalValue.textContent = totalAmountDiv.textContent;
+            pixQrCodeImg.src = paymentLinks.qrCodeImageUrl;
+            pixKeyInput.value = paymentLinks.pixKey;
+            pixManualPaymentSection.style.display = 'block';
+        });
+
+        payWithMpBtn.addEventListener('click', async () => {
+            payWithMpBtn.textContent = 'Gerando link...';
+            payWithMpBtn.disabled = true;
 
             try {
-                const pixData = await generatePix();
-                loaderContainer.style.display = 'none';
-                
-                // Exibe o QR Code e o código Copia e Cola
-                pixQrCodeImg.src = `data:image/jpeg;base64,${pixData.qrCodeBase64}`;
-                pixCopyPasteInput.value = pixData.qrCodeCopyPaste;
-                pixContainer.style.display = 'block';
-
-                statusScreen.innerHTML = `<p>Aguardando pagamento... Assim que for confirmado, enviaremos o ingresso para seu e-mail.</p>`;
-                statusScreen.style.display = 'block';
-
+                const response = await fetch('/api/create-mercadopago-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getFormData())
+                });
+                if (!response.ok) throw new Error('Falha ao criar link de pagamento.');
+                const data = await response.json();
+                window.location.href = data.paymentUrl; // Redireciona para o Mercado Pago
             } catch (error) {
-                console.error("Erro ao gerar PIX:", error);
-                loaderContainer.style.display = 'none';
-                statusScreen.innerHTML = `<p style="color:red;">Não foi possível gerar o PIX. Por favor, tente novamente.</p>`;
-                statusScreen.style.display = 'block';
+                console.error("Erro ao gerar link do Mercado Pago:", error);
+                alert("Não foi possível gerar o link de pagamento. Tente novamente.");
+                payWithMpBtn.textContent = 'Pagar com Mercado Pago (Cartão, etc)';
+                payWithMpBtn.disabled = false;
             }
         });
 
-        async function generatePix() {
+        confirmPixPaymentBtn.addEventListener('click', async () => {
+            pixManualPaymentSection.style.display = 'none';
+            sendingLoader.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/send-ticket-manually', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getFormDataForTicket())
+                });
+                if (!response.ok) throw new Error('Falha ao enviar o ingresso.');
+                
+                sendingLoader.style.display = 'none';
+                finalStatusScreen.innerHTML = `<h2>✅ Sucesso!</h2><p>Seu ingresso foi enviado para o e-mail informado. Verifique sua caixa de entrada e spam.</p>`;
+                finalStatusScreen.style.display = 'block';
+
+            } catch (error) {
+                console.error("Erro ao enviar ingresso:", error);
+                sendingLoader.style.display = 'none';
+                finalStatusScreen.innerHTML = `<h2>❌ Erro!</h2><p>Não foi possível enviar seu ingresso. Por favor, entre em contato com a produção.</p>`;
+                finalStatusScreen.style.display = 'block';
+            }
+        });
+
+        // --- FUNÇÕES AUXILIARES ---
+        function getFormData() {
             const items = [];
             if (parseInt(qtyInteira.value) > 0) items.push({ title: 'Ingresso Inteira', quantity: parseInt(qtyInteira.value), unit_price: selectedSession.precoInteira });
             if (parseInt(qtyMeia.value) > 0) items.push({ title: 'Ingresso Meia', quantity: parseInt(qtyMeia.value), unit_price: selectedSession.precoMeia });
             
-            // ATENÇÃO: Usar a nova função de backend
-            const response = await fetch('/api/3-generate-pix', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    items: items,
-                    payer: {
-                        fullName: document.getElementById('full-name').value,
-                        email: document.getElementById('email').value,
-                        phone: document.getElementById('phone').value
-                    },
-                    metadata: { sessionId: selectedSession.id }
-                })
-            });
-
-            if (!response.ok) {
-                 const errorBody = await response.text();
-                 console.error("Erro do backend:", errorBody);
-                 throw new Error('Falha na API ao gerar PIX.');
-            }
-            return await response.json();
+            return {
+                items: items,
+                payer: {
+                    fullName: document.getElementById('full-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                metadata: { sessionId: selectedSession.id }
+            };
         }
-        
-        // --- FUNÇÕES AUXILIARES ---
-        copyPixButton.addEventListener('click', () => {
-            pixCopyPasteInput.select();
-            document.execCommand('copy');
-            copySuccessMessage.style.display = 'inline';
-            setTimeout(() => {
-                copySuccessMessage.style.display = 'none';
-            }, 2000);
-        });
+
+        function getFormDataForTicket() {
+             return {
+                buyerInfo: {
+                    fullName: document.getElementById('full-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                ticketInfo: {
+                    qtyInteira: parseInt(qtyInteira.value),
+                    qtyMeia: parseInt(qtyMeia.value),
+                    totalAmount: totalAmountDiv.textContent.replace('R$ ', '')
+                }
+            };
+        }
 
         function updateTotalAmount() {
             if (!selectedSession) return;
@@ -1377,42 +1392,61 @@
                     field.style.borderColor = '';
                 }
             });
-            if (parseInt(qtyInteira.value) === 0 && parseInt(qtyMeia.value) === 0) {
+            const totalTickets = parseInt(qtyInteira.value) + parseInt(qtyMeia.value);
+            if (totalTickets === 0) {
                 alert('Você precisa selecionar pelo menos um ingresso.');
                 isValid = false;
             }
-            if (!isValid) alert('Por favor, preencha todos os campos obrigatórios.');
+            if (totalTickets > 4) {
+                 alert('A compra é limitada a 4 ingressos por vez.');
+                isValid = false;
+            }
+            if (!isValid) alert('Por favor, preencha todos os campos obrigatórios e verifique a quantidade de ingressos.');
             return isValid;
         }
 
-        // --- GERADOR DE SCRAP (Mantido como o seu) ---
-        const scrapButton = document.getElementById('scrap-button');
-        scrapButton.addEventListener('click', async function() {
-            // ... sua lógica de scrap ...
-        });
+        // --- INICIALIZAÇÃO E EVENTOS GLOBAIS ---
+        function initialize() {
+            renderContent();
+            createParticles();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
 
-        // --- INICIALIZAÇÃO ---
-        renderContent();
-        createParticles();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        qtyInteira.addEventListener('input', updateTotalAmount);
-        qtyMeia.addEventListener('input', updateTotalAmount);
-        document.querySelectorAll('.action-button, .nav-button, .event-button').forEach(addClickEffect);
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('event-button') && !e.target.disabled) {
-                openModal(e.target.dataset.sessionId);
-            }
-        });
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Listeners de input
+            qtyInteira.addEventListener('input', updateTotalAmount);
+            qtyMeia.addEventListener('input', updateTotalAmount);
+            closeBtn.addEventListener('click', closeModal);
+
+            // Listener global para botões (delegação de evento)
+            document.addEventListener('click', (e) => {
+                const button = e.target.closest('button, a');
+                if (!button) return;
+
+                // Efeito visual de clique
+                if (button.matches('.action-button, .nav-button, .event-button, .continue-button')) {
+                    button.classList.add('clicked');
+                    setTimeout(() => button.classList.remove('clicked'), 300);
+                }
+
+                // Abrir modal de compra
+                if (button.matches('.event-button') && !button.disabled) {
+                    openModal(button.dataset.sessionId);
                 }
             });
-        });
+
+            // Smooth scroll para âncoras
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+            });
+        }
+
+        initialize();
     });
     </script>
 </body>
