@@ -8,16 +8,21 @@ export const handler = async (event) => {
     try {
         const { items, payer, metadata } = JSON.parse(event.body);
 
+        // Define uma data de expiração para 15 minutos no futuro para o PIX
+        const expirationDate = new Date();
+        expirationDate.setMinutes(expirationDate.getMinutes() + 15);
+
         const preference = new Preference(client);
         const result = await preference.create({
             body: {
-                items: items, // Recebe os itens diretamente do frontend
+                items: items,
                 payer: {
                     name: payer.fullName,
                     email: payer.email,
                     phone: {
-                        area_code: payer.phone.substring(0, 2), // Supondo formato (XX) YYYYY-YYYY
-                        number: payer.phone.substring(2)
+                        // Assume formato (XX) YYYYY-YYYY, remove caracteres não numéricos
+                        area_code: payer.phone.replace(/\D/g, '').substring(0, 2),
+                        number: payer.phone.replace(/\D/g, '').substring(2)
                     }
                 },
                 metadata: {
@@ -26,6 +31,13 @@ export const handler = async (event) => {
                     buyer_phone: payer.phone,
                     session_id: metadata.sessionId
                 },
+                payment_methods: {
+                    excluded_payment_types: [
+                        { id: "ticket" } // Exclui boleto para simplificar
+                    ]
+                },
+                // Adiciona a data de expiração para o pagamento
+                date_of_expiration: expirationDate.toISOString().replace(/\.\d{3}Z$/, "-03:00"),
                 notification_url: `${process.env.URL}/api/2-handle-webhook`,
                 back_urls: {
                     success: `${process.env.URL}/sucesso.html`, // Crie esta página
