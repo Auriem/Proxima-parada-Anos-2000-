@@ -1188,7 +1188,7 @@
         // --- CONFIGURAÇÃO DO MERCADO PAGO ---
         // !!! ATENÇÃO !!! Coloque sua CHAVE PÚBLICA (PUBLIC KEY) aqui. Ela é segura para o frontend.
         // A chave PÚBLICA geralmente começa com "APP_" ou "TEST_" e NÃO contém "-USR-".
-        const mp = new MercadoPago('APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837');
+        const mp = new MercadoPago('SUA_PUBLIC_KEY_AQUI');
 
         // --- ELEMENTOS DO DOM ---
         const modal = document.getElementById('purchase-modal');
@@ -1352,11 +1352,29 @@
                     paymentMethods: { mercadoPago: 'all', creditCard: 'all', debitCard: 'all', bankTransfer: 'all' }
                 },
                 callbacks: {
-                    onReady: () => console.log("Payment Brick pronto!"),
-                    onSubmit: () => {
-                        document.getElementById('payment-brick-container').style.display = 'none';
-                        statusScreen.innerHTML = `<p>✅ Ótimo! Estamos processando seu pagamento.</p><p>Você receberá o ingresso no seu e-mail assim que o pagamento for confirmado. Não feche esta janela ainda.</p>`;
-                        statusScreen.style.display = 'block';
+                    onReady: () => {
+                        console.log("Payment Brick pronto!");
+                    },
+                    onSubmit: ({ selectedPaymentMethod, formData }) => {
+                        // =======================================================
+                        // ESTA É A CORREÇÃO PRINCIPAL PARA O PIX
+                        // =======================================================
+                        // Não escondemos mais o container. O Brick o usará para mostrar o QR Code.
+                        // Apenas informamos ao usuário o que fazer.
+                        if (selectedPaymentMethod === "bank_transfer") { // bank_transfer é o ID para PIX
+                             statusScreen.innerHTML = `<p>✅ Ótimo! Escaneie o QR Code para pagar.</p><p>Aguardando a confirmação do pagamento...</p>`;
+                             statusScreen.style.display = 'block';
+                        } else {
+                            // Para outros métodos de pagamento, podemos esconder o brick e mostrar o status
+                            document.getElementById('payment-brick-container').style.display = 'none';
+                            statusScreen.innerHTML = `<p>✅ Ótimo! Estamos processando seu pagamento...</p><p>Você receberá o ingresso no seu e-mail assim que o pagamento for confirmado.</p>`;
+                            statusScreen.style.display = 'block';
+                        }
+                        
+                        // Retornar uma promessa vazia mantém o Brick na tela,
+                        // o que é essencial para o usuário ver o QR Code do PIX.
+                        // Para outros métodos, o processamento ocorre em segundo plano.
+                        return new Promise(() => {});
                     },
                     onError: (error) => {
                         console.error(error);
@@ -1426,21 +1444,3 @@
     </script>
 </body>
 </html>
-```
-
-### O que foi alterado?
-
-1.  **HTML do Modal (Linha 825):**
-    * Removi toda a sua seção de pagamento manual (botões de PIX/Cartão, formulário de cartão e o botão "Finalizar Compra").
-    * No lugar, adicionei uma estrutura mais simples com um único container `<div id="payment-brick-container"></div>`. É aqui que o Mercado Pago irá desenhar a interface de pagamento completa.
-
-2.  **JavaScript (Toda a tag `<script>`):**
-    * **Segurança:** Troquei sua chave secreta (`APP_USR-...`) por um placeholder `SUA_PUBLIC_KEY_AQUI`. **É crucial que você coloque sua Chave Pública aqui**, e não a secreta.
-    * **Nova Lógica de Pagamento:** Removi toda a sua lógica antiga que tentava controlar os botões de PIX e Cartão.
-    * **Implementação do Payment Brick:** Criei um novo fluxo que é disparado pelo botão "Continuar para Pagamento". Ele:
-        1.  Valida o formulário.
-        2.  Chama a sua função de backend (que já estava correta) para criar uma "preferência de pagamento".
-        3.  Usa o ID dessa preferência para **renderizar o Payment Brick** dentro do container que criamos.
-    * **Experiência do Usuário:** O código agora mostra uma mensagem de "Carregando..." e, após o envio do pagamento, exibe uma tela de status para o cliente, informando que o pagamento está sendo processado.
-
-Agora, seu site está usando a ferramenta correta para o Checkout Transparente. O cliente terá uma experiência fluida, sem sair do seu site para pag
