@@ -1188,7 +1188,8 @@
         // --- CONFIGURAÇÃO DO MERCADO PAGO ---
         // !!! ATENÇÃO !!! Coloque sua CHAVE PÚBLICA (PUBLIC KEY) aqui. Ela é segura para o frontend.
         // A chave PÚBLICA geralmente começa com "APP_" ou "TEST_" e NÃO contém "-USR-".
-        const mp = new MercadoPago('APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837');
+        const publicKey = 'SUA_PUBLIC_KEY_AQUI';
+        let mp; // Será inicializado após a verificação da chave
 
         // --- ELEMENTOS DO DOM ---
         const modal = document.getElementById('purchase-modal');
@@ -1294,9 +1295,17 @@
         continueBtn.addEventListener('click', async () => {
             if (!validateForm() || isPaymentBrickRendered) return;
 
+            // Verificação da Chave Pública
+            if (publicKey === 'APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837') {
+                alert('ERRO DE CONFIGURAÇÃO: A Chave Pública do Mercado Pago não foi definida no código JavaScript.');
+                return;
+            }
+            mp = new MercadoPago(publicKey);
+
             personalDataForm.style.display = 'none';
             paymentSection.style.display = 'block';
             loaderContainer.style.display = 'block';
+            statusScreen.style.display = 'none';
 
             await createAndRenderPaymentBrick();
         });
@@ -1309,9 +1318,15 @@
                 loaderContainer.style.display = 'none';
                 await renderPaymentBrick(preferenceId);
             } catch (error) {
-                console.error("Erro ao renderizar o Payment Brick:", error);
+                console.error("Erro detalhado:", error);
                 loaderContainer.style.display = 'none';
-                statusScreen.innerHTML = `<p style="color:red;">Ocorreu um erro ao carregar o pagamento. Por favor, feche e tente novamente.</p>`;
+                let userMessage = `<p style="color:red;">Ocorreu um erro ao carregar o pagamento.</p>`;
+                if (error.message.includes('Failed to fetch') || error.message.includes('Falha na API')) {
+                    userMessage += `<p>Não foi possível comunicar com o servidor. Verifique se a variável MERCADOPAGO_ACCESS_TOKEN está configurada corretamente no Netlify.</p>`;
+                } else {
+                    userMessage += `<p>Verifique se a sua Chave Pública (Public Key) está correta no código.</p>`;
+                }
+                statusScreen.innerHTML = userMessage;
                 statusScreen.style.display = 'block';
             }
         }
@@ -1335,8 +1350,15 @@
                 })
             });
 
-            if (!response.ok) throw new Error('Falha na API ao criar preferência.');
+            if (!response.ok) {
+                 const errorBody = await response.text();
+                 console.error("Erro do backend:", errorBody);
+                 throw new Error('Falha na API ao criar preferência.');
+            }
             const preference = await response.json();
+            if (!preference.preferenceId) {
+                throw new Error('ID da preferência não recebido do backend.');
+            }
             return preference.preferenceId;
         }
 
@@ -1356,30 +1378,16 @@
                         console.log("Payment Brick pronto!");
                     },
                     onSubmit: ({ selectedPaymentMethod, formData }) => {
-                        // =======================================================
-                        // ESTA É A CORREÇÃO PRINCIPAL PARA O PIX
-                        // =======================================================
-                        // Não escondemos mais o container. O Brick o usará para mostrar o QR Code.
-                        // Apenas informamos ao usuário o que fazer.
-                        if (selectedPaymentMethod === "bank_transfer") { // bank_transfer é o ID para PIX
-                             statusScreen.innerHTML = `<p>✅ Ótimo! Escaneie o QR Code para pagar.</p><p>Aguardando a confirmação do pagamento...</p>`;
-                             statusScreen.style.display = 'block';
-                        } else {
-                            // Para outros métodos de pagamento, podemos esconder o brick e mostrar o status
-                            document.getElementById('payment-brick-container').style.display = 'none';
-                            statusScreen.innerHTML = `<p>✅ Ótimo! Estamos processando seu pagamento...</p><p>Você receberá o ingresso no seu e-mail assim que o pagamento for confirmado.</p>`;
-                            statusScreen.style.display = 'block';
-                        }
-                        
-                        // Retornar uma promessa vazia mantém o Brick na tela,
-                        // o que é essencial para o usuário ver o QR Code do PIX.
-                        // Para outros métodos, o processamento ocorre em segundo plano.
+                        // Para qualquer método de pagamento, retornamos uma promessa que nunca resolve.
+                        // Isso mantém o Brick na tela para exibir o QR Code do PIX
+                        // ou a animação de processamento para cartões.
+                        // A confirmação real da compra virá pelo webhook.
                         return new Promise(() => {});
                     },
                     onError: (error) => {
                         console.error(error);
                         alert("Ocorreu um erro com o pagamento. Verifique os dados e tente novamente.");
-                        closeModal(); // Fecha e reseta o modal em caso de erro
+                        closeModal();
                     },
                 },
             };
@@ -1444,4 +1452,3 @@
     </script>
 </body>
 </html>
-
