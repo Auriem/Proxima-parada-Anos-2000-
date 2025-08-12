@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Próxima Parada: Anos 2000 - Venda de Ingressos</title>
-    <!-- SDK DO MERCADO PAGO -->
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
     <style>
@@ -1140,22 +1138,29 @@
                     <div class="total-amount" id="total-amount">R$ 50,00</div>
                 </div>
                 
-                <button id="continue-to-payment" class="continue-button">Continuar para Pagamento</button>
+                <button id="continue-to-payment" class="continue-button">Pagar com PIX</button>
             </div>
             
             <!-- ======================================================= -->
-            <!-- SEÇÃO DE PAGAMENTO CORRIGIDA E SIMPLIFICADA -->
+            <!-- SEÇÃO DE PAGAMENTO PIX DIRETO -->
             <!-- ======================================================= -->
             <div id="payment-section" class="payment-section">
-                <h4 style="color: var(--neon-pink); text-align: center; margin-bottom: 20px;">Finalize seu Pagamento</h4>
+                <h4 style="color: var(--neon-pink); text-align: center; margin-bottom: 20px;">Pague com PIX</h4>
                 
-                <!-- O Payment Brick do Mercado Pago será renderizado aqui -->
-                <div id="payment-brick-container"></div>
+                <!-- Container para o QR Code e Copia/Cola -->
+                <div id="pix-container" style="text-align: center; display: none;">
+                    <p>Escaneie o QR Code abaixo com seu app do banco:</p>
+                    <img id="pix-qrcode" src="" alt="QR Code PIX" style="max-width: 250px; margin: 10px auto; border: 5px solid white; border-radius: 8px;">
+                    <p>Ou use o PIX Copia e Cola:</p>
+                    <textarea id="pix-copia-cola" rows="4" style="width: 100%; background: #333; color: white; border-radius: 5px; padding: 10px; box-sizing: border-box; font-size: 14px; word-wrap: break-word;" readonly></textarea>
+                    <button id="copy-pix-button" class="action-button" style="margin-top: 10px;">Copiar Código</button>
+                    <p id="copy-success-message" style="color: var(--neon-green); display: none; margin-top: 10px;">Copiado!</p>
+                </div>
             
                 <!-- Mensagem de carregamento -->
                 <div id="loader-container" class="retro-loader" style="display: none;">
                     <span class="loader-icon">💿</span>
-                    <span class="loader-text">Carregando opções de pagamento...</span>
+                    <span class="loader-text">Gerando código PIX...</span>
                 </div>
             
                 <!-- Container para exibir o status do pagamento -->
@@ -1185,12 +1190,6 @@
             { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
         ];
 
-        // --- CONFIGURAÇÃO DO MERCADO PAGO ---
-        // A CHAVE ABAIXO FOI INSERIDA CONFORME SOLICITADO.
-        // AVISO: Esta é uma CHAVE SECRETA (Access Token). O ideal é usar sua CHAVE PÚBLICA (Public Key).
-        const publicKey = 'APP_USR-0fc1f9b5-1a9e-41d5-929e-f25aefa4c837';
-        let mp; // Será inicializado após a verificação da chave
-
         // --- ELEMENTOS DO DOM ---
         const modal = document.getElementById('purchase-modal');
         const closeBtn = document.getElementById('modal-close-btn');
@@ -1202,9 +1201,13 @@
         const qtyInteira = document.getElementById('qty-inteira');
         const qtyMeia = document.getElementById('qty-meia');
         const totalAmountDiv = document.getElementById('total-amount');
+        const pixContainer = document.getElementById('pix-container');
+        const pixQrCodeImg = document.getElementById('pix-qrcode');
+        const pixCopyPasteInput = document.getElementById('pix-copia-cola');
+        const copyPixButton = document.getElementById('copy-pix-button');
+        const copySuccessMessage = document.getElementById('copy-success-message');
 
         let selectedSession = null;
-        let isPaymentBrickRendered = false; // Flag para controlar a renderização do brick
 
         // --- FUNÇÕES DE RENDERIZAÇÃO E UTILITÁRIAS (Mantidas como as suas) ---
         function renderContent() {
@@ -1282,10 +1285,8 @@
             // Reseta o modal para o estado inicial
             personalDataForm.style.display = 'block';
             paymentSection.style.display = 'none';
+            pixContainer.style.display = 'none';
             statusScreen.style.display = 'none';
-            document.getElementById('payment-brick-container').style.display = 'block';
-            document.getElementById('payment-brick-container').innerHTML = ''; // Limpa o brick
-            isPaymentBrickRendered = false;
         }
 
         closeBtn.addEventListener('click', closeModal);
@@ -1293,50 +1294,41 @@
         
         // --- VALIDAÇÃO E FLUXO DE PAGAMENTO ---
         continueBtn.addEventListener('click', async () => {
-            if (!validateForm() || isPaymentBrickRendered) return;
-
-            // Verificação da Chave Pública
-            if (publicKey === 'SUA_PUBLIC_KEY_AQUI') {
-                alert('ERRO DE CONFIGURAÇÃO: A Chave Pública do Mercado Pago não foi definida no código JavaScript.');
-                return;
-            }
-            mp = new MercadoPago(publicKey);
+            if (!validateForm()) return;
 
             personalDataForm.style.display = 'none';
             paymentSection.style.display = 'block';
             loaderContainer.style.display = 'block';
+            pixContainer.style.display = 'none';
             statusScreen.style.display = 'none';
 
-            await createAndRenderPaymentBrick();
-        });
-
-        // --- FUNÇÕES PRINCIPAIS DO CHECKOUT TRANSPARENTE ---
-        async function createAndRenderPaymentBrick() {
-            isPaymentBrickRendered = true;
             try {
-                const preferenceId = await createPreference();
+                const pixData = await generatePix();
                 loaderContainer.style.display = 'none';
-                await renderPaymentBrick(preferenceId);
+                
+                // Exibe o QR Code e o código Copia e Cola
+                pixQrCodeImg.src = `data:image/jpeg;base64,${pixData.qrCodeBase64}`;
+                pixCopyPasteInput.value = pixData.qrCodeCopyPaste;
+                pixContainer.style.display = 'block';
+
+                statusScreen.innerHTML = `<p>Aguardando pagamento... Assim que for confirmado, enviaremos o ingresso para seu e-mail.</p>`;
+                statusScreen.style.display = 'block';
+
             } catch (error) {
-                console.error("Erro detalhado:", error);
+                console.error("Erro ao gerar PIX:", error);
                 loaderContainer.style.display = 'none';
-                let userMessage = `<p style="color:red;">Ocorreu um erro ao carregar o pagamento.</p>`;
-                if (error.message.includes('Failed to fetch') || error.message.includes('Falha na API')) {
-                    userMessage += `<p>Não foi possível comunicar com o servidor. Verifique se a variável MERCADOPAGO_ACCESS_TOKEN está configurada corretamente no Netlify.</p>`;
-                } else {
-                    userMessage += `<p>Verifique se a sua Chave Pública (Public Key) está correta no código.</p>`;
-                }
-                statusScreen.innerHTML = userMessage;
+                statusScreen.innerHTML = `<p style="color:red;">Não foi possível gerar o PIX. Por favor, tente novamente.</p>`;
                 statusScreen.style.display = 'block';
             }
-        }
+        });
 
-        async function createPreference() {
+        async function generatePix() {
             const items = [];
-            if (parseInt(qtyInteira.value) > 0) items.push({ title: 'Ingresso Inteira - Próxima Parada: Anos 2000', quantity: parseInt(qtyInteira.value), unit_price: selectedSession.precoInteira });
-            if (parseInt(qtyMeia.value) > 0) items.push({ title: 'Ingresso Meia - Próxima Parada: Anos 2000', quantity: parseInt(qtyMeia.value), unit_price: selectedSession.precoMeia });
+            if (parseInt(qtyInteira.value) > 0) items.push({ title: 'Ingresso Inteira', quantity: parseInt(qtyInteira.value), unit_price: selectedSession.precoInteira });
+            if (parseInt(qtyMeia.value) > 0) items.push({ title: 'Ingresso Meia', quantity: parseInt(qtyMeia.value), unit_price: selectedSession.precoMeia });
             
-            const response = await fetch('/api/1-create-payment', {
+            // ATENÇÃO: Usar a nova função de backend
+            const response = await fetch('/api/3-generate-pix', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1353,48 +1345,21 @@
             if (!response.ok) {
                  const errorBody = await response.text();
                  console.error("Erro do backend:", errorBody);
-                 throw new Error('Falha na API ao criar preferência.');
+                 throw new Error('Falha na API ao gerar PIX.');
             }
-            const preference = await response.json();
-            if (!preference.preferenceId) {
-                throw new Error('ID da preferência não recebido do backend.');
-            }
-            return preference.preferenceId;
-        }
-
-        async function renderPaymentBrick(preferenceId) {
-            const bricksBuilder = mp.bricks();
-            const settings = {
-                initialization: {
-                    amount: parseFloat(totalAmountDiv.textContent.replace('R$ ', '').replace(',', '.')),
-                    preferenceId: preferenceId,
-                },
-                customization: {
-                    visual: { style: { theme: 'dark' } },
-                    paymentMethods: { mercadoPago: 'all', creditCard: 'all', debitCard: 'all', bankTransfer: 'all' }
-                },
-                callbacks: {
-                    onReady: () => {
-                        console.log("Payment Brick pronto!");
-                    },
-                    onSubmit: ({ selectedPaymentMethod, formData }) => {
-                        // Para qualquer método de pagamento, retornamos uma promessa que nunca resolve.
-                        // Isso mantém o Brick na tela para exibir o QR Code do PIX
-                        // ou a animação de processamento para cartões.
-                        // A confirmação real da compra virá pelo webhook.
-                        return new Promise(() => {});
-                    },
-                    onError: (error) => {
-                        console.error(error);
-                        alert("Ocorreu um erro com o pagamento. Verifique os dados e tente novamente.");
-                        closeModal();
-                    },
-                },
-            };
-            window.paymentBrickController = await bricksBuilder.create('payment', 'payment-brick-container', settings);
+            return await response.json();
         }
         
         // --- FUNÇÕES AUXILIARES ---
+        copyPixButton.addEventListener('click', () => {
+            pixCopyPasteInput.select();
+            document.execCommand('copy');
+            copySuccessMessage.style.display = 'inline';
+            setTimeout(() => {
+                copySuccessMessage.style.display = 'none';
+            }, 2000);
+        });
+
         function updateTotalAmount() {
             if (!selectedSession) return;
             const total = (qtyInteira.value * selectedSession.precoInteira) + (qtyMeia.value * selectedSession.precoMeia);
