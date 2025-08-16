@@ -668,4 +668,797 @@
             border-radius: 8px;
             z-index: -1;
             transition: all 0.5s;
-       
+        }
+        
+        .cast-card:hover::before {
+            background: linear-gradient(135deg, transparent 0%, rgba(173, 255, 47, 0.1) 100%);
+        }
+        
+        .cast-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-pink);
+            margin: 0 auto 15px;
+            object-fit: cover;
+            object-position: center top;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 110, 199, 0.5);
+        }
+
+        .cast-photo.aquiles {
+            object-position: center 30%;
+        }
+        
+        .cast-card:hover .cast-photo {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(173, 255, 47, 0.7);
+            transform: scale(1.05);
+        }
+
+        .cast-gif {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid var(--neon-pink);
+        }
+        
+        .cast-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--neon-pink);
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .cast-card:hover .cast-name {
+            color: var(--neon-green);
+        }
+        
+        .cast-character {
+            font-size: 16px;
+            color: var(--light-gray);
+            font-style: italic;
+        }
+        
+        /* Seção de Geração de Scrap Aprimorada */
+        .scrap-section {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--hot-pink);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 20px var(--hot-pink);
+        }
+        
+        .scrap-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 2px solid var(--neon-pink);
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .scrap-input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        .scrap-result {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Indicador de carregamento temático */
+        .retro-loader {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--neon-pink);
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+        }
+
+        .retro-loader.active {
+            display: block;
+        }
+
+        .loader-text {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-pink);
+            animation: pulse 1.5s infinite;
+        }
+
+        .loader-icon {
+            font-size: 24px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal de Compra Aprimorado */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            margin: 5% auto;
+            padding: 20px;
+            border: 3px solid var(--neon-pink);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px var(--neon-pink);
+            animation: modalAppear 0.3s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--neon-pink);
+            transform: scale(1.2);
+        }
+        
+        .modal-title {
+            font-family: 'VT323', monospace;
+            font-size: 28px;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-title::before {
+            content: '🎟️';
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--white);
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--neon-green);
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            font-size: 16px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px rgba(255, 110, 199, 0.3);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .continue-button {
+            background: linear-gradient(to bottom, var(--neon-green), #8aff00);
+            color: var(--dark-gray);
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: all 0.3s;
+        }
+        
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(173, 255, 47, 0.4);
+        }
+        
+        /* Seção de Pagamento */
+        .payment-section {
+            display: none;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--neon-pink);
+        }
+        
+        /* Responsividade Aprimorada */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .countdown-timer {
+                gap: 10px;
+            }
+            
+            .countdown-box {
+                min-width: 50px;
+                padding: 8px;
+            }
+            
+            .countdown-number {
+                font-size: 24px;
+            }
+            
+            .events-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .cast-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 28px;
+            }
+            
+            .main-banner {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .cast-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Container de partículas -->
+    <div id="particles-container"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="logo glow-text glitch">Próxima Parada: Anos 2000</h1>
+        </header>
+        
+        <nav>
+            <a href="#eventos" class="nav-button">🎟️ Ingressos</a>
+            <a href="#elenco" class="nav-button">🎭 Elenco</a>
+            <a href="#scrap" class="nav-button">📝 Scrap Nostálgico</a>
+        </nav>
+        
+        <div class="main-banner">
+            <h2 class="glow-text">Uma viagem nostálgica pelos anos 2000!</h2>
+            <p>Reviva a magia de uma década inesquecível com música, dança e muito entretenimento!</p>
+            <a href="#eventos" class="action-button">🎟️ COMPRAR INGRESSOS</a>
+        </div>
+        
+        <div class="countdown">
+            <div class="countdown-title">Próxima Apresentação</div>
+            <div class="countdown-timer" id="countdown-timer">
+                <div class="countdown-box">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-label">DIAS</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">HORAS</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-label">MIN</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">SEG</div>
+                </div>
+            </div>
+        </div>
+        
+        <section id="eventos" class="events-section">
+            <h2 class="section-title">Sessões Disponíveis</h2>
+            <p class="capacity-note">Capacidade: 110 lugares por sessão</p>
+            <div class="events-list" id="events-list-container">
+                <!-- Eventos serão renderizados dinamicamente aqui -->
+            </div>
+        </section>
+
+        <section id="sobre" class="about-section">
+            <h2 class="section-title">Sobre a Peça</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
+                    <p class="highlight-box">"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
+                </div>
+                <div class="about-image-container">
+                    <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
+                </div>
+            </div>
+        </section>
+
+        <section id="local" class="location-section">
+            <h3 class="section-title">📍 Local de Apresentação 📍</h3>
+            <p class="location-address">Teatro Enio Carvalho - Rua Mateus Leme, 990, Centro Cívico, Curitiba</p>
+        </section>
+        
+        <section id="elenco" class="cast-section">
+            <h2 class="section-title">Nosso Elenco</h2>
+            <div class="cast-grid" id="cast-grid-container">
+                <!-- Elenco será renderizado dinamicamente aqui -->
+            </div>
+        </section>
+        
+        <section id="scrap" class="scrap-section">
+            <h2 class="section-title">Gerador de Scrap Nostálgico</h2>
+            <p>Crie uma mensagem nostálgica personalizada sobre os anos 2000!</p>
+            <input type="text" id="scrap-input" class="scrap-input" placeholder="Digite algo sobre os anos 2000...">
+            <button id="scrap-button" class="action-button">✨ Gerar Scrap!</button>
+            <div class="retro-loader" id="scrap-loading">Gerando sua nostalgia...</div>
+            <div id="scrap-result" class="scrap-result"></div>
+        </section>
+    </div>
+
+    <footer id="contato">
+        <div class="container">
+             <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
+             <h3 class="contact-title">Fale Conosco ::: Mande um Scrap!</h3>
+             <p class="contact-subtitle">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+             <div class="contact-buttons">
+                <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
+                <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
+                <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
+                <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
+                <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+             </div>
+            <p class="footer-text">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Compra -->
+    <div id="purchase-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close">×</button>
+            <h3 class="modal-title">Comprar Ingresso</h3>
+            
+            <div id="personal-data-form">
+                <div class="form-group">
+                    <label for="full-name">Nome Completo:</label>
+                    <input type="text" id="full-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Telefone:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Ingresso:</label>
+                    <div class="ticket-group">
+                        <label for="qty-inteira">Inteira (R$ 50,00)</label>
+                        <input type="number" id="qty-inteira" min="0" value="1" max="4">
+                    </div>
+                    <div class="ticket-group">
+                        <label for="qty-meia">Meia (R$ 25,00)</label>
+                        <input type="number" id="qty-meia" min="0" value="0" max="4">
+                    </div>
+                </div>
+                <div class="total-section">
+                    <div class="total-amount" id="total-amount">R$ 50,00</div>
+                </div>
+                <button id="continue-to-payment" class="continue-button">Continuar</button>
+            </div>
+            
+            <div id="payment-choice-section" style="display: none; text-align: center;">
+                <h4 style="color: var(--neon-pink); margin-bottom: 20px;">Escolha como pagar:</h4>
+                <button id="pay-with-pix-btn" class="action-button">Pagar com PIX</button>
+                <button id="pay-with-mp-btn" class="action-button">Pagar com Mercado Pago (Cartão, etc)</button>
+            </div>
+
+            <div id="pix-manual-payment" style="display: none; text-align: center;">
+                 <h4 style="color: var(--neon-pink);">Pague com PIX</h4>
+                 <p>O valor total da sua compra é: <b id="pix-total-value" style="font-size: 1.2em;"></b></p>
+                 <p>Use o QR Code ou a chave abaixo:</p>
+                 <img id="pix-qr-code-img" src="" alt="QR Code PIX" style="max-width: 250px; margin: 10px auto; border: 5px solid white; border-radius: 8px;">
+                 <p>Chave PIX (Copia e Cola):</p>
+                 <input id="pix-key-input" type="text" value="" readonly style="width: 100%; text-align: center; background: #333; color: white; border: 1px solid var(--neon-pink); padding: 8px; box-sizing: border-box; margin-bottom: 10px;">
+                 <hr style="border-color: var(--neon-pink); margin: 20px 0;">
+                 <p style="font-weight: bold;">Após fazer o pagamento, clique no botão abaixo para receber seu ingresso.</p>
+                 <button id="confirm-pix-payment-btn" class="continue-button">Já paguei, enviar ingresso!</button>
+                 <div id="sending-loader" class="retro-loader" style="display: none;">Enviando seu ingresso...</div>
+            </div>
+
+             <div id="final-status-screen" style="display: none; text-align: center; padding: 20px;"></div>
+
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // =======================================================
+        // PASSO 1: CONFIGURE SEUS DADOS AQUI
+        // =======================================================
+        const paymentLinks = {
+            // Cole aqui o link direto da IMAGEM do seu QR Code estático
+            qrCodeImageUrl: 'https://i.postimg.cc/X7h7ZJjW/image-1.png',
+            
+            // Cole aqui a sua CHAVE PIX (o texto para copia e cola)
+            pixKey: '+5541985031409'
+        };
+        // =======================================================
+
+        // --- DADOS ESTÁTICOS ---
+        const sessoes = [
+            { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+            { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        ];
+        const elenco = [
+            { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+            { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+            { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+            { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+            { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+            { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+            { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+        ];
+
+        // --- ELEMENTOS DO DOM ---
+        const modal = document.getElementById('purchase-modal');
+        const closeBtn = document.getElementById('modal-close-btn');
+        const continueBtn = document.getElementById('continue-to-payment');
+        const personalDataForm = document.getElementById('personal-data-form');
+        const qtyInteira = document.getElementById('qty-inteira');
+        const qtyMeia = document.getElementById('qty-meia');
+        const totalAmountDiv = document.getElementById('total-amount');
+        const paymentChoiceSection = document.getElementById('payment-choice-section');
+        const payWithPixBtn = document.getElementById('pay-with-pix-btn');
+        const payWithMpBtn = document.getElementById('pay-with-mp-btn');
+        const pixManualPaymentSection = document.getElementById('pix-manual-payment');
+        const pixTotalValue = document.getElementById('pix-total-value');
+        const pixQrCodeImg = document.getElementById('pix-qr-code-img');
+        const pixKeyInput = document.getElementById('pix-key-input');
+        const confirmPixPaymentBtn = document.getElementById('confirm-pix-payment-btn');
+        const sendingLoader = document.getElementById('sending-loader');
+        const finalStatusScreen = document.getElementById('final-status-screen');
+
+        let selectedSession = null;
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO E UTILITÁRIAS ---
+        function renderContent() {
+            const eventsContainer = document.getElementById('events-list-container');
+            eventsContainer.innerHTML = '';
+            sessoes.forEach(sessao => {
+                const dataObj = new Date(sessao.data);
+                const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `<h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3><p class="event-date">${horaFormatada}h</p><p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p><button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}</button>`;
+                eventsContainer.appendChild(card);
+            });
+            const castContainer = document.getElementById('cast-grid-container');
+            castContainer.innerHTML = '';
+            elenco.forEach(membro => {
+                const card = document.createElement('div');
+                card.className = 'cast-card';
+                card.innerHTML = `<img src="${membro.foto}" alt="${membro.nome}" class="cast-photo ${membro.nome === 'Aquiles Amendola' ? 'aquiles' : ''}"><h3 class="cast-name">${membro.nome}</h3><p class="cast-character">${membro.personagem}</p>`;
+                castContainer.appendChild(card);
+            });
+            const gifCard = document.createElement('div');
+            gifCard.className = 'cast-card';
+            gifCard.innerHTML = `<a href="https://postimages.org/" target="_blank"><img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô GIF" style="width:120px; height:120px; border-radius:10px; border:3px solid var(--neon-pink);"></a>`;
+            castContainer.appendChild(gifCard);
+        }
+
+        function updateCountdown() {
+            const proximaSessao = sessoes.find(s => new Date(s.data) > new Date());
+            if (!proximaSessao) return;
+            const targetDate = new Date(proximaSessao.data);
+            const now = new Date();
+            const difference = targetDate - now;
+            if (difference > 0) {
+                document.getElementById('days').textContent = Math.floor(difference / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById('hours').textContent = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = Math.floor((difference % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 50;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // --- LÓGICA DO MODAL E PAGAMENTO ---
+        function openModal(sessionId) {
+            selectedSession = sessoes.find(s => s.id === sessionId);
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            updateTotalAmount();
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            personalDataForm.style.display = 'block';
+            paymentChoiceSection.style.display = 'none';
+            pixManualPaymentSection.style.display = 'none';
+            finalStatusScreen.style.display = 'none';
+        }
+
+        continueBtn.addEventListener('click', () => {
+            if (!validateForm()) return;
+            personalDataForm.style.display = 'none';
+            paymentChoiceSection.style.display = 'block';
+        });
+
+        payWithPixBtn.addEventListener('click', () => {
+            paymentChoiceSection.style.display = 'none';
+            pixTotalValue.textContent = totalAmountDiv.textContent;
+            pixQrCodeImg.src = paymentLinks.qrCodeImageUrl;
+            pixKeyInput.value = paymentLinks.pixKey;
+            pixManualPaymentSection.style.display = 'block';
+        });
+
+        payWithMpBtn.addEventListener('click', async () => {
+            payWithMpBtn.textContent = 'Gerando link...';
+            payWithMpBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/create-mercadopago-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getFormData())
+                });
+                if (!response.ok) throw new Error('Falha ao criar link de pagamento.');
+                const data = await response.json();
+                window.location.href = data.paymentUrl; // Redireciona para o Mercado Pago
+            } catch (error) {
+                console.error("Erro ao gerar link do Mercado Pago:", error);
+                alert("Não foi possível gerar o link de pagamento. Tente novamente.");
+                payWithMpBtn.textContent = 'Pagar com Mercado Pago (Cartão, etc)';
+                payWithMpBtn.disabled = false;
+            }
+        });
+
+        confirmPixPaymentBtn.addEventListener('click', async () => {
+            pixManualPaymentSection.style.display = 'none';
+            sendingLoader.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/send-ticket-manually', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(getFormDataForTicket())
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || 'Erro desconhecido no servidor.');
+                }
+                
+                sendingLoader.style.display = 'none';
+                finalStatusScreen.innerHTML = `<h2>✅ Sucesso!</h2><p>Seu ingresso foi enviado para o e-mail informado. Verifique sua caixa de entrada e spam.</p>`;
+                finalStatusScreen.style.display = 'block';
+
+            } catch (error) {
+                console.error("Erro ao enviar ingresso:", error);
+                sendingLoader.style.display = 'none';
+                finalStatusScreen.innerHTML = `<h2>❌ Erro!</h2><p>Não foi possível enviar seu ingresso.</p><p style="font-size: 12px; color: #ccc; margin-top: 15px;">Detalhe técnico: ${error.message}</p>`;
+                finalStatusScreen.style.display = 'block';
+            }
+        });
+
+        // --- FUNÇÕES AUXILIARES ---
+        function getFormData() {
+            const items = [];
+            if (parseInt(qtyInteira.value) > 0) items.push({ title: 'Ingresso Inteira', quantity: parseInt(qtyInteira.value), unit_price: selectedSession.precoInteira });
+            if (parseInt(qtyMeia.value) > 0) items.push({ title: 'Ingresso Meia', quantity: parseInt(qtyMeia.value), unit_price: selectedSession.precoMeia });
+            
+            return {
+                items: items,
+                payer: {
+                    fullName: document.getElementById('full-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                metadata: { sessionId: selectedSession.id }
+            };
+        }
+
+        function getFormDataForTicket() {
+             return {
+                buyerInfo: {
+                    fullName: document.getElementById('full-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                ticketInfo: {
+                    qtyInteira: parseInt(qtyInteira.value),
+                    qtyMeia: parseInt(qtyMeia.value),
+                    totalAmount: totalAmountDiv.textContent.replace('R$ ', '')
+                }
+            };
+        }
+
+        function updateTotalAmount() {
+            if (!selectedSession) return;
+            const total = (parseInt(qtyInteira.value) * selectedSession.precoInteira) + (parseInt(qtyMeia.value) * selectedSession.precoMeia);
+            totalAmountDiv.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function validateForm() {
+            let isValid = true;
+            ['full-name', 'email'].forEach(id => {
+                const field = document.getElementById(id);
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'red';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            const totalTickets = parseInt(qtyInteira.value) + parseInt(qtyMeia.value);
+            if (totalTickets === 0) {
+                alert('Você precisa selecionar pelo menos um ingresso.');
+                isValid = false;
+            }
+            if (totalTickets > 8) { // Aumentei o limite para 4 inteiras + 4 meias
+                 alert('A compra é limitada a 8 ingressos por vez.');
+                isValid = false;
+            }
+            if (!isValid) alert('Por favor, preencha todos os campos obrigatórios e verifique a quantidade de ingressos.');
+            return isValid;
+        }
+
+        // --- INICIALIZAÇÃO E EVENTOS GLOBAIS ---
+        function initialize() {
+            renderContent();
+            createParticles();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Listeners de input
+            qtyInteira.addEventListener('input', updateTotalAmount);
+            qtyMeia.addEventListener('input', updateTotalAmount);
+            closeBtn.addEventListener('click', closeModal);
+
+            // Listener global para botões (delegação de evento)
+            document.body.addEventListener('click', (e) => {
+                const target = e.target.closest('a, button');
+                if (!target) return;
+
+                // Efeito visual de clique
+                if (target.matches('.action-button, .nav-button, .event-button, .continue-button')) {
+                    target.classList.add('clicked');
+                    setTimeout(() => target.classList.remove('clicked'), 300);
+                }
+
+                // Abrir modal de compra
+                if (target.matches('.event-button, .action-button[href="#eventos"]')) {
+                    e.preventDefault();
+                    const targetElement = document.getElementById('eventos');
+                    if(targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
+                    
+                    if(target.dataset.sessionId) {
+                        openModal(target.dataset.sessionId);
+                    }
+                }
+            });
+
+            // Smooth scroll para âncoras
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (this.getAttribute('href') !== '#eventos') {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        initialize();
+    });
+    </script>
+</body>
+</html>
