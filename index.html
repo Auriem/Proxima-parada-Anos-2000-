@@ -1407,6 +1407,11 @@
             if (!isValid) alert('Por favor, preencha todos os campos obrigatórios e verifique a quantidade de ingressos.');
             return isValid;
         }
+        
+        function addClickEffect(element) {
+            element.classList.add('clicked');
+            setTimeout(() => { element.classList.remove('clicked'); }, 300);
+        }
 
         // --- INICIALIZAÇÃO E EVENTOS GLOBAIS ---
         function initialize() {
@@ -1427,8 +1432,7 @@
 
                 // Efeito visual de clique
                 if (target.matches('.action-button, .nav-button, .event-button, .continue-button')) {
-                    target.classList.add('clicked');
-                    setTimeout(() => target.classList.remove('clicked'), 300);
+                    addClickEffect(target);
                 }
 
                 // Abrir modal de compra
