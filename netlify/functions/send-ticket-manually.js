@@ -4,11 +4,20 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // Lendo as chaves secretas do ambiente Netlify
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
 const myAdminEmail = process.env.MY_ADMIN_EMAIL;
 
 export const handler = async (event) => {
     try {
+        // Verificação inicial das variáveis de ambiente
+        if (!resendApiKey) {
+            throw new Error('A variável de ambiente RESEND_API_KEY não está configurada no Netlify.');
+        }
+        if (!myAdminEmail) {
+            throw new Error('A variável de ambiente MY_ADMIN_EMAIL não está configurada no Netlify.');
+        }
+
+        const resend = new Resend(resendApiKey);
         const { buyerInfo, ticketInfo } = JSON.parse(event.body);
 
         // 1. Gerar um código único para o ingresso
@@ -20,7 +29,7 @@ export const handler = async (event) => {
 
         // 3. Enviar email para o cliente com o ingresso
         await resend.emails.send({
-            from: 'Ingressos Anos 2000 <vendas@seudominio.com>', // Configure seu domínio no Resend
+            from: 'Ingressos Anos 2000 <vendas@seudominio.com>', // Lembre-se de configurar seu domínio no Resend
             to: [buyerInfo.email],
             subject: `Seu ingresso para "Próxima Parada: Anos 2000" chegou!`,
             html: `<h1>Obrigado, ${buyerInfo.fullName}!</h1><p>Seu(s) ingresso(s) estão em anexo. Guarde este e-mail, ele é seu comprovante.</p>`,
@@ -49,8 +58,16 @@ export const handler = async (event) => {
         return { statusCode: 200, body: JSON.stringify({ message: 'E-mails enviados.' }) };
 
     } catch (error) {
-        console.error("Erro no envio manual:", error);
-        return { statusCode: 500, body: JSON.stringify({ error: 'Falha ao processar o envio.' }) };
+        console.error("ERRO DETALHADO NO BACKEND:", error);
+        
+        // Retorna o erro específico para o frontend
+        return { 
+            statusCode: 500, 
+            body: JSON.stringify({ 
+                error: 'Falha ao processar o envio do ingresso.',
+                details: error.message, // A mensagem de erro exata!
+            }) 
+        };
     }
 };
 
@@ -64,31 +81,14 @@ async function createTicketFromTemplate(buyerInfo, ticketInfo, uniqueCode) {
 
     const itemsText = `Inteiras: ${ticketInfo.qtyInteira} | Meias: ${ticketInfo.qtyMeia}`;
     
-    // Adiciona o código único ao PDF (ajuste a posição X e Y conforme seu template)
     page.drawText(`CODIGO: ${uniqueCode}`, {
-        x: 50,
-        y: height - 750, // Ajuste esta posição
-        font,
-        size: 14,
-        color: rgb(0, 0, 0),
+        x: 50, y: height - 750, font, size: 14, color: rgb(0, 0, 0),
     });
-
-    // Adiciona o nome do comprador
-     page.drawText(buyerInfo.fullName, {
-        x: 50,
-        y: height - 720, // Ajuste esta posição
-        font,
-        size: 12,
-        color: rgb(0, 0, 0),
+    page.drawText(buyerInfo.fullName, {
+        x: 50, y: height - 720, font, size: 12, color: rgb(0, 0, 0),
     });
-
-    // Adiciona a quantidade de ingressos
     page.drawText(itemsText, {
-        x: 50,
-        y: height - 700, // Ajuste esta posição
-        font,
-        size: 12,
-        color: rgb(0, 0, 0),
+        x: 50, y: height - 700, font, size: 12, color: rgb(0, 0, 0),
     });
 
     return await pdfDoc.save();
