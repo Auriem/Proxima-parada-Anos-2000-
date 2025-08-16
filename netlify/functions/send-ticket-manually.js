@@ -29,7 +29,7 @@ export const handler = async (event) => {
 
         // 3. Enviar email para o cliente com o ingresso
         await resend.emails.send({
-            from: 'Ingressos Anos 2000 <vendas@seudominio.com>', // Lembre-se de configurar seu domínio no Resend
+            from: 'Ingressos <vendas@proximaparadaanos2000.online>', // DOMÍNIO CORRIGIDO
             to: [buyerInfo.email],
             subject: `Seu ingresso para "Próxima Parada: Anos 2000" chegou!`,
             html: `<h1>Obrigado, ${buyerInfo.fullName}!</h1><p>Seu(s) ingresso(s) estão em anexo. Guarde este e-mail, ele é seu comprovante.</p>`,
@@ -39,7 +39,7 @@ export const handler = async (event) => {
         // 4. Enviar email de notificação para você (administrador)
         const itemsComprados = `Inteiras: ${ticketInfo.qtyInteira}<br>Meias: ${ticketInfo.qtyMeia}`;
         await resend.emails.send({
-            from: 'AVISO DE VENDA MANUAL <sistema@seudominio.com>',
+            from: 'AVISO DE VENDA MANUAL <sistema@proximaparadaanos2000.online>', // DOMÍNIO CORRIGIDO
             to: [myAdminEmail],
             subject: `Nova Venda (Ação Manual) - ${buyerInfo.fullName}`,
             html: `<h1>Venda Registrada (CONFIRMAR PAGAMENTO)</h1>
