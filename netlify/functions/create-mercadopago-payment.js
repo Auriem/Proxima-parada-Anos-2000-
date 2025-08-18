@@ -34,7 +34,7 @@ export const handler = async (event) => {
           buyer_phone: payer.phone,
           session_id: metadata.sessionId
         },
-        notification_url: `${process.env.URL}/.netlify/functions/2-handle-webhook`,
+notification_url: `${process.env.BASE_URL}/.netlify/functions/2-handle-webhook`,
         back_urls: {
           success: `${process.env.URL}/sucesso.html`,
           failure: `${process.env.URL}/falha.html`,
