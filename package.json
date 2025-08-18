@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "module",
   "dependencies": {
     "mercadopago": "^2.8.0",
     "pdf-lib": "^1.17.1",
