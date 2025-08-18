@@ -1308,7 +1308,7 @@
                 });
                 if (!response.ok) throw new Error('Falha ao criar link de pagamento.');
                 const data = await response.json();
-                window.location.href = data.paymentUrl; // Redireciona para o Mercado Pago
+                window.location.href = data.paymentUrl;
             } catch (error) {
                 console.error("Erro ao gerar link do Mercado Pago:", error);
                 alert("Não foi possível gerar o link de pagamento. Tente novamente.");
@@ -1322,12 +1322,15 @@
             sendingLoader.style.display = 'block';
 
             try {
-                const response = await fetch(paymentData.zapierWebhookUrl, {
+                // CORREÇÃO: Usar a URL completa para a função do Netlify
+                const response = await fetch(`${window.location.origin}/.netlify/functions/send-ticket-manually`, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(getFormDataForTicket())
                 });
                 if (!response.ok) {
-                    throw new Error('Ocorreu um erro ao registrar sua compra.');
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || 'Erro desconhecido no servidor.');
                 }
                 
                 sendingLoader.style.display = 'none';
@@ -1335,9 +1338,9 @@
                 finalStatusScreen.style.display = 'block';
 
             } catch (error) {
-                console.error("Erro ao enviar para o Zapier:", error);
+                console.error("Erro ao enviar ingresso:", error);
                 sendingLoader.style.display = 'none';
-                finalStatusScreen.innerHTML = `<h2>❌ Erro!</h2><p>Não foi possível registrar sua compra. Por favor, entre em contato com a produção.</p>`;
+                finalStatusScreen.innerHTML = `<h2>❌ Erro!</h2><p>Não foi possível enviar seu ingresso.</p><p style="font-size: 12px; color: #ccc; margin-top: 15px;">Detalhe técnico: ${error.message}</p>`;
                 finalStatusScreen.style.display = 'block';
             }
         });
@@ -1361,12 +1364,16 @@
 
         function getFormDataForTicket() {
              return {
-                fullName: document.getElementById('full-name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                qtyInteira: parseInt(qtyInteira.value),
-                qtyMeia: parseInt(qtyMeia.value),
-                totalAmount: totalAmountDiv.textContent.replace('R$ ', '')
+                buyerInfo: {
+                    fullName: document.getElementById('full-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value
+                },
+                ticketInfo: {
+                    qtyInteira: parseInt(qtyInteira.value),
+                    qtyMeia: parseInt(qtyMeia.value),
+                    totalAmount: totalAmountDiv.textContent.replace('R$ ', '')
+                }
             };
         }
 
@@ -1392,7 +1399,7 @@
                 alert('Você precisa selecionar pelo menos um ingresso.');
                 isValid = false;
             }
-            if (totalTickets > 8) { // Aumentei o limite para 4 inteiras + 4 meias
+            if (totalTickets > 8) {
                  alert('A compra é limitada a 8 ingressos por vez.');
                 isValid = false;
             }
