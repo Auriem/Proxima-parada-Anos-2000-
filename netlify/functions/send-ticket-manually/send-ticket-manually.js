@@ -1,13 +1,9 @@
-import { Resend } from 'resend';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const { Resend } = require('resend');
+const { PDFDocument, StandardFonts } = require('pdf-lib');
+const fs = require('fs/promises');
+const path = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     console.log('send-ticket-manually: Função iniciada.');
     console.log('send-ticket-manually: Event body recebido:', event.body);
@@ -168,4 +164,3 @@ async function createTicketFromTemplate(buyerInfo, ticketInfo, uniqueCode) {
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;
 }
-
