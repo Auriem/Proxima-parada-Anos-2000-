@@ -1,88 +1,141 @@
 import { Resend } from 'resend';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import fs from 'fs/promises';
-import path from 'path';
+import { PDFDocument } from 'pdf-lib';
 
 export const handler = async (event) => {
-    try {
-        // ETAPA 1: Verificar as variáveis de ambiente
-        const resendApiKey = process.env.RESEND_API_KEY;
-        const myAdminEmail = process.env.MY_ADMIN_EMAIL;
+  try {
+    console.log('Função send-ticket-manually chamada');
+    console.log('Event body:', event.body);
+    
+    // ETAPA 1: Verificar as variáveis de ambiente
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const myAdminEmail = process.env.MY_ADMIN_EMAIL;
 
-        if (!resendApiKey) {
-            throw new Error('CONFIGURAÇÃO FALTANDO: A variável de ambiente RESEND_API_KEY não foi encontrada no Netlify.');
-        }
-        if (!myAdminEmail) {
-            throw new Error('CONFIGURAÇÃO FALTANDO: A variável de ambiente MY_ADMIN_EMAIL não foi encontrada no Netlify.');
-        }
-
-        const resend = new Resend(resendApiKey);
-        const { buyerInfo, ticketInfo } = JSON.parse(event.body);
-        const uniqueCode = `PP2000-${Date.now().toString(36).toUpperCase()}`;
-
-        // ETAPA 2: Tentar ler e modificar o arquivo PDF
-        let pdfBytes;
-        try {
-            pdfBytes = await createTicketFromTemplate(buyerInfo, ticketInfo, uniqueCode);
-        } catch (pdfError) {
-            throw new Error(`ERRO NO ARQUIVO PDF: Não foi possível ler ou modificar o template. Verifique se o caminho 'templates/ingresso_template.pdf' está correto no GitHub. Detalhe: ${pdfError.message}`);
-        }
-        
-        const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
-
-        // ETAPA 3: Tentar enviar o e-mail para o cliente
-        try {
-            await resend.emails.send({
-                from: 'Ingressos <vendas@proximaparadaanos2000.online>',
-                to: [buyerInfo.email],
-                subject: `Seu ingresso para "Próxima Parada: Anos 2000" chegou!`,
-                html: `<h1>Obrigado, ${buyerInfo.fullName}!</h1><p>Seu(s) ingresso(s) estão em anexo. Guarde este e-mail, ele é seu comprovante.</p>`,
-                attachments: [{ filename: 'Ingresso-Anos-2000.pdf', content: pdfBase64 }],
-            });
-        } catch (clientEmailError) {
-            throw new Error(`ERRO NO ENVIO (CLIENTE): O serviço de e-mail (Resend) recusou o envio. Verifique se o domínio 'proximaparadaanos2000.online' está verificado no Resend. Detalhe da API: ${clientEmailError.message}`);
-        }
-        
-        // ETAPA 4: Tentar enviar o e-mail de notificação para o administrador
-        try {
-            const itemsComprados = `Inteiras: ${ticketInfo.qtyInteira}<br>Meias: ${ticketInfo.qtyMeia}`;
-            await resend.emails.send({
-                from: 'AVISO DE VENDA MANUAL <sistema@proximaparadaanos2000.online>',
-                to: [myAdminEmail],
-                subject: `Nova Venda (Ação Manual) - ${buyerInfo.fullName}`,
-                html: `<h1>Venda Registrada (CONFIRMAR PAGAMENTO)</h1><p><b>AVISO:</b> Este ingresso foi enviado. <b>Verifique manualmente se o pagamento de R$ ${ticketInfo.totalAmount} foi recebido.</b></p><hr><p><b>Cliente:</b> ${buyerInfo.fullName}</p><p><b>Email:</b> ${buyerInfo.email}</p><p><b>Telefone:</b> ${buyerInfo.phone || 'Não informado'}</p><p><b>Código Único Gerado:</b> ${uniqueCode}</p><hr><p><b>Itens:</b></p><p>${itemsComprados}</p><p><b>Total: R$ ${ticketInfo.totalAmount}</b></p>`,
-            });
-        } catch (adminEmailError) {
-            // Se este e-mail falhar, não retornamos um erro para o cliente, pois ele já recebeu o ingresso.
-            console.error("AVISO: O e-mail para o cliente foi enviado, mas falhou ao notificar o administrador.", adminEmailError);
-        }
-
-        return { statusCode: 200, body: JSON.stringify({ message: 'E-mails enviados.' }) };
-
-    } catch (error) {
-        console.error("ERRO FINAL CAPTURADO:", error.message);
-        return { 
-            statusCode: 500, 
-            body: JSON.stringify({ 
-                error: 'Falha ao processar o envio do ingresso.',
-                details: error.message, // A mensagem de erro exata que criamos!
-            }) 
-        };
+    if (!resendApiKey) {
+      console.error('RESEND_API_KEY não configurada');
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'CONFIGURAÇÃO FALTANDO: A variável de ambiente RESEND_API_KEY não foi encontrada no Netlify.' }),
+      };
     }
+    if (!myAdminEmail) {
+      console.error('MY_ADMIN_EMAIL não configurada');
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'CONFIGURAÇÃO FALTANDO: A variável de ambiente MY_ADMIN_EMAIL não foi encontrada no Netlify.' }),
+      };
+    }
+
+    const resend = new Resend(resendApiKey);
+    
+    // Parse dos dados recebidos
+    let buyerInfo, ticketInfo;
+    try {
+      const data = JSON.parse(event.body);
+      buyerInfo = data.buyerInfo;
+      ticketInfo = data.ticketInfo;
+      console.log('Dados recebidos:', { buyerInfo, ticketInfo });
+    } catch (parseError) {
+      console.error('Erro ao fazer parse dos dados:', parseError);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Dados inválidos recebidos' }),
+      };
+    }
+
+    if (!buyerInfo || !buyerInfo.name || !buyerInfo.email) {
+      console.error('Dados do comprador incompletos:', buyerInfo);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Dados do comprador incompletos' }),
+      };
+    }
+
+    const uniqueCode = `PP2000-${Date.now().toString(36).toUpperCase()}`;
+    console.log('Código único gerado:', uniqueCode);
+
+    // ETAPA 2: Tentar ler e modificar o arquivo PDF
+    let pdfBytes;
+    try {
+      pdfBytes = await createTicketFromTemplate(buyerInfo, ticketInfo, uniqueCode);
+      console.log('PDF gerado com sucesso');
+    } catch (pdfError) {
+      console.error('ERRO NO ARQUIVO PDF:', pdfError);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'Erro ao gerar o ingresso em PDF: ' + pdfError.message }),
+      };
+    }
+
+    const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+
+    // ETAPA 3: Enviar o e-mail com o ingresso para o cliente
+    try {
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: buyerInfo.email,
+        subject: 'Seu ingresso para Próxima Parada Anos 2000!',
+        html: `<p>Olá ${buyerInfo.name},</p><p>Seu ingresso está anexado a este e-mail.</p><p>Código do ingresso: ${uniqueCode}</p><p>Atenciosamente,</p><p>Equipe Próxima Parada Anos 2000</p>`,
+        attachments: [
+          {
+            filename: 'ingresso.pdf',
+            content: pdfBase64,
+          },
+        ],
+      });
+      console.log('Email enviado para o cliente:', buyerInfo.email);
+    } catch (emailError) {
+      console.error('Erro ao enviar email para o cliente:', emailError);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'Erro ao enviar email para o cliente: ' + emailError.message }),
+      };
+    }
+
+    // ETAPA 4: Enviar o e-mail de notificação para o administrador
+    try {
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: myAdminEmail,
+        subject: 'Novo ingresso enviado manualmente!',
+        html: `<p>Um novo ingresso foi enviado manualmente para ${buyerInfo.name} (${buyerInfo.email}).</p><p>Código único: ${uniqueCode}</p><p>Telefone: ${buyerInfo.phone || 'Não informado'}</p>`,
+      });
+      console.log('Email de notificação enviado para o admin:', myAdminEmail);
+    } catch (adminEmailError) {
+      console.error('Erro ao enviar email para o admin:', adminEmailError);
+      // Não retorna erro aqui pois o email principal já foi enviado
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Ingresso enviado com sucesso!', code: uniqueCode }),
+    };
+  } catch (error) {
+    console.error('Erro geral ao enviar ingresso manualmente:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Erro interno do servidor: ' + error.message }),
+    };
+  }
 };
 
 async function createTicketFromTemplate(buyerInfo, ticketInfo, uniqueCode) {
-    const templatePath = path.resolve(process.cwd(), 'templates/ingresso_template.pdf');
-    const templateBytes = await fs.readFile(templatePath);
-    const pdfDoc = await PDFDocument.load(templateBytes);
-    const [page] = pdfDoc.getPages();
-    const { width, height } = page.getSize();
-    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const itemsText = `Inteiras: ${ticketInfo.qtyInteira} | Meias: ${ticketInfo.qtyMeia}`;
-    
-    page.drawText(`CODIGO: ${uniqueCode}`, { x: 50, y: height - 750, font, size: 14, color: rgb(0, 0, 0) });
-    page.drawText(buyerInfo.fullName, { x: 50, y: height - 720, font, size: 12, color: rgb(0, 0, 0) });
-    page.drawText(itemsText, { x: 50, y: height - 700, font, size: 12, color: rgb(0, 0, 0) });
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage();
 
-    return await pdfDoc.save();
-                                       }
+  // Adicione o conteúdo do ingresso aqui
+  page.drawText(`Ingresso para Próxima Parada Anos 2000`, { x: 50, y: 700 });
+  page.drawText(`Nome: ${buyerInfo.name}`, { x: 50, y: 680 });
+  page.drawText(`Email: ${buyerInfo.email}`, { x: 50, y: 660 });
+  page.drawText(`Telefone: ${buyerInfo.phone || 'Não informado'}`, { x: 50, y: 640 });
+  page.drawText(`Código Único: ${uniqueCode}`, { x: 50, y: 620 });
+  page.drawText(`Data: ${new Date().toLocaleDateString()}`, { x: 50, y: 600 });
+  
+  if (ticketInfo) {
+    page.drawText(`Sessão: ${ticketInfo.session || 'Não especificada'}`, { x: 50, y: 580 });
+    page.drawText(`Valor: R$ ${ticketInfo.price || '0,00'}`, { x: 50, y: 560 });
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
+}
+
