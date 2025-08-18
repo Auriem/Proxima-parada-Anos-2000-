@@ -1,12 +1,8 @@
-import { MercadoPagoConfig, Payment } from 'mercadopago';
-import { Resend } from 'resend';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { MercadoPagoConfig, Payment } = require("mercadopago");
+const { Resend } = require("resend");
+const { PDFDocument, StandardFonts } = require("pdf-lib");
+const fs = require("fs/promises");
+const path = require("path");
 
 // Lendo as chaves secretas do ambiente Netlify
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -14,55 +10,55 @@ const mpClient = new MercadoPagoConfig({ accessToken: process.env.MERCADOPAGO_AC
 const payment = new Payment(mpClient);
 const myAdminEmail = process.env.MY_ADMIN_EMAIL;
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
-    console.log('Webhook recebido:', event.body);
+    console.log("Webhook recebido:", event.body);
     
     // Verificar se as variáveis de ambiente estão configuradas
     if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY não configurada');
+      console.error("RESEND_API_KEY não configurada");
       return {
         statusCode: 500,
-        body: JSON.stringify({ message: 'Configuração de email não encontrada' }),
+        body: JSON.stringify({ message: "Configuração de email não encontrada" }),
       };
     }
     
     if (!process.env.MY_ADMIN_EMAIL) {
-      console.error('MY_ADMIN_EMAIL não configurada');
+      console.error("MY_ADMIN_EMAIL não configurada");
       return {
         statusCode: 500,
-        body: JSON.stringify({ message: 'Email do administrador não configurado' }),
+        body: JSON.stringify({ message: "Email do administrador não configurado" }),
       };
     }
 
     const data = JSON.parse(event.body);
-    console.log('Dados do webhook:', data);
+    console.log("Dados do webhook:", data);
 
-    if (data.type === 'payment') {
-      console.log('Processando pagamento ID:', data.data.id);
+    if (data.type === "payment") {
+      console.log("Processando pagamento ID:", data.data.id);
       const paymentDetails = await payment.get({ id: data.data.id });
-      console.log('Detalhes do pagamento:', paymentDetails);
+      console.log("Detalhes do pagamento:", paymentDetails);
 
-      if (paymentDetails.status === 'approved') {
+      if (paymentDetails.status === "approved") {
         const { metadata } = paymentDetails;
         const buyerName = metadata.buyer_name;
         const buyerEmail = metadata.buyer_email;
 
-        console.log('Pagamento aprovado para:', buyerName, buyerEmail);
+        console.log("Pagamento aprovado para:", buyerName, buyerEmail);
 
         // 1. Gerar o PDF a partir do seu template
         const pdfBytes = await createTicketFromTemplate(paymentDetails, buyerName, buyerEmail);
-        const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
+        const pdfBase64 = Buffer.from(pdfBytes).toString("base64");
 
         // 2. Enviar o e-mail com o ingresso para o cliente
         await resend.emails.send({
-          from: 'onboarding@resend.dev',
+          from: "onboarding@resend.dev",
           to: buyerEmail,
-          subject: 'Seu ingresso para Próxima Parada Anos 2000!',
+          subject: "Seu ingresso para Próxima Parada Anos 2000!",
           html: `<p>Olá ${buyerName},</p><p>Seu ingresso está anexado a este e-mail.</p><p>Atenciosamente,</p><p>Equipe Próxima Parada Anos 2000</p>`,
           attachments: [
             {
-              filename: 'ingresso.pdf',
+              filename: "ingresso.pdf",
               content: pdfBase64,
             },
           ],
@@ -70,43 +66,43 @@ export const handler = async (event) => {
 
         // 3. Enviar o e-mail de notificação para o administrador
         await resend.emails.send({
-          from: 'onboarding@resend.dev',
+          from: "onboarding@resend.dev",
           to: myAdminEmail,
-          subject: 'Novo ingresso vendido!',
+          subject: "Novo ingresso vendido!",
           html: `<p>Um novo ingresso foi vendido para ${buyerName} (${buyerEmail}).</p><p>Detalhes do pagamento: ${JSON.stringify(paymentDetails)}</p>`,
         });
 
-        console.log('Emails enviados com sucesso');
+        console.log("Emails enviados com sucesso");
         return {
           statusCode: 200,
-          body: JSON.stringify({ message: 'Ingresso enviado com sucesso!' }),
+          body: JSON.stringify({ message: "Ingresso enviado com sucesso!" }),
         };
       } else {
-        console.log('Pagamento não aprovado, status:', paymentDetails.status);
+        console.log("Pagamento não aprovado, status:", paymentDetails.status);
       }
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Evento não processado.' }),
+      body: JSON.stringify({ message: "Evento não processado." }),
     };
   } catch (error) {
-    console.error('Erro ao processar webhook:', error);
+    console.error("Erro ao processar webhook:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: 'Erro interno do servidor: ' + error.message }),
+      body: JSON.stringify({ message: "Erro interno do servidor: " + error.message }),
     };
   }
 };
 
 async function createTicketFromTemplate(paymentDetails, buyerName, buyerEmail) {
-  const templatePath = path.join(__dirname, 'ingresso_template.pdf');
+  const templatePath = path.join(__dirname, "ingresso_template.pdf");
   let existingPdfBytes;
   try {
     existingPdfBytes = await fs.readFile(templatePath);
-    console.log('Template PDF lido com sucesso.');
+    console.log("Template PDF lido com sucesso.");
   } catch (readError) {
-    console.error('Erro ao ler o template PDF:', readError);
+    console.error("Erro ao ler o template PDF:", readError);
     // Se o template não for encontrado, cria um PDF do zero como fallback
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage();
