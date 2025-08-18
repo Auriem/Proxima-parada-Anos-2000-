@@ -2,58 +2,96 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 export const handler = async (event) => {
   try {
-    console.log('Criando preferência de pagamento');
-    console.log('Event body:', event.body);
+    console.log('create-mercadopago-payment: Função iniciada.');
+    console.log('create-mercadopago-payment: Event body recebido:', event.body);
     
     const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
     
     if (!accessToken) {
-      console.error('MERCADOPAGO_ACCESS_TOKEN não configurado');
+      console.error('create-mercadopago-payment: MERCADOPAGO_ACCESS_TOKEN não configurado.');
       return {
         statusCode: 500,
-        body: JSON.stringify({ message: 'Token do Mercado Pago não configurado' }),
+        body: JSON.stringify({ message: 'Token do Mercado Pago não configurado.' }),
       };
     }
     
     const client = new MercadoPagoConfig({ accessToken });
     const preference = new Preference(client);
 
-    const { items, payer, metadata } = JSON.parse(event.body);
-    console.log('Dados recebidos:', { items, payer, metadata });
+    let requestBody;
+    try {
+      requestBody = JSON.parse(event.body);
+      console.log('create-mercadopago-payment: Body parseado:', requestBody);
+    } catch (parseError) {
+      console.error('create-mercadopago-payment: Erro ao parsear JSON do body:', parseError);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Requisição inválida: JSON mal formatado.' }),
+      };
+    }
+
+    const { title, price, buyerName, buyerEmail } = requestBody;
+    console.log('create-mercadopago-payment: Dados extraídos:', { title, price, buyerName, buyerEmail });
+
+    // Verificando se os dados essenciais estão presentes
+    if (!title || !price || !buyerName || !buyerEmail) {
+      console.error('create-mercadopago-payment: Dados essenciais faltando:', { title, price, buyerName, buyerEmail });
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Dados essenciais para a preferência de pagamento estão faltando.' }),
+      };
+    }
+
+    const items = [{
+      title: title,
+      unit_price: parseFloat(price),
+      quantity: 1,
+    }];
+
+    const payer = {
+      fullName: buyerName,
+      email: buyerEmail,
+    };
+
+    const metadata = {
+      buyer_name: buyerName,
+      buyer_email: buyerEmail,
+      // Adicione outros metadados se necessário, como buyer_phone ou session_id
+    };
+
+    // Usar process.env.BASE_URL conforme discutido
+    const notificationUrl = `${process.env.BASE_URL}/.netlify/functions/2-handle-webhook`;
+    const successUrl = `${process.env.BASE_URL}/sucesso.html`;
+    const failureUrl = `${process.env.BASE_URL}/falha.html`;
+
+    console.log('create-mercadopago-payment: URLs de retorno e notificação:', { notificationUrl, successUrl, failureUrl });
 
     const result = await preference.create({
       body: {
         items: items,
-        payer: { 
-          name: payer.fullName, 
-          email: payer.email 
-        },
-        metadata: {
-          buyer_name: payer.fullName,
-          buyer_email: payer.email,
-          buyer_phone: payer.phone,
-          session_id: metadata.sessionId
-        },
-notification_url: `${process.env.BASE_URL}/.netlify/functions/2-handle-webhook`,
+        payer: payer,
+        metadata: metadata,
+        notification_url: notificationUrl,
         back_urls: {
-          success: `${process.env.URL}/sucesso.html`,
-          failure: `${process.env.URL}/falha.html`,
+          success: successUrl,
+          failure: failureUrl,
         },
         auto_return: "approved",
       },
     });
 
-    console.log('Preferência criada com sucesso:', result.id);
+    console.log('create-mercadopago-payment: Preferência criada com sucesso. ID:', result.id);
     return {
       statusCode: 200,
       body: JSON.stringify({ id: result.id, init_point: result.init_point }),
     };
   } catch (error) {
-    console.error("Erro ao criar preferência de pagamento:", error);
+    console.error('create-mercadopago-payment: Erro geral:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Erro interno do servidor: " + error.message }),
+      body: JSON.stringify({ message: 'Erro interno do servidor: ' + error.message }),
     };
   }
 };
+
 
