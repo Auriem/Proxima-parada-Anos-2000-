@@ -295,4 +295,426 @@
       <h2 class="section-title">Sobre a Peça</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira e
+          <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
+          <p class="highlight-box">"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
+        </div>
+        <div class="about-image-container">
+          <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
+        </div>
+      </div>
+    </section>
+
+    <section id="local" class="location-section">
+      <h3 class="section-title">📍 Local de Apresentação 📍</h3>
+      <p class="location-address">Teatro Enio Carvalho - Rua Mateus Leme, 990, Centro Cívico, Curitiba</p>
+    </section>
+
+    <section id="elenco" class="cast-section">
+      <h2 class="section-title">Nosso Elenco</h2>
+      <div class="cast-grid" id="cast-grid-container"><!-- render dinâmico --></div>
+    </section>
+
+    <section id="scrap" class="scrap-section">
+      <h2 class="section-title">Gerador de Scrap Nostálgico</h2>
+      <p>Crie uma mensagem nostálgica personalizada sobre os anos 2000!</p>
+      <input type="text" id="scrap-input" class="scrap-input" placeholder="Digite algo sobre os anos 2000...">
+      <button id="scrap-button" class="action-button">✨ Gerar Scrap!</button>
+      <div class="retro-loader" id="scrap-loading">Gerando sua nostalgia...</div>
+      <div id="scrap-result" class="scrap-result"></div>
+    </section>
+  </div>
+
+  <footer id="contato">
+    <div class="container">
+      <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
+      <h3 class="contact-title">Fale Conosco ::: Mande um Scrap!</h3>
+      <p class="contact-subtitle">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+      <div class="contact-buttons">
+        <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
+        <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
+        <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
+        <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
+        <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+      </div>
+      <p class="footer-text">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Modal de Compra -->
+  <div id="purchase-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="modal-close-btn" class="modal-close">×</button>
+      <h3 class="modal-title">Comprar Ingresso</h3>
+
+      <!-- Etapa 1: Dados + Quantidades -->
+      <div id="personal-data-form">
+        <div class="form-group"><label for="full-name">Nome Completo:</label><input type="text" id="full-name" required></div>
+        <div class="form-group"><label for="email">E-mail:</label><input type="email" id="email" required></div>
+        <div class="form-group"><label for="phone">Telefone:</label><input type="tel" id="phone" required></div>
+        <div class="form-group">
+          <label>Tipo de Ingresso:</label>
+          <div class="ticket-group"><label for="qty-inteira">Inteira (R$ 50,00)</label><input type="number" id="qty-inteira" min="0" value="1" max="8"></div>
+          <div class="ticket-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
+        </div>
+        <div class="total-section"><div class="total-amount" id="total-amount">R$ 50,00</div></div>
+        <button id="continue-to-payment" class="continue-button">Continuar para pagamento</button>
+      </div>
+
+      <!-- Etapa 2: Confirmação de pagamento + upload -->
+      <div id="post-payment-section" class="payment-section" style="display:none; text-align:center;">
+        <h4 style="color: var(--neon-pink); margin-bottom: 20px;">Pagamento aberto em uma nova aba</h4>
+        <p>Conclua o pagamento na aba do <b>Mercado Pago</b>. Assim que pagar, volte aqui e envie o comprovante para receber seu ingresso por e-mail.</p>
+
+        <div class="form-group" style="text-align:left;">
+          <label for="proof-file">Comprovante de pagamento (imagem ou PDF):</label>
+          <input type="file" id="proof-file" accept="image/*,.pdf" />
+        </div>
+
+        <button id="send-ticket-btn" class="continue-button">Já paguei, enviar meu ingresso</button>
+        <div id="sending-loader" class="retro-loader">Enviando seu ingresso...</div>
+      </div>
+
+      <!-- Etapa Final: sucesso/erro -->
+      <div id="final-status-screen" style="display:none; text-align:center; padding:20px;"></div>
+    </div>
+  </div>
+
+  <!-- Tela final externa (fallback se quiser usar fora do modal) -->
+  <section id="final-screen">
+    <h2>✅ Compra confirmada!</h2>
+    <p>Este é o seu ingresso digital:</p>
+    <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
+    <p>Seu código único:</p>
+    <div class="retro-code" id="codigoUnico"></div>
+    <p>Guarde este código junto com seu comprovante. Ele é seu ingresso digital.</p>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      /* =====================
+         CONFIGURAÇÕES
+      ====================== */
+      // Links Mercado Pago de valores pré-definidos
+      const linksPagamento = {
+        25:  "https://mpago.li/1SDJxrj",
+        50:  "https://mpago.li/21ks87P",
+        75:  "https://mpago.li/1VmFtmt",
+        100: "https://mpago.li/2Lhv2M1",
+        125: "https://mpago.li/1a688tD",
+        150: "https://mpago.li/1uWW1XE",
+        175: "https://mpago.li/2a2GAF5",
+        200: "https://mpago.li/15tvMBA"
+      };
+
+      // Sessões (as mesmas do seu index)
+      const sessoes = [
+        { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+      ];
+
+      const elenco = [
+        { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+        { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+        { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+        { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+        { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+        { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+        { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+      ];
+
+      /* =====================
+         ELEMENTOS
+      ====================== */
+      const modal = document.getElementById('purchase-modal');
+      const closeBtn = document.getElementById('modal-close-btn');
+      const continueBtn = document.getElementById('continue-to-payment');
+      const personalDataForm = document.getElementById('personal-data-form');
+      const postPaymentSection = document.getElementById('post-payment-section');
+      const sendTicketBtn = document.getElementById('send-ticket-btn');
+      const sendingLoader = document.getElementById('sending-loader');
+      const finalStatusScreen = document.getElementById('final-status-screen');
+
+      const qtyInteira = document.getElementById('qty-inteira');
+      const qtyMeia = document.getElementById('qty-meia');
+      const totalAmountDiv = document.getElementById('total-amount');
+
+      let selectedSession = null;
+
+      /* =====================
+         RENDER / UTIL
+      ====================== */
+      function renderContent() {
+        const eventsContainer = document.getElementById('events-list-container');
+        eventsContainer.innerHTML = '';
+        sessoes.forEach(sessao => {
+          const dataObj = new Date(sessao.data);
+          const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+          const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+          const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          const card = document.createElement('div');
+          card.className = 'event-card';
+          card.innerHTML = `
+            <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
+            <p class="event-date">${horaFormatada}h</p>
+            <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
+            <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
+              ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
+            </button>`;
+          eventsContainer.appendChild(card);
+        });
+
+        const castContainer = document.getElementById('cast-grid-container');
+        castContainer.innerHTML = '';
+        elenco.forEach(m => {
+          const card = document.createElement('div');
+          card.className = 'cast-card';
+          card.innerHTML = `
+            <img src="${m.foto}" alt="${m.nome}" class="cast-photo ${m.nome === 'Aquiles Amendola' ? 'aquiles' : ''}">
+            <h3 class="cast-name">${m.nome}</h3>
+            <p class="cast-character">${m.personagem}</p>`;
+          castContainer.appendChild(card);
+        });
+        const gifCard = document.createElement('div');
+        gifCard.className = 'cast-card';
+        gifCard.innerHTML = `<a href="https://postimages.org/" target="_blank"><img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô GIF" style="width:120px; height:120px; border-radius:10px; border:3px solid var(--neon-pink);"></a>`;
+        castContainer.appendChild(gifCard);
+      }
+
+      function updateCountdown() {
+        const proxima = sessoes.find(s => new Date(s.data) > new Date());
+        if (!proxima) return;
+        const target = new Date(proxima.data);
+        const now = new Date(); const diff = target - now;
+        if (diff > 0) {
+          document.getElementById('days').textContent = Math.floor(diff / (1000*60*60*24)).toString().padStart(2,'0');
+          document.getElementById('hours').textContent = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2,'0');
+          document.getElementById('minutes').textContent = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2,'0');
+          document.getElementById('seconds').textContent = Math.floor((diff % (1000*60)) / 1000).toString().padStart(2,'0');
+        }
+      }
+
+      function createParticles() {
+        const container = document.getElementById('particles-container');
+        const count = 50;
+        for (let i=0;i<count;i++){
+          const p=document.createElement('div');
+          p.className='particle';
+          p.style.left = Math.random()*100 + '%';
+          p.style.animationDelay = Math.random()*6 + 's';
+          p.style.animationDuration = (Math.random()*3 + 3) + 's';
+          container.appendChild(p);
+        }
+      }
+
+      function addClickEffect(el){ el.classList.add('clicked'); setTimeout(()=>el.classList.remove('clicked'),300); }
+
+      /* =====================
+         MODAL / FLUXO
+      ====================== */
+      function openModal(sessionId){
+        selectedSession = sessoes.find(s => s.id === sessionId);
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        personalDataForm.style.display = 'block';
+        postPaymentSection.style.display = 'none';
+        finalStatusScreen.style.display = 'none';
+        updateTotalAmount();
+      }
+      function closeModal(){
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      function updateTotalAmount(){
+        if(!selectedSession) return;
+        const qI = parseInt(qtyInteira.value||'0');
+        const qM = parseInt(qtyMeia.value||'0');
+        const total = (qI * selectedSession.precoInteira) + (qM * selectedSession.precoMeia);
+        totalAmountDiv.textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+      }
+
+      function validateForm(){
+        let ok = true;
+        const required = ['full-name','email'];
+        required.forEach(id=>{
+          const el = document.getElementById(id);
+          if(!el.value.trim()){ el.style.borderColor='red'; ok=false; } else { el.style.borderColor=''; }
+        });
+        const totalTickets = (parseInt(qtyInteira.value||'0') + parseInt(qtyMeia.value||'0'));
+        if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
+        if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
+        if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
+        return ok;
+      }
+
+      function calcularTotalNumero(){
+        const parsed = parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
+        return Math.round(parsed); // arredonda para inteiro: 25,50,...200
+      }
+
+      function detalhesCompraString(){
+        const qI = parseInt(qtyInteira.value||'0');
+        const qM = parseInt(qtyMeia.value||'0');
+        const tot = totalAmountDiv.textContent;
+        const dataObj = new Date(selectedSession.data);
+        const dataFormatada = dataObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+        const horaFormatada = dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${dataFormatada} ${horaFormatada}h`;
+      }
+
+      function gerarCodigoUnico(sessaoId){
+        const sess = sessoes.find(s=>s.id===sessaoId);
+        const d = new Date(sess.data);
+        const dia = String(d.getDate()).padStart(2,'0');
+        const mes = String(d.getMonth()+1).padStart(2,'0');
+        const hora = String(d.getHours()).padStart(2,'0');
+        const min = String(d.getMinutes()).padStart(2,'0');
+        const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let rand=""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
+        return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
+      }
+
+      function openPaymentLinkForTotal(total){
+        const link = linksPagamento[total];
+        if(!link){ alert('Valor não disponível. O total deve ser um dos valores pré-definidos (25 a 200).'); return false; }
+        window.open(link, '_blank');
+        return true;
+      }
+
+      /* ======= Eventos UI ======= */
+      closeBtn.addEventListener('click', closeModal);
+      qtyInteira.addEventListener('input', updateTotalAmount);
+      qtyMeia.addEventListener('input', updateTotalAmount);
+
+      continueBtn.addEventListener('click', ()=>{
+        if(!validateForm()) return;
+        const total = calcularTotalNumero();
+
+        if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+        if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
+        if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+
+        // Abre o link do Mercado Pago e avança para a etapa de upload do comprovante
+        const ok = openPaymentLinkForTotal(total);
+        if(ok){
+          personalDataForm.style.display='none';
+          postPaymentSection.style.display='block';
+        }
+      });
+
+      sendTicketBtn.addEventListener('click', ()=>{
+        const file = document.getElementById('proof-file').files[0];
+        if(!file){ alert('Anexe o comprovante de pagamento.'); return; }
+
+        sendingLoader.style.display = 'block';
+        const reader = new FileReader();
+        reader.onload = function(){
+          const base64File = reader.result; // << link base64 no corpo
+          const code = gerarCodigoUnico(selectedSession.id);
+          const payload = {
+            from_name: document.getElementById('full-name').value,
+            from_email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            sessao: selectedSession.id,
+            ingresso: detalhesCompraString(),
+            comprovante: base64File,          // base64 no corpo do e-mail
+            code: code,
+            total_value: totalAmountDiv.textContent.replace('R$','').trim()
+          };
+
+          emailjs.send("service_c9ak8yp","template_5lax0jv", payload, "zWI9wjgMNAHJ0WV7f")
+            .then(()=>{
+              sendingLoader.style.display='none';
+              finalStatusScreen.innerHTML = `
+                <h2>✅ Sucesso!</h2>
+                <p>Seu ingresso foi enviado para <b>${payload.from_email}</b>.</p>
+                <p>Guarde este código único:</p>
+                <div class="retro-code">${payload.code}</div>
+                <div style="margin-top:15px;">
+                  <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
+                </div>
+                <p style="font-size:12px;opacity:.9;">Se não encontrar o e-mail, verifique o Spam/Lixo eletrônico.</p>
+              `;
+              finalStatusScreen.style.display='block';
+              postPaymentSection.style.display='none';
+            })
+            .catch(err=>{
+              sendingLoader.style.display='none';
+              finalStatusScreen.innerHTML = `
+                <h2>❌ Erro!</h2>
+                <p>Não foi possível enviar seu ingresso agora.</p>
+                <p style="font-size: 12px; color: #ccc; margin-top: 15px;">Detalhe técnico: ${JSON.stringify(err)}</p>
+              `;
+              finalStatusScreen.style.display='block';
+              postPaymentSection.style.display='none';
+            });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Delegação para abrir modal nas sessões
+      document.body.addEventListener('click', (e)=>{
+        const target = e.target.closest('a, button');
+        if(!target) return;
+
+        if(target.matches('.action-button, .nav-button, .event-button, .continue-button')) addClickEffect(target);
+
+        if(target.matches('.event-button, .action-button[href="#eventos"]')){
+          e.preventDefault();
+          const section = document.getElementById('eventos');
+          if(section) section.scrollIntoView({behavior:'smooth'});
+
+          if(target.dataset.sessionId) openModal(target.dataset.sessionId);
+        }
+      });
+
+      // Âncoras suaves (exceto #eventos que já tratamos)
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', function(e){
+          if(this.getAttribute('href') !== '#eventos'){
+            e.preventDefault();
+            const el = document.querySelector(this.getAttribute('href'));
+            if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        });
+      });
+
+      /* =====================
+         SCRAP (brincadeira)
+      ====================== */
+      const scrapBtn = document.getElementById('scrap-button');
+      const scrapInput = document.getElementById('scrap-input');
+      const scrapLoading = document.getElementById('scrap-loading');
+      const scrapResult = document.getElementById('scrap-result');
+      if(scrapBtn){
+        scrapBtn.addEventListener('click', ()=>{
+          const txt = (scrapInput.value||'').trim();
+          if(!txt){ scrapResult.textContent = 'Escreve um tema nostálgico tipo “MSN”, “Orkut”, “lan house”...'; return; }
+          scrapLoading.classList.add('active');
+          setTimeout(()=>{
+            scrapLoading.classList.remove('active');
+            scrapResult.textContent =
+`★ ${txt.toUpperCase()} 4EVER ★
+Se você lembra, sua infância/adolescência foi épica.
+Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
+          }, 800);
+        });
+      }
+
+      /* =====================
+         INIT
+      ====================== */
+      function initialize(){
+        renderContent();
+        createParticles();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+      initialize();
+    });
+  </script>
+</body>
+</html>
