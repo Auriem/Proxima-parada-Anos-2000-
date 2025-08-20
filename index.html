@@ -620,14 +620,22 @@
       try{
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
         // Mostra ingresso pro cliente na HORA
-        finalStatusScreen.innerHTML = `
-          <h2>✅ Compra confirmada!</h2>
-          <p>Este é o seu ingresso digital. <b>Tire um print desta tela</b> e guarde o código abaixo.</p>
-          <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
-          <p>Seu código único:</p>
-          <div class="retro-code">${generatedCode}</div>
-          <p style="font-size:12px; opacity:.9; margin-top:10px;">Você também receberá instruções no e-mail informado durante a compra (verifique o Spam).</p>
-        `;
+       finalStatusScreen.innerHTML = `
+  <h2>✅ Compra confirmada!</h2>
+  <p>Este é o seu ingresso digital. <b>Tire um print desta tela</b> e guarde o código abaixo.</p>
+  <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
+  <p>Seu código único:</p>
+  <div class="retro-code">${generatedCode}</div>
+  <p style="font-size:12px; opacity:.9; margin-top:10px;">Você também receberá instruções no e-mail informado durante a compra (verifique o Spam).</p>
+
+  <!-- GIF Anahí pedido -->
+  <a href="https://postimages.org/" target="_blank" style="display:inline-block; margin-top:12px;">
+    <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" 
+         alt="Anahí RBD GIF" 
+         style="max-width:220px; border-radius:12px; border:4px solid var(--neon-pink); box-shadow:0 0 16px var(--neon-pink);" />
+  </a>
+`;
+
         finalStatusScreen.style.display='block';
         postPaymentSection.style.display='none';
       }catch(err){
@@ -674,25 +682,54 @@
       });
     });
 
-    // Scrap
-    const scrapBtn = document.getElementById('scrap-button');
-    const scrapInput = document.getElementById('scrap-input');
-    const scrapLoading = document.getElementById('scrap-loading');
-    const scrapResult = document.getElementById('scrap-result');
-    if(scrapBtn){
-      scrapBtn.addEventListener('click', ()=>{
-        const txt = (scrapInput.value||'').trim();
-        if(!txt){ scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...'; return; }
-        scrapLoading.classList.add('active');
-        setTimeout(()=>{
-          scrapLoading.classList.remove('active');
-          scrapResult.textContent =
-`★ ${txt.toUpperCase()} 4EVER ★
+    // Scrap com variações e som MSN
+const scrapBtn = document.getElementById('scrap-button');
+const scrapInput = document.getElementById('scrap-input');
+const scrapLoading = document.getElementById('scrap-loading');
+const scrapResult = document.getElementById('scrap-result');
+
+// Som estilo MSN (nudge/alerta)
+const msnSound = new Audio("https://www.myinstants.com/media/sounds/msn_nudge.mp3");
+
+const scrapsVariacoes = [
+  txt => `★ ${txt.toUpperCase()} 4EVER ★
 Se você lembra, sua infância/adolescência foi épica.
-Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
-        }, 700);
-      });
+Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`,
+
+  txt => `(${txt}) era tudo!
+Só quem viveu sabe. 🤩
+#Saudades2000`,
+
+  txt => `Sdds de quando ${txt} fazia a gente sorrir sem internet no celular 💾📟`,
+
+  txt => `${txt} >>> qualquer coisa de hoje.
+Assinado: Nostalgia pura 🕹️`,
+
+  txt => `Lembra do ${txt}? Se sim, você desbloqueou uma memória rara 🔓✨`
+];
+
+if(scrapBtn){
+  scrapBtn.addEventListener('click', ()=>{
+    const txt = (scrapInput.value||'').trim();
+    if(!txt){
+      scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...';
+      return;
     }
+    scrapLoading.classList.add('active');
+    setTimeout(()=>{
+      scrapLoading.classList.remove('active');
+      const variation = scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
+      scrapResult.textContent = variation(txt);
+
+      // Toca o som ao exibir o scrap
+      try{
+        msnSound.currentTime = 0;
+        msnSound.play();
+      }catch(e){}
+    }, 700);
+  });
+}
+
 
     // ======== START ========
     function initialize(){
@@ -705,5 +742,6 @@ Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
   </script>
 </body>
 </html>
+
 
 
