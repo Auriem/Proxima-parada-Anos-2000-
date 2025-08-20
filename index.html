@@ -2,249 +2,233 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Próxima Parada: Anos 2000 - Venda de Ingressos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Próxima Parada: Anos 2000 - Ingressos</title>
 
-  <!-- fontes / libs visuais -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+  <!-- Fonte opcional 2000s vibe -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --primary-blue:#0000CD; --primary-purple:#8A2BE2;
-      --neon-pink:#FF6EC7; --hot-pink:#FF1493; --light-pink:#FFC0CB;
-      --neon-green:#ADFF2F; --white:#FFF; --light-gray:#DDD; --dark-gray:#333;
+      --primary-blue:#0000CD;
+      --primary-purple:#8A2BE2;
+      --neon-pink:#FF6EC7;
+      --hot-pink:#FF1493;
+      --light-pink:#FFC0CB;
+      --neon-green:#ADFF2F;
+      --white:#FFFFFF;
+      --light-gray:#DDDDDD;
+      --dark-gray:#222;
+      --bg-grad: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
     }
-    *{box-sizing:border-box}
+
+    *{ box-sizing: border-box }
+    html,body{ margin:0; padding:0 }
     body{
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-      color: var(--white); margin:0; line-height:1.6; background-attachment:fixed; overflow-x:hidden; position:relative;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg-grad);
+      color: var(--white);
+      line-height: 1.55;
+      background-attachment: fixed;
+      overflow-x: hidden;
+      position: relative;
     }
+
+    /* Scanlines/ruído leve */
     body::before{
-      content:''; position:fixed; inset:0;
-      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.03) 2px,rgba(255,255,255,.03) 4px);
-      pointer-events:none; z-index:1; animation:scanlines 2s linear infinite;
+      content:'';
+      position: fixed; inset: 0;
+      pointer-events:none; z-index:1;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px);
+      animation: scanlines 2s linear infinite;
     }
-    @keyframes scanlines{0%{transform:translateY(0)}100%{transform:translateY(4px)}}
+    @keyframes scanlines{ 0%{transform:translateY(0)} 100%{transform:translateY(4px)} }
 
-    #particles-container{position:fixed; inset:0; pointer-events:none; z-index:2}
-    .particle{position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation:float 6s infinite linear}
-    @keyframes float{0%{transform:translateY(100vh)}100%{transform:translateY(-10px) translateX(100px); opacity:0}}
-
-    .container{width:90%; max-width:1100px; margin:0 auto; padding:20px; position:relative; z-index:10}
-
-    .glow-text{
-      text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 15px var(--neon-pink),0 0 20px var(--neon-pink);
-      animation:textPulse 2s infinite;
+    #particles-container{ position: fixed; inset:0; pointer-events:none; z-index:2; }
+    .particle{ position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation: float 6s infinite linear; }
+    @keyframes float{
+      0%{ transform: translateY(100vh) translateX(0); opacity:0 }
+      10%,90%{ opacity:.6 }
+      100%{ transform: translateY(-10px) translateX(100px); opacity:0 }
     }
-    @keyframes textPulse{0%{text-shadow:0 0 5px #fff,0 0 10px var(--neon-pink)}50%{text-shadow:0 0 20px #fff,0 0 30px var(--hot-pink)}100%{text-shadow:0 0 5px #fff,0 0 10px var(--neon-pink)}}
+
+    .container{ width: 92%; max-width: 1100px; margin: 0 auto; padding: 20px; position:relative; z-index: 10; }
 
     header{
-      background: rgba(0,0,0,.7); border-bottom:3px solid var(--neon-pink); padding:15px 0; text-align:center;
-      box-shadow:0 0 15px var(--neon-pink); position:relative; overflow:hidden;
+      text-align:center; padding:22px 0; border-bottom:3px solid var(--neon-pink);
+      background: rgba(0,0,0,.55); box-shadow:0 0 18px var(--neon-pink);
+      position:relative; overflow:hidden;
     }
-    header::before{
-      content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
-      background: radial-gradient(circle, transparent 20%, rgba(0,0,0,.7) 70%); opacity:.1; animation:headerGlow 10s linear infinite;
+    .logo{
+      font-family: 'VT323', monospace;
+      font-size: clamp(36px, 5vw, 64px);
+      letter-spacing:1px; margin:0;
+      text-shadow:0 0 5px #fff, 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
     }
-    @keyframes headerGlow{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-    .logo{font-family:'VT323', monospace; font-size:48px; margin:0; letter-spacing:2px; display:inline-block}
-    .logo.glitch{animation:glitch 3s infinite}
-    @keyframes glitch{
-      0%,90%,100%{transform:translate(0)}
-      10%{transform:translate(-2px,2px)}20%{transform:translate(2px,-2px)}
-      30%{transform:translate(-2px,-2px)}40%{transform:translate(2px,2px)}
-      50%{transform:translate(-2px,2px)}60%{transform:translate(2px,-2px)}
-    }
-    .logo::after{content:'✨'; position:absolute; font-size:24px; margin-left:6px; animation:sparkle 1.5s infinite}
-    @keyframes sparkle{0%{opacity:0; transform:scale(.8)}50%{opacity:1; transform:scale(1.2) rotate(180deg)}100%{opacity:0}}
 
-    /* Nav retrô com “flecha 2000s” */
-    nav{margin:20px 0; display:flex; justify-content:center; flex-wrap:wrap; gap:14px}
+    /* Nav com flecha retrô */
+    nav{ margin: 18px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
     .nav-button{
-      position:relative; background: linear-gradient(to bottom, #666, #333); color:#fff; border:2px solid var(--light-gray);
-      border-radius:10px; padding:12px 18px 12px 42px; font-weight:bold; text-decoration:none; cursor:pointer;
-      box-shadow:2px 2px 5px rgba(0,0,0,.5); transition:.2s;
+      background: linear-gradient(180deg, #3a3a3a, #1e1e1e);
+      color:#fff; border:2px solid #cfcfcf; border-radius:10px;
+      padding:10px 18px; font-weight:700; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,.4); transition:.2s;
+      position:relative; overflow:hidden;
     }
-    /* Flecha estilo clipart anos 2000 (SVG inline) */
-    .nav-button::before{
-      content:''; position:absolute; left:10px; top:50%; transform:translateY(-50%);
-      width:22px; height:22px; filter: drop-shadow(0 0 4px rgba(255,110,199,.8));
-      background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23FF6EC7'/%3E%3Cstop offset='1' stop-color='%23ADFF2F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 32 L40 12 L36 26 L56 26 L56 38 L36 38 L40 52 Z' fill='url(%23g)' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E");
-      background-size:contain; background-repeat:no-repeat;
+    .nav-button .arrow{
+      font-family:'VT323', monospace;
+      font-size:20px; line-height:1;
+      background: linear-gradient(90deg, #fff, #ff9de3, #7aff3a);
+      -webkit-background-clip: text; background-clip:text;
+      color: transparent; filter: drop-shadow(0 0 6px rgba(255,110,199,.8));
     }
-    .nav-button:hover{transform:translateY(-3px); background:linear-gradient(to bottom,#777,#444)}
-    .nav-button:active{transform:translateY(2px) scale(.98)}
+    .nav-button:hover{ transform: translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,.35); }
+    .nav-button:active{ transform: translateY(0); }
 
     .main-banner{
-      background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:15px; padding:24px; margin:30px 0; text-align:center;
-      box-shadow:0 0 20px var(--neon-green); position:relative; overflow:hidden;
+      background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:16px; padding:22px; margin:28px 0; text-align:center;
+      box-shadow: 0 0 22px var(--neon-green); position:relative; overflow:hidden;
     }
-    .main-banner::before{
-      content:''; position:absolute; inset:0; opacity:.08;
-      background:linear-gradient(45deg, transparent 48%, var(--neon-green) 49%, var(--neon-green) 51%, transparent 52%);
-      background-size:200% 200%; animation:scanline 4s linear infinite;
-    }
+    .main-banner h2{ margin: 0 0 8px 0 }
     .action-button{
-      background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
-      color:#fff; border:none; border-radius:10px; padding:12px 22px; font-size:18px; font-weight:bold; cursor:pointer; margin:10px;
-      box-shadow:0 0 10px var(--neon-pink); transition:.3s; text-decoration:none; display:inline-block; position:relative; overflow:hidden;
+      background: linear-gradient(180deg, var(--neon-pink), var(--hot-pink));
+      color:#fff; border:none; border-radius:12px; padding:12px 22px; font-size:18px; font-weight:800; cursor:pointer; margin-top:10px;
+      box-shadow:0 0 14px var(--neon-pink); transition:.25s; display:inline-flex; align-items:center; gap:10px; text-decoration:none;
     }
-    .action-button::after{
-      content:''; position:absolute; inset:0; transform:scaleX(0); transform-origin:left; transition:.5s; z-index:-1;
-      background:linear-gradient(to right, var(--hot-pink), var(--neon-pink));
-    }
-    .action-button:hover::after{transform:scaleX(1)}
-    .action-button:hover{transform:translateY(-5px)}
+    .action-button:hover{ transform: translateY(-4px); box-shadow: 0 10px 24px rgba(255,20,147,.45); }
 
-    .countdown{background:rgba(0,0,0,.7); border:2px solid var(--hot-pink); border-radius:10px; padding:15px; margin:30px 0; text-align:center; box-shadow:0 0 15px var(--hot-pink)}
-    .countdown-title{font-family:'VT323', monospace; font-size:24px; margin-bottom:10px; color:var(--hot-pink)}
-    .countdown-timer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap}
-    .countdown-box{background:var(--dark-gray); border:1px solid var(--light-gray); border-radius:5px; padding:10px; min-width:60px}
-    .countdown-number{font-size:28px; font-weight:bold; color:var(--hot-pink); text-shadow:0 0 5px var(--neon-pink)}
-    .countdown-label{font-size:12px; color:var(--light-gray); text-transform:uppercase}
+    /* Countdown */
+    .countdown{ background: rgba(0,0,0,.7); border:2px solid var(--hot-pink); border-radius:12px; padding:16px; margin:26px 0; text-align:center; box-shadow:0 0 16px var(--hot-pink); }
+    .countdown-title{ font-family:'VT323', monospace; font-size:26px; color:var(--hot-pink); margin:0 0 10px 0 }
+    .countdown-timer{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+    .countdown-box{ background:#111; border:1px solid #bbb; border-radius:8px; padding:10px 12px; min-width:62px }
+    .countdown-number{ font-size:28px; font-weight:800; color:var(--neon-pink) }
+    .countdown-label{ font-size:12px; color:#cfcfcf; letter-spacing:.04em }
 
-    .events-section{margin:40px 0}
+    /* Sessões/Ingressos */
+    .events-section{ margin: 38px 0 }
     .section-title{
-      font-family:'VT323', monospace; font-size:32px; margin:6px 0 14px; text-align:center; color:var(--neon-green);
+      font-family:'VT323', monospace; font-size:34px; text-align:center; color:var(--neon-green);
+      display:block; margin: 0 auto 10px auto;
     }
-    .capacity-note{text-align:center; color:var(--light-gray); font-style:italic; margin-bottom:25px}
-    .events-list{display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:20px}
-
+    .capacity-note{ text-align:center; color:#e9e9e9; opacity:.9; margin: 0 0 20px 0 }
+    .events-list{ display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:18px; }
     .event-card{
-      background: rgba(0,0,0,.7); border:2px solid var(--neon-green); border-radius:10px; padding:20px; transition:.4s;
-      box-shadow:0 0 10px rgba(0,0,0,.5); position:relative;
+      background: rgba(0,0,0,.66); border:2px solid var(--neon-green); border-radius:12px; padding:18px; box-shadow:0 0 12px rgba(0,0,0,.5);
+      transition:.35s;
     }
-    .event-card:hover{transform:translateY(-8px); border-color:var(--neon-pink); box-shadow:0 15px 30px rgba(0,0,0,.6)}
-    .event-title{font-size:22px; margin:0 0 10px; color:var(--neon-green)}
-    .event-date{font-size:16px; color:var(--light-gray); margin:0 0 12px}
-    .event-price{font-size:18px; font-weight:bold; color:var(--neon-pink); margin:0 0 14px}
-
+    .event-card:hover{ transform: translateY(-6px); border-color: var(--neon-pink); box-shadow:0 16px 30px rgba(0,0,0,.45); }
+    .event-title{ font-size:22px; color:var(--neon-green); margin:0 0 6px 0 }
+    .event-date, .event-price{ margin: 6px 0; color:#e8e8e8 }
     .event-button{
-      background: linear-gradient(to bottom, var(--neon-green), #8aff00);
-      color:#222; border:none; border-radius:8px; padding:10px 15px; font-size:16px; font-weight:bold; cursor:pointer; width:100%;
-      box-shadow:0 0 5px var(--neon-green); transition:.3s;
+      margin-top:10px; width:100%;
+      background: linear-gradient(180deg, var(--neon-green), #8aff00);
+      color:#222; border:none; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer; box-shadow:0 0 8px var(--neon-green);
+      transition:.25s;
     }
-    .event-button:hover{filter:brightness(1.05)}
-    .event-button:disabled{background:#555; color:#999; cursor:not-allowed; box-shadow:none}
+    .event-button:hover{ transform: translateY(-2px) }
+    .event-button:disabled{ background:#555; color:#999; cursor:not-allowed; box-shadow:none }
 
-    /* === SOBRE: centralização + cartaz ao lado (responsivo) === */
-    .about-section{margin:40px 0}
+    /* Sobre a peça (cartaz + sinopse centralizados) */
+    .about-section{ margin: 44px 0 }
     .about-content{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:24px; align-items:center;
-      max-width: 980px; margin: 0 auto;
+      display:grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items:center;
+      background: rgba(0,0,0,.45); border:2px solid #ffffff22; border-radius:16px; padding:20px;
     }
-    .about-text{display:flex; flex-direction:column; gap:14px}
-    .about-text p{margin:0}
+    .about-text{ text-align:left }
     .highlight-box{
-      background: rgba(0,0,0,.65);
-      border: 2px solid var(--neon-pink);
-      box-shadow: 0 0 16px rgba(255,110,199,.35), inset 0 0 12px rgba(173,255,47,.15);
-      padding:14px 16px; border-radius:12px;
+      margin-top:12px; padding:16px;
+      background: #ffffffee; color:#222; border-radius:12px;
+      border: 3px dashed var(--hot-pink);
+      box-shadow: 0 0 18px #ff69b4aa;
+      font-size: 15.5px;
     }
-    .about-image-container{display:flex; justify-content:center}
+    .about-image-container{ text-align:center }
     .about-image-container img{
-      max-width: 380px; width:100%; border-radius:12px; border:3px solid var(--neon-green);
-      box-shadow:0 0 18px rgba(173,255,47,.5);
+      max-width: 380px; width:100%;
+      border:4px solid var(--neon-pink); border-radius:14px; box-shadow:0 0 16px var(--neon-pink);
     }
 
-    .location-section{margin:30px 0; text-align:center}
-    .location-section .location-address{margin:0}
+    /* Local */
+    .location-section{ margin: 30px 0; text-align:center }
+    .location-address{ font-weight:600 }
 
-    .cast-section{margin:40px 0}
-    .cast-grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:25px; justify-items:center}
-    .cast-card{background: rgba(0,0,0,.7); border:2px solid var(--neon-pink); border-radius:10px; padding:20px; text-align:center; transition:.4s; width:100%}
-    .cast-card:hover{transform:translateY(-8px); border-color:var(--neon-green)}
-    .cast-photo{width:120px; height:120px; border-radius:50%; border:3px solid var(--neon-pink); object-fit:cover; object-position:center top; box-shadow:0 0 10px rgba(255,110,199,.5)}
+    /* Elenco */
+    .cast-section{ margin: 44px 0 }
+    .cast-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:18px; }
+    .cast-card{ background: rgba(0,0,0,.66); border:2px solid var(--neon-pink); border-radius:12px; padding:18px; text-align:center; transition:.3s }
+    .cast-card:hover{ transform: translateY(-6px); border-color:var(--neon-green) }
+    .cast-photo{ width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid var(--neon-pink); box-shadow:0 0 12px rgba(255,110,199,.6) }
 
-    .scrap-section{background: rgba(0,0,0,.5); border:3px solid var(--hot-pink); border-radius:15px; padding:20px; margin:30px 0; text-align:center; box-shadow:0 0 20px var(--hot-pink)}
-    .scrap-input{width:100%; max-width:420px; padding:10px; border:2px solid var(--neon-pink); border-radius:6px; background:rgba(0,0,0,.7); color:#fff; font-size:16px}
-    .scrap-result{background: rgba(0,0,0,.8); border:1px solid var(--light-gray); border-radius:6px; padding:15px; margin-top:15px; text-align:left; max-height:200px; overflow-y:auto; white-space:pre-wrap}
-    .retro-loader{display:none; color:var(--neon-pink); font-family:'VT323', monospace}
-    .retro-loader.active{display:block}
+    /* Scrap */
+    .scrap-section{ background: rgba(0,0,0,.5); border:3px solid var(--hot-pink); border-radius:16px; padding:20px; margin:36px 0; text-align:center; box-shadow:0 0 20px var(--hot-pink) }
+    .scrap-input{ width:100%; max-width:420px; padding:10px; border:2px solid var(--neon-pink); border-radius:8px; background: rgba(0,0,0,.7); color:#fff; font-size:16px; }
+    .retro-loader{ display:none; color:var(--neon-pink); margin-top:10px }
+    .retro-loader.active{ display:block }
+    .scrap-result{ background: rgba(0,0,0,.8); border:1px solid #ccc; border-radius:8px; padding:14px; margin-top:12px; white-space:pre-wrap; text-align:left }
 
-    footer .contact-buttons{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
-    .contact-title,.footer-text{text-align:center}
-
-    /* === Modal === */
-    .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter:blur(5px)}
+    /* Modal compra */
+    .modal-overlay{ position:fixed; inset:0; background: rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter: blur(5px) }
     .modal-content{
-      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-      padding:20px; border:3px solid var(--neon-pink); border-radius:15px; width:90%; max-width:520px; max-height:90vh; overflow-y:auto;
-      box-shadow:0 0 30px var(--neon-pink); position:relative; animation:modalAppear .25s ease-out;
+      background: var(--bg-grad); color:#fff; width:92%; max-width:560px; max-height:90vh; overflow-y:auto;
+      border:3px solid var(--neon-pink); border-radius:16px; padding:20px; position:relative; box-shadow:0 0 28px var(--neon-pink);
+      animation: modalAppear .25s ease-out;
     }
-    @keyframes modalAppear{from{transform:scale(.9); opacity:0}to{transform:scale(1); opacity:1}}
-    .modal-close{position:absolute; top:12px; right:16px; background:none; border:none; color:#fff; font-size:26px; cursor:pointer}
-    .modal-title{font-family:'VT323', monospace; font-size:28px; color:var(--neon-pink); margin-bottom:18px; text-align:center}
-
-    .form-group{margin-bottom:16px}
-    .form-group label{display:block; margin-bottom:6px; font-weight:bold}
+    @keyframes modalAppear{ from{transform:scale(.92); opacity:0} to{transform:scale(1); opacity:1} }
+    .modal-close{ position:absolute; top:10px; right:12px; background:none; border:none; color:#fff; font-size:26px; cursor:pointer }
+    .modal-title{ font-family:'VT323', monospace; font-size:30px; color:var(--neon-pink); margin:6px 0 16px 0; text-align:center }
+    .form-group{ margin-bottom:14px }
+    .form-group label{ display:block; font-weight:700; margin-bottom:6px }
     .form-group input, .form-group select{
-      width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:8px; background:rgba(0,0,0,.7); color:#fff; font-size:16px
+      width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:10px; background: rgba(0,0,0,.65); color:#fff; font-size:16px;
     }
-    .form-row{display:flex; gap:12px}
-    .form-row .form-group{flex:1}
+    .form-row{ display:flex; gap:14px }
+    .form-row .form-group{ flex:1 }
+
     .continue-button{
-      background: linear-gradient(to bottom, var(--neon-green), #8aff00);
-      color:#222; border:none; border-radius:10px; padding:14px 18px; font-size:18px; font-weight:bold; cursor:pointer; width:100%; margin-top:6px;
-      box-shadow:0 0 10px var(--neon-green); transition:.25s;
+      background: linear-gradient(180deg, var(--neon-green), #8aff00);
+      color:#222; border:none; border-radius:12px; padding:14px 18px; font-weight:800; cursor:pointer; width:100%;
+      box-shadow:0 0 12px var(--neon-green); transition:.22s;
     }
-    .continue-button:hover{transform:translateY(-3px)}
+    .continue-button:hover{ transform: translateY(-3px) }
 
-    .payment-section{display:none; margin-top:16px; padding-top:16px; border-top:2px solid var(--neon-pink)}
+    .payment-section{ display:none; margin-top:16px; padding-top:16px; border-top:2px solid var(--neon-pink) }
 
-    /* botão “subir” com flecha */
-    .back-to-top{
-      position:fixed; right:16px; bottom:16px; z-index:999; text-decoration:none;
-      background:#111; border:2px solid var(--neon-pink); border-radius:50px; padding:10px 14px; display:flex; align-items:center; gap:8px;
-      box-shadow:0 0 12px rgba(255,110,199,.5); font-weight:bold; color:#fff;
-    }
-    .back-to-top::before{
-      content:'➤'; display:inline-block; transform:rotate(-90deg); font-size:18px; text-shadow:0 0 8px var(--neon-pink);
-    }
+    /* Final screen (dentro do modal) */
+    #final-status-screen{ display:none; text-align:center; padding:12px }
+    #final-status-screen img{ max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 12px; display:block }
+    .retro-code{ font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px }
 
-    /* responsivo */
-    @media (max-width:900px){ .about-content{grid-template-columns:1fr; text-align:center} .about-image-container{order:-1} }
-    @media (max-width:768px){
-      .logo{font-size:36px} .section-title{font-size:28px}
-      .countdown-number{font-size:24px}
-    }
-    @media (max-width:480px){
-      .container{width:95%; padding:10px} .logo{font-size:28px} .main-banner{padding:15px}
-      .modal-content{width:95%; padding:18px}
-    }
+    footer{ text-align:center; padding:24px 0; background: rgba(0,0,0,.5); margin-top:32px; border-top:3px solid #ffffff33 }
 
-    /* tela final externa */
-    #final-screen{text-align:center; display:none; padding:20px}
-    #final-screen img{max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 15px; display:block}
-    .retro-code{font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px}
+    /* Responsivo */
+    @media (max-width: 900px){
+      .about-content{ grid-template-columns: 1fr; text-align:left }
+      .about-image-container{ order:-1 }
+    }
   </style>
-
-  <!-- EmailJS v4 -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    (function(){ emailjs.init({ publicKey: "zWI9wjgMNAHJ0WV7f" }); })();
-  </script>
 </head>
 <body>
+  <!-- Partículas -->
   <div id="particles-container"></div>
 
   <div class="container">
     <header>
-      <h1 class="logo glow-text glitch">Próxima Parada: Anos 2000</h1>
+      <h1 class="logo">Próxima Parada: Anos 2000</h1>
     </header>
 
     <nav>
-      <a href="#eventos" class="nav-button">Ingressos</a>
-      <a href="#sobre" class="nav-button">Sinopse</a>
-      <a href="#elenco" class="nav-button">Elenco</a>
-      <a href="#scrap" class="nav-button">Scrap</a>
+      <a href="#eventos" class="nav-button"><span class="arrow">➤</span> Ingressos</a>
+      <a href="#sobre" class="nav-button"><span class="arrow">➤</span> Sobre</a>
+      <a href="#elenco" class="nav-button"><span class="arrow">➤</span> Elenco</a>
+      <a href="#scrap" class="nav-button"><span class="arrow">➤</span> Scrap</a>
     </nav>
 
     <div class="main-banner">
-      <h2 class="glow-text">Uma viagem nostálgica pelos anos 2000!</h2>
-      <p>Reviva a magia de uma década inesquecível com música, dança e muito entretenimento!</p>
+      <h2>Uma viagem nostálgica pelos anos 2000!</h2>
+      <p>MSN, Orkut, lan house e muito glitter. Vem com a gente! ✨</p>
       <a href="#eventos" class="action-button">🎟️ COMPRAR INGRESSOS</a>
     </div>
 
@@ -261,15 +245,17 @@
     <section id="eventos" class="events-section">
       <h2 class="section-title">Sessões Disponíveis</h2>
       <p class="capacity-note">Capacidade: 110 lugares por sessão</p>
-      <div class="events-list" id="events-list-container"></div>
+      <div class="events-list" id="events-list-container"><!-- render dinâmico --></div>
     </section>
 
     <section id="sobre" class="about-section">
       <h2 class="section-title">Sobre a Peça</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>"Uma comédia nostálgica sobre o tempo, as amizades e os amores que moldaram uma geração. Em meio ao barulho de um modem discado, pôsteres colados com durex e tardes inteiras cantando "Rebelde", um grupo de adolescentes vive intensamente os dias em que o tempo parecia infinito. É 2005, e tudo gira em torno de bandas escolares, testes da Capricho, amizades dramáticas e conversas no MSN que duravam a madrugada inteira. Bruno, Juliana, Raquel, Fernando, Luana e Marcelo compartilham o mesmo espaço – um quarto caótico e cheio de memórias – Quando uma visitante misteriosa do futuro, Sofia, aparece para "atualizar o sistema", os planos da turma viram de cabeça para baixo.</p>
-          <p class="highlight-box">"Próxima Parada: Anos 2000" é uma comédia afetuosa que mistura humor, memória e crítica. A peça atravessa o tempo sem sair do lugar, trazendo à tona questionamentos sobre as mudanças que a tecnologia imprime nas relações humanas. Entre um trote telefônico, um debate existencial e um reencontro inesperado com o futuro, o espetáculo constrói um retrato coletivo de uma geração à beira da transformação — que aprendeu a amar offline e a lidar com o mundo a 256 kbps."</p>
+          <p>“Próxima Parada: Anos 2000” é uma comédia afetuosa que mistura humor, memória e crítica. Em meio a pôsteres colados com durex, conversas no MSN e bandas escolares, um grupo vive os dias em que o tempo parecia infinito — até que uma visitante do futuro chega para “atualizar o sistema”.</p>
+          <div class="highlight-box">
+            Entre trotes telefônicos e debates existenciais, o espetáculo questiona como a tecnologia transformou nossas relações. É um retrato de uma geração que aprendeu a amar offline e a lidar com o mundo a 256 kbps.
+          </div>
         </div>
         <div class="about-image-container">
           <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
@@ -284,7 +270,7 @@
 
     <section id="elenco" class="cast-section">
       <h2 class="section-title">Nosso Elenco</h2>
-      <div class="cast-grid" id="cast-grid-container"></div>
+      <div class="cast-grid" id="cast-grid-container"><!-- render dinâmico --></div>
     </section>
 
     <section id="scrap" class="scrap-section">
@@ -300,30 +286,30 @@
   <footer id="contato">
     <div class="container">
       <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
-      <h3 class="contact-title">Fale Conosco ::: Mande um Scrap!</h3>
-      <p class="contact-subtitle">Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
-      <div class="contact-buttons">
+      <h3>Fale Conosco ::: Mande um Scrap!</h3>
+      <p>Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
         <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
         <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
         <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
         <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
         <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
       </div>
-      <p class="footer-text">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
+      <p style="opacity:.9">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
     </div>
   </footer>
 
   <!-- Modal de Compra -->
-  <div id="purchase-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="compra-title">
-      <button id="modal-close-btn" class="modal-close" aria-label="Fechar">×</button>
-      <h3 id="compra-title" class="modal-title">Comprar Ingresso</h3>
+  <div id="purchase-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="modal-close-btn" class="modal-close">×</button>
+      <h3 class="modal-title">Comprar Ingresso</h3>
 
-      <!-- Etapa 1 -->
+      <!-- Etapa 1: Dados + Quantidades -->
       <div id="personal-data-form">
-        <div class="form-group"><label for="full-name">Nome Completo</label><input type="text" id="full-name" required></div>
-        <div class="form-group"><label for="email">E-mail</label><input type="email" id="email" required></div>
-        <div class="form-group"><label for="phone">Telefone</label><input type="tel" id="phone" placeholder="(41) 9 9999-9999"></div>
+        <div class="form-group"><label for="full-name">Nome Completo *</label><input type="text" id="full-name" required></div>
+        <div class="form-group"><label for="email">E-mail *</label><input type="email" id="email" required></div>
+        <div class="form-group"><label for="phone">Telefone</label><input type="tel" id="phone"></div>
         <div class="form-group">
           <label>Tipo de Ingresso</label>
           <div class="form-row">
@@ -331,358 +317,363 @@
             <div class="form-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
           </div>
         </div>
-        <div class="form-group"><strong>Total:</strong> <span id="total-amount">R$ 50,00</span></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0">
+          <strong>Total:</strong>
+          <div class="retro-code" id="total-amount">R$ 50,00</div>
+        </div>
         <button id="continue-to-payment" class="continue-button">Continuar para pagamento</button>
+        <p style="font-size:12px; opacity:.85; margin-top:8px;">Limite: 8 ingressos por compra • Valores disponíveis: 25 a 200</p>
       </div>
 
-      <!-- Etapa 2: sem upload; só nome do responsável pelo Pix -->
-      <div id="post-payment-section" class="payment-section" style="display:none; text-align:center;">
-        <h4 style="color: var(--neon-pink); margin-bottom: 12px;">Pagamento aberto em uma nova aba</h4>
-        <p>Conclua o pagamento no <b>Mercado Pago</b>. Depois, informe abaixo o <b>nome do responsável pelo Pix</b> e clique para receber o ingresso por e-mail.</p>
+      <!-- Etapa 2: Confirmação de pagamento + responsável Pix -->
+      <div id="post-payment-section" class="payment-section" style="display:none;">
+        <h4 style="color: var(--neon-pink); margin:0 0 12px 0;">Pagamento aberto em uma nova aba</h4>
+        <p>Conclua o pagamento no <b>Mercado Pago</b>. Volte aqui e insira o <b>nome do responsável pelo Pix</b> para gerar seu ingresso.</p>
 
-        <div class="form-group" style="text-align:left;">
-          <label for="pix-name">Nome do responsável pelo Pix</label>
-          <input type="text" id="pix-name" placeholder="Ex.: Maria Silva" />
+        <div class="form-group">
+          <label for="responsavel-pix">Nome do responsável pelo Pix *</label>
+          <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
         </div>
 
-        <button id="send-ticket-btn" class="continue-button">Já paguei, enviar meu ingresso</button>
-        <div id="sending-loader" class="retro-loader">Enviando seu ingresso...</div>
+        <button id="send-ticket-btn" class="continue-button">Já paguei, gerar meu ingresso</button>
+        <div id="sending-loader" class="retro-loader">Enviando dados...</div>
       </div>
 
-      <div id="final-status-screen" style="display:none; text-align:center; padding:20px;"></div>
+      <!-- Etapa Final: sucesso/erro (Mostra ingresso pro cliente) -->
+      <div id="final-status-screen"></div>
     </div>
   </div>
 
-  <!-- Botão “subir” com flecha retrô -->
-  <a href="#topo" class="back-to-top" id="top-btn" title="Voltar ao topo">Topo</a>
+  <!-- Sons -->
+  <audio id="ui-click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
 
-  <!-- Tela final externa, se quiser usar fora do modal -->
-  <section id="final-screen">
-    <h2>✅ Compra confirmada!</h2>
-    <p>Este é o seu ingresso digital:</p>
-    <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
-    <p>Seu código único:</p>
-    <div class="retro-code" id="codigoUnico"></div>
-    <p>Guarde este código junto com o comprovante do seu pagamento.</p>
-  </section>
-
+  <!-- EmailJS SDK v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      /* ================= CONFIG ================= */
-      const linksPagamento = {
-        25:"https://mpago.li/1SDJxrj",
-        50:"https://mpago.li/21ks87P",
-        75:"https://mpago.li/1VmFtmt",
-        100:"https://mpago.li/2Lhv2M1",
-        125:"https://mpago.li/1a688tD",
-        150:"https://mpago.li/1uWW1XE",
-        175:"https://mpago.li/2a2GAF5",
-        200:"https://mpago.li/15tvMBA"
+    // ======== CONFIG ========
+    const OWNER_EMAIL = "auriemcompany@gmail.com"; // <— seu e-mail fixo
+    const EMAILJS_SERVICE_ID = "service_c9ak8yp";
+    const EMAILJS_TEMPLATE_ID = "template_5lax0jv";
+    const EMAILJS_PUBLIC_KEY = "zWI9wjgMNAHJ0WV7f";
+
+    // Links Mercado Pago (totais permitidos)
+    const linksPagamento = {
+      25:  "https://mpago.li/1SDJxrj",
+      50:  "https://mpago.li/21ks87P",
+      75:  "https://mpago.li/1VmFtmt",
+      100: "https://mpago.li/2Lhv2M1",
+      125: "https://mpago.li/1a688tD",
+      150: "https://mpago.li/1uWW1XE",
+      175: "https://mpago.li/2a2GAF5",
+      200: "https://mpago.li/15tvMBA"
+    };
+
+    // Sessões
+    const sessoes = [
+      { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+      { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+      { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+      { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+      { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+    ];
+
+    const elenco = [
+      { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+      { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+      { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+      { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+      { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+      { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+      { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+    ];
+
+    // ======== INIT ========
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    const uiClick = document.getElementById('ui-click');
+    const modal = document.getElementById('purchase-modal');
+    const closeBtn = document.getElementById('modal-close-btn');
+    const continueBtn = document.getElementById('continue-to-payment');
+    const personalDataForm = document.getElementById('personal-data-form');
+    const postPaymentSection = document.getElementById('post-payment-section');
+    const sendTicketBtn = document.getElementById('send-ticket-btn');
+    const sendingLoader = document.getElementById('sending-loader');
+    const finalStatusScreen = document.getElementById('final-status-screen');
+    const qtyInteira = document.getElementById('qty-inteira');
+    const qtyMeia = document.getElementById('qty-meia');
+    const totalAmountDiv = document.getElementById('total-amount');
+
+    let selectedSession = null;
+    let generatedCode = null;
+
+    function playClick(){ uiClick.currentTime = 0; uiClick.play().catch(()=>{}); }
+
+    function createParticles(){
+      const container = document.getElementById('particles-container');
+      const count = 50;
+      for(let i=0;i<count;i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random()*100 + '%';
+        p.style.animationDelay = Math.random()*6 + 's';
+        p.style.animationDuration = (Math.random()*3 + 3) + 's';
+        container.appendChild(p);
+      }
+    }
+
+    function renderContent(){
+      // Sessões
+      const eventsContainer = document.getElementById('events-list-container');
+      eventsContainer.innerHTML = '';
+      sessoes.forEach(sessao=>{
+        const d = new Date(sessao.data);
+        const dia = d.toLocaleDateString('pt-BR', { weekday:'long' });
+        const dataF = d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
+        const horaF = d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.innerHTML = `
+          <h3 class="event-title">${dia.charAt(0).toUpperCase()+dia.slice(1)}, ${dataF}</h3>
+          <p class="event-date">${horaF}h</p>
+          <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
+          <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado?'disabled':''}>
+            ${sessao.esgotado?'ESGOTADO':'COMPRAR INGRESSO'}
+          </button>`;
+        eventsContainer.appendChild(card);
+      });
+
+      // Elenco
+      const castContainer = document.getElementById('cast-grid-container');
+      castContainer.innerHTML = '';
+      elenco.forEach(m=>{
+        const card = document.createElement('div');
+        card.className = 'cast-card';
+        card.innerHTML = `
+          <img src="${m.foto}" class="cast-photo" alt="${m.nome}">
+          <h3 style="margin:10px 0 4px 0">${m.nome}</h3>
+          <p style="opacity:.9">${m.personagem}</p>
+        `;
+        castContainer.appendChild(card);
+      });
+      // GIF extra
+      const gif = document.createElement('div');
+      gif.className = 'cast-card';
+      gif.innerHTML = `<img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô" style="width:120px; height:120px; border-radius:10px; border:3px solid var(--neon-pink);">`;
+      castContainer.appendChild(gif);
+    }
+
+    function updateCountdown(){
+      const next = sessoes.find(s => new Date(s.data) > new Date());
+      if(!next) return;
+      const target = new Date(next.data);
+      const now = new Date();
+      const diff = target - now;
+      if(diff <= 0) return;
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const s = Math.floor((diff % (1000*60)) / 1000);
+      document.getElementById('days').textContent = String(d).padStart(2,'0');
+      document.getElementById('hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+      document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+    }
+
+    function openModal(sessionId){
+      selectedSession = sessoes.find(s=>s.id===sessionId);
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      personalDataForm.style.display = 'block';
+      postPaymentSection.style.display = 'none';
+      finalStatusScreen.style.display = 'none';
+      generatedCode = null;
+      updateTotalAmount();
+    }
+    function closeModal(){
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function updateTotalAmount(){
+      if(!selectedSession) return;
+      const qI = parseInt(qtyInteira.value||'0');
+      const qM = parseInt(qtyMeia.value||'0');
+      const total = (qI * selectedSession.precoInteira) + (qM * selectedSession.precoMeia);
+      totalAmountDiv.textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+    }
+
+    function validateForm(){
+      let ok = true;
+      const name = document.getElementById('full-name');
+      const email = document.getElementById('email');
+      if(!name.value.trim()){ name.style.borderColor='red'; ok=false } else name.style.borderColor='';
+      if(!email.value.trim()){ email.style.borderColor='red'; ok=false } else email.style.borderColor='';
+      const totalTickets = (parseInt(qtyInteira.value||'0') + parseInt(qtyMeia.value||'0'));
+      if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
+      if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
+      if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
+      return ok;
+    }
+
+    function calcularTotalNumero(){
+      const parsed = parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
+      return Math.round(parsed);
+    }
+
+    function detalhesCompraString(){
+      const qI = parseInt(qtyInteira.value||'0');
+      const qM = parseInt(qtyMeia.value||'0');
+      const tot = totalAmountDiv.textContent;
+      const dataObj = new Date(selectedSession.data);
+      const dataF = dataObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+      const horaF = dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${dataF} ${horaF}h`;
+    }
+
+    function gerarCodigoUnico(sessaoId){
+      const sess = sessoes.find(s=>s.id===sessaoId);
+      const d = new Date(sess.data);
+      const dia = String(d.getDate()).padStart(2,'0');
+      const mes = String(d.getMonth()+1).padStart(2,'0');
+      const hora = String(d.getHours()).padStart(2,'0');
+      const min = String(d.getMinutes()).padStart(2,'0');
+      const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let rand=""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
+      return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
+    }
+
+    function openPaymentLinkForTotal(total){
+      const link = linksPagamento[total];
+      if(!link){ alert('Valor não disponível. Ajuste as quantidades para um total válido (25 a 200).'); return false; }
+      window.open(link, '_blank');
+      return true;
+    }
+
+    // ======== Listeners ========
+    closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
+    qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
+    qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
+
+    continueBtn.addEventListener('click', ()=>{
+      playClick();
+      if(!validateForm()) return;
+      const total = calcularTotalNumero();
+      if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+      if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
+      if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+      if(openPaymentLinkForTotal(total)){
+        personalDataForm.style.display='none';
+        postPaymentSection.style.display='block';
+      }
+    });
+
+    sendTicketBtn.addEventListener('click', async ()=>{
+      playClick();
+      const respPix = document.getElementById('responsavel-pix').value.trim();
+      if(!respPix){ alert('Informe o nome do responsável pelo Pix.'); return; }
+
+      sendingLoader.classList.add('active');
+
+      // Gera código e prepara payload
+      generatedCode = gerarCodigoUnico(selectedSession.id);
+      const payload = {
+        to_email: OWNER_EMAIL,               // <- garante destinatário
+        from_name: document.getElementById('full-name').value,
+        from_email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value || '—',
+        responsavel_pix: respPix,
+        sessao: selectedSession.id,
+        ingresso: detalhesCompraString(),
+        code: generatedCode,
+        total_value: totalAmountDiv.textContent.replace('R$','').trim()
       };
 
-      const sessoes = [
-        { id:'sessao-251003-2030', data:'2025-10-03T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
-        { id:'sessao-251004-1730', data:'2025-10-04T17:30:00', precoInteira:50, precoMeia:25, esgotado:false },
-        { id:'sessao-251004-2030', data:'2025-10-04T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
-        { id:'sessao-251005-1730', data:'2025-10-05T17:30:00', precoInteira:50, precoMeia:25, esgotado:false },
-        { id:'sessao-251005-2030', data:'2025-10-05T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
-      ];
-
-      const elenco = [
-        { nome:'Antônia Montemezzo', personagem:'Juliana',  foto:'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
-        { nome:'Evelyn Muller',      personagem:'Luana',    foto:'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
-        { nome:'Carolina Ribas',     personagem:'Raquel',   foto:'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
-        { nome:'Jessica Nayara',     personagem:'Sofia',    foto:'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
-        { nome:'Aquiles Amendola',   personagem:'Fernando', foto:'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
-        { nome:'Anthony Braga',      personagem:'Bruno',    foto:'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
-        { nome:'Pedro Ferraz',       personagem:'Marcelo',  foto:'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
-      ];
-
-      /* ============== SOM RETRÔ (WebAudio) ============== */
-      let audioCtx;
-      function playClick(){
-        try{
-          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-          const o = audioCtx.createOscillator();
-          const g = audioCtx.createGain();
-          o.type = 'square'; o.frequency.value = 900;
-          g.gain.value = 0.06; o.connect(g); g.connect(audioCtx.destination);
-          o.start(); setTimeout(()=>{ o.stop(); }, 80);
-        }catch(e){}
-      }
-
-      /* ================= ELEMENTOS ================= */
-      const modal = document.getElementById('purchase-modal');
-      const closeBtn = document.getElementById('modal-close-btn');
-      const continueBtn = document.getElementById('continue-to-payment');
-      const personalDataForm = document.getElementById('personal-data-form');
-      const postPaymentSection = document.getElementById('post-payment-section');
-      const sendTicketBtn = document.getElementById('send-ticket-btn');
-      const sendingLoader = document.getElementById('sending-loader');
-      const finalStatusScreen = document.getElementById('final-status-screen');
-
-      const qtyInteira = document.getElementById('qty-inteira');
-      const qtyMeia = document.getElementById('qty-meia');
-      const totalAmountDiv = document.getElementById('total-amount');
-      const pixName = document.getElementById('pix-name');
-
-      let selectedSession = null;
-
-      /* ================= RENDER / UTIL ================= */
-      function renderContent(){
-        const eventsContainer = document.getElementById('events-list-container');
-        eventsContainer.innerHTML = '';
-        sessoes.forEach(sessao=>{
-          const d = new Date(sessao.data);
-          const dia = d.toLocaleDateString('pt-BR',{weekday:'long'});
-          const data = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-          const hora = d.toLocaleTimeString('pt-BR',{hour:'2-digit', minute:'2-digit'});
-          const card = document.createElement('div');
-          card.className='event-card';
-          card.innerHTML = `
-            <h3 class="event-title">${dia.charAt(0).toUpperCase()+dia.slice(1)}, ${data}</h3>
-            <p class="event-date">${hora}h</p>
-            <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
-            <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado?'disabled':''}>${sessao.esgotado?'ESGOTADO':'COMPRAR INGRESSO'}</button>
-          `;
-          eventsContainer.appendChild(card);
-        });
-
-        const castContainer = document.getElementById('cast-grid-container');
-        castContainer.innerHTML='';
-        elenco.forEach(m=>{
-          const card = document.createElement('div');
-          card.className='cast-card';
-          card.innerHTML = `
-            <img src="${m.foto}" alt="${m.nome}" class="cast-photo">
-            <h3 class="cast-name">${m.nome}</h3>
-            <p class="cast-character">${m.personagem}</p>
-          `;
-          castContainer.appendChild(card);
-        });
-        const gifCard = document.createElement('div');
-        gifCard.className = 'cast-card';
-        gifCard.innerHTML = `<a href="https://postimages.org/" target="_blank"><img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô GIF" style="width:120px; height:120px; border-radius:10px; border:3px solid var(--neon-pink);"></a>`;
-        castContainer.appendChild(gifCard);
-      }
-
-      function updateCountdown(){
-        const proxima = sessoes.find(s=> new Date(s.data) > new Date());
-        if(!proxima) return;
-        const target = new Date(proxima.data);
-        const diff = target - new Date();
-        if(diff>0){
-          const d = Math.floor(diff/86400000);
-          const h = Math.floor((diff%86400000)/3600000);
-          const m = Math.floor((diff%3600000)/60000);
-          const s = Math.floor((diff%60000)/1000);
-          document.getElementById('days').textContent = String(d).padStart(2,'0');
-          document.getElementById('hours').textContent = String(h).padStart(2,'0');
-          document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-          document.getElementById('seconds').textContent = String(s).padStart(2,'0');
-        }
-      }
-
-      function createParticles(){
-        const container = document.getElementById('particles-container');
-        for(let i=0;i<50;i++){
-          const p = document.createElement('div');
-          p.className='particle';
-          p.style.left = Math.random()*100 + '%';
-          p.style.animationDelay = Math.random()*6 + 's';
-          p.style.animationDuration = (Math.random()*3 + 3) + 's';
-          container.appendChild(p);
-        }
-      }
-
-      function openModal(sessionId){
-        selectedSession = sessoes.find(s=>s.id===sessionId);
-        modal.style.display='flex';
-        document.body.style.overflow='hidden';
-        personalDataForm.style.display='block';
+      try{
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
+        // Mostra ingresso pro cliente na HORA
+        finalStatusScreen.innerHTML = `
+          <h2>✅ Compra confirmada!</h2>
+          <p>Este é o seu ingresso digital. <b>Tire um print desta tela</b> e guarde o código abaixo.</p>
+          <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
+          <p>Seu código único:</p>
+          <div class="retro-code">${generatedCode}</div>
+          <p style="font-size:12px; opacity:.9; margin-top:10px;">Você também receberá instruções no e-mail informado durante a compra (verifique o Spam).</p>
+        `;
+        finalStatusScreen.style.display='block';
         postPaymentSection.style.display='none';
-        finalStatusScreen.style.display='none';
-        updateTotalAmount();
+      }catch(err){
+        finalStatusScreen.innerHTML = `
+          <h2>❌ Erro!</h2>
+          <p>Não foi possível enviar os dados agora.</p>
+          <p style="font-size:12px; color:#eee; margin-top:10px;">Detalhe técnico: ${JSON.stringify(err)}</p>
+          <p style="font-size:12px; opacity:.9;">Dica: no EmailJS, configure o campo <b>To email</b> do template como <code>{{to_email}}</code> ou defina um destinatário fixo.</p>
+        `;
+        finalStatusScreen.style.display='block';
+        postPaymentSection.style.display='none';
+      }finally{
+        sendingLoader.classList.remove('active');
       }
-      function closeModal(){
-        modal.style.display='none';
-        document.body.style.overflow='auto';
+    });
+
+    // Abrir modal ao clicar nos cards / CTA
+    document.body.addEventListener('click', (e)=>{
+      const target = e.target.closest('a,button');
+      if(!target) return;
+
+      if(target.matches('.action-button,.nav-button,.event-button,.continue-button')) playClick();
+
+      // Rola até sessões
+      if(target.matches('.action-button[href="#eventos"], .nav-button[href="#eventos"]')){
+        e.preventDefault();
+        document.getElementById('eventos')?.scrollIntoView({behavior:'smooth'});
       }
 
-      function updateTotalAmount(){
-        if(!selectedSession) return;
-        const qI = parseInt(qtyInteira.value||'0',10);
-        const qM = parseInt(qtyMeia.value||'0',10);
-        const total = qI*selectedSession.precoInteira + qM*selectedSession.precoMeia;
-        totalAmountDiv.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+      // Abrir modal com sessão específica
+      if(target.matches('.event-button') && target.dataset.sessionId){
+        e.preventDefault();
+        openModal(target.dataset.sessionId);
       }
-      function calcularTotalNumero(){
-        const parsed = parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
-        return Math.round(parsed);
-      }
-      function detalhesCompraString(){
-        const qI = parseInt(qtyInteira.value||'0',10);
-        const qM = parseInt(qtyMeia.value||'0',10);
-        const tot = totalAmountDiv.textContent;
-        const d = new Date(selectedSession.data);
-        const data = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-        const hora = d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-        return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${data} ${hora}h`;
-      }
-      function gerarCodigoUnico(sessaoId){
-        const sess = sessoes.find(s=>s.id===sessaoId);
-        const d = new Date(sess.data);
-        const dia = String(d.getDate()).padStart(2,'0');
-        const mes = String(d.getMonth()+1).padStart(2,'0');
-        const hora = String(d.getHours()).padStart(2,'0');
-        const min = String(d.getMinutes()).padStart(2,'0');
-        const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let rand=""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
-        return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
-      }
-      function validateForm(){
-        let ok = true;
-        ['full-name','email'].forEach(id=>{
-          const el = document.getElementById(id);
-          if(!el.value.trim()){ el.style.borderColor='red'; ok=false; } else { el.style.borderColor=''; }
-        });
-        const totalTickets = (parseInt(qtyInteira.value||'0',10) + parseInt(qtyMeia.value||'0',10));
-        if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
-        if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
-        if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
-        return ok;
-      }
-      function openPaymentLinkForTotal(total){
-        const link = linksPagamento[total];
-        if(!link){ alert('Valor não disponível. Ajuste as quantidades para um total pré-definido.'); return false; }
-        window.open(link,'_blank'); return true;
-      }
+    });
 
-      /* ================== EVENTOS UI ================== */
-      closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
-      document.querySelectorAll('a,button').forEach(el=>{
-        el.addEventListener('click', ()=>{ playClick(); }, {passive:true});
+    // Âncoras suaves gerais
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', function(e){
+        if(this.getAttribute('href') === '#eventos') return; // já tratamos
+        e.preventDefault();
+        const el = document.querySelector(this.getAttribute('href'));
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
       });
+    });
 
-      qtyInteira.addEventListener('input', updateTotalAmount);
-      qtyMeia.addEventListener('input', updateTotalAmount);
-
-      continueBtn.addEventListener('click', ()=>{
-        if(!validateForm()) return;
-        const total = calcularTotalNumero();
-        if(total===0){ alert('Selecione ao menos 1 ingresso.'); return; }
-        if(total>200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
-        if(!linksPagamento[total]){ alert('Para este total não há link configurado.'); return; }
-        const ok = openPaymentLinkForTotal(total);
-        if(ok){
-          personalDataForm.style.display='none';
-          postPaymentSection.style.display='block';
-          pixName.focus();
-        }
-      });
-
-      sendTicketBtn.addEventListener('click', ()=>{
-        const payer = (pixName.value||'').trim();
-        if(!payer){ alert('Informe o nome do responsável pelo Pix.'); pixName.focus(); return; }
-
-        sendingLoader.style.display='block';
-
-        const code = gerarCodigoUnico(selectedSession.id);
-        const payload = {
-          from_name: document.getElementById('full-name').value,
-          from_email: document.getElementById('email').value,
-          phone: document.getElementById('phone').value,
-          sessao: selectedSession.id,
-          ingresso: detalhesCompraString(),
-          code: code,
-          payer_name: payer,
-          total_value: totalAmountDiv.textContent.replace('R$','').trim()
-        };
-
-        // EmailJS v4 (sem anexos/base64) -> evita erro 413
-        emailjs.send("service_c9ak8yp", "template_5lax0jv", payload)
-          .then(()=>{
-            sendingLoader.style.display='none';
-            finalStatusScreen.innerHTML = `
-              <h2>✅ Sucesso!</h2>
-              <p>Seu ingresso foi enviado para <b>${payload.from_email}</b>.</p>
-              <p>Guarde este código único:</p>
-              <div class="retro-code">${payload.code}</div>
-              <div style="margin-top:15px;">
-                <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso" style="max-width:260px; border-radius:10px; border:3px solid var(--neon-pink)">
-              </div>
-              <p style="font-size:12px;opacity:.9;">Se não encontrar o e-mail, verifique o Spam/Lixo eletrônico.</p>
-            `;
-            finalStatusScreen.style.display='block';
-            postPaymentSection.style.display='none';
-          })
-          .catch(err=>{
-            sendingLoader.style.display='none';
-            finalStatusScreen.innerHTML = `
-              <h2>❌ Erro!</h2>
-              <p>Não foi possível enviar seu ingresso agora.</p>
-              <p style="font-size:12px; color:#ccc; margin-top:12px;">Detalhe técnico: ${JSON.stringify(err)}</p>
-            `;
-            finalStatusScreen.style.display='block';
-            postPaymentSection.style.display='none';
-          });
-      });
-
-      // abrir modal pelas sessões
-      document.body.addEventListener('click', (e)=>{
-        const btn = e.target.closest('button.event-button');
-        if(btn && btn.dataset.sessionId){
-          e.preventDefault();
-          openModal(btn.dataset.sessionId);
-        }
-      });
-
-      // âncoras suaves
-      document.querySelectorAll('a[href^="#"]').forEach(a=>{
-        a.addEventListener('click', function(e){
-          const hash = this.getAttribute('href');
-          const el = document.querySelector(hash);
-          if(el){
-            e.preventDefault();
-            el.scrollIntoView({behavior:'smooth', block:'start'});
-          }
-        });
-      });
-
-      // botão topo visível após rolar
-      const topBtn = document.getElementById('top-btn');
-      window.addEventListener('scroll', ()=>{ topBtn.style.display = window.scrollY>300 ? 'flex':'none'; });
-
-      /* ================= SCRAP ================= */
-      const scrapBtn = document.getElementById('scrap-button');
-      const scrapInput = document.getElementById('scrap-input');
-      const scrapLoading = document.getElementById('scrap-loading');
-      const scrapResult = document.getElementById('scrap-result');
-      if(scrapBtn){
-        scrapBtn.addEventListener('click', ()=>{
-          const txt = (scrapInput.value||'').trim();
-          if(!txt){ scrapResult.textContent='Escreve um tema nostálgico tipo “MSN”, “Orkut”, “lan house”...'; return; }
-          scrapLoading.classList.add('active');
-          setTimeout(()=>{
-            scrapLoading.classList.remove('active');
-            scrapResult.textContent =
+    // Scrap
+    const scrapBtn = document.getElementById('scrap-button');
+    const scrapInput = document.getElementById('scrap-input');
+    const scrapLoading = document.getElementById('scrap-loading');
+    const scrapResult = document.getElementById('scrap-result');
+    if(scrapBtn){
+      scrapBtn.addEventListener('click', ()=>{
+        const txt = (scrapInput.value||'').trim();
+        if(!txt){ scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...'; return; }
+        scrapLoading.classList.add('active');
+        setTimeout(()=>{
+          scrapLoading.classList.remove('active');
+          scrapResult.textContent =
 `★ ${txt.toUpperCase()} 4EVER ★
 Se você lembra, sua infância/adolescência foi épica.
 Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
-          }, 700);
-        });
-      }
+        }, 700);
+      });
+    }
 
-      /* ================= INIT ================= */
-      function updateTotalOnInputs(){ updateTotalAmount(); }
-      qtyInteira.addEventListener('change', updateTotalOnInputs);
-      qtyMeia.addEventListener('change', updateTotalOnInputs);
-
-      function initialize(){
-        renderContent(); createParticles(); updateCountdown(); setInterval(updateCountdown, 1000);
-      }
-      initialize();
-    });
+    // ======== START ========
+    function initialize(){
+      createParticles();
+      renderContent();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+    initialize();
   </script>
 </body>
 </html>
