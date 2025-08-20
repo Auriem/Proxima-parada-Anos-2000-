@@ -1,265 +1,233 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Próxima Parada: Anos 2000 - Venda de Ingressos</title>
+
+  <!-- fontes / libs visuais -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
 
   <style>
-    /* ======== SEU ESTILO ORIGINAL (preservado) ======== */
-    :root {
-      --primary-blue: #0000CD;
-      --primary-purple: #8A2BE2;
-      --neon-pink: #FF6EC7;
-      --hot-pink: #FF1493;
-      --light-pink: #FFC0CB;
-      --neon-green: #ADFF2F;
-      --white: #FFFFFF;
-      --light-gray: #DDDDDD;
-      --dark-gray: #333333;
+    :root{
+      --primary-blue:#0000CD; --primary-purple:#8A2BE2;
+      --neon-pink:#FF6EC7; --hot-pink:#FF1493; --light-pink:#FFC0CB;
+      --neon-green:#ADFF2F; --white:#FFF; --light-gray:#DDD; --dark-gray:#333;
     }
-    body {
-      font-family: 'Arial', sans-serif;
+    *{box-sizing:border-box}
+    body{
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-      color: var(--white);
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      background-attachment: fixed;
-      overflow-x: hidden;
-      position: relative;
+      color: var(--white); margin:0; line-height:1.6; background-attachment:fixed; overflow-x:hidden; position:relative;
     }
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px
-      );
-      pointer-events: none; z-index: 1; animation: scanlines 2s linear infinite;
+    body::before{
+      content:''; position:fixed; inset:0;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.03) 2px,rgba(255,255,255,.03) 4px);
+      pointer-events:none; z-index:1; animation:scanlines 2s linear infinite;
     }
-    @keyframes scanlines { 0%{transform:translateY(0)}100%{transform:translateY(4px)} }
-    #particles-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
-    .particle { position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation: float 6s infinite linear; }
-    @keyframes float {
-      0%{ transform: translateY(100vh) translateX(0); opacity:0; }
-      10%{ opacity:.6; } 90%{ opacity:.6; }
-      100%{ transform: translateY(-10px) translateX(100px); opacity:0; }
-    }
-    .container { width: 90%; max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
+    @keyframes scanlines{0%{transform:translateY(0)}100%{transform:translateY(4px)}}
 
-    .glow-text {
-      text-shadow: 0 0 5px var(--white), 0 0 10px var(--white), 0 0 15px var(--neon-pink), 0 0 20px var(--neon-pink);
-      animation: textPulse 2s infinite;
-    }
-    @keyframes textPulse { 0%{text-shadow:0 0 5px var(--white),0 0 10px var(--neon-pink)}50%{text-shadow:0 0 20px var(--white),0 0 30px var(--hot-pink)}100%{text-shadow:0 0 5px var(--white),0 0 10px var(--neon-pink)} }
+    #particles-container{position:fixed; inset:0; pointer-events:none; z-index:2}
+    .particle{position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation:float 6s infinite linear}
+    @keyframes float{0%{transform:translateY(100vh)}100%{transform:translateY(-10px) translateX(100px); opacity:0}}
 
-    header { background: rgba(0,0,0,.7); border-bottom:3px solid var(--neon-pink); padding:15px 0; text-align:center; box-shadow:0 0 15px var(--neon-pink); position:relative; overflow:hidden; }
-    header::before {
+    .container{width:90%; max-width:1100px; margin:0 auto; padding:20px; position:relative; z-index:10}
+
+    .glow-text{
+      text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 15px var(--neon-pink),0 0 20px var(--neon-pink);
+      animation:textPulse 2s infinite;
+    }
+    @keyframes textPulse{0%{text-shadow:0 0 5px #fff,0 0 10px var(--neon-pink)}50%{text-shadow:0 0 20px #fff,0 0 30px var(--hot-pink)}100%{text-shadow:0 0 5px #fff,0 0 10px var(--neon-pink)}}
+
+    header{
+      background: rgba(0,0,0,.7); border-bottom:3px solid var(--neon-pink); padding:15px 0; text-align:center;
+      box-shadow:0 0 15px var(--neon-pink); position:relative; overflow:hidden;
+    }
+    header::before{
       content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
-      background: radial-gradient(circle, transparent 20%, rgba(0,0,0,.7) 70%); opacity:.1; animation: headerGlow 10s infinite linear;
+      background: radial-gradient(circle, transparent 20%, rgba(0,0,0,.7) 70%); opacity:.1; animation:headerGlow 10s linear infinite;
     }
-    @keyframes headerGlow { 0%{transform:rotate(0)}100%{transform:rotate(360deg)} }
-    .logo { font-family:'VT323', monospace; font-size:48px; margin:0; letter-spacing:2px; position:relative; display:inline-block; }
-    .logo.glitch { animation: glitch 3s infinite; }
-    @keyframes glitch {
-      0%,90%,100%{ transform:translate(0); filter:hue-rotate(0deg); }
-      10%{ transform:translate(-2px,2px); filter:hue-rotate(90deg); }
-      20%{ transform:translate(2px,-2px); filter:hue-rotate(180deg); }
-      30%{ transform:translate(-2px,-2px); filter:hue-rotate(270deg); }
-      40%{ transform:translate(2px,2px); filter:hue-rotate(360deg); }
-      50%{ transform:translate(-2px,2px); filter:hue-rotate(90deg); }
-      60%{ transform:translate(2px,-2px); filter:hue-rotate(180deg); }
+    @keyframes headerGlow{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    .logo{font-family:'VT323', monospace; font-size:48px; margin:0; letter-spacing:2px; display:inline-block}
+    .logo.glitch{animation:glitch 3s infinite}
+    @keyframes glitch{
+      0%,90%,100%{transform:translate(0)}
+      10%{transform:translate(-2px,2px)}20%{transform:translate(2px,-2px)}
+      30%{transform:translate(-2px,-2px)}40%{transform:translate(2px,2px)}
+      50%{transform:translate(-2px,2px)}60%{transform:translate(2px,-2px)}
     }
-    .logo::after { content:'✨'; position:absolute; top:-10px; right:-30px; font-size:24px; animation:sparkle 1.5s infinite; }
-    @keyframes sparkle { 0%{opacity:0; transform:scale(.8) rotate(0)}50%{opacity:1; transform:scale(1.2) rotate(180deg)}100%{opacity:0; transform:scale(.8) rotate(360deg)} }
+    .logo::after{content:'✨'; position:absolute; font-size:24px; margin-left:6px; animation:sparkle 1.5s infinite}
+    @keyframes sparkle{0%{opacity:0; transform:scale(.8)}50%{opacity:1; transform:scale(1.2) rotate(180deg)}100%{opacity:0}}
 
-    nav { margin: 20px 0; display:flex; justify-content:center; flex-wrap:wrap; }
-    .nav-button {
-      background: linear-gradient(to bottom, #666, #333); color: var(--white); border:2px solid var(--light-gray);
-      border-radius:8px; padding:10px 18px; margin:5px 10px; font-size:16px; font-weight:bold; cursor:pointer;
-      box-shadow:2px 2px 5px rgba(0,0,0,.5); transition:.2s; position:relative; overflow:hidden; text-decoration:none;
+    /* Nav retrô com “flecha 2000s” */
+    nav{margin:20px 0; display:flex; justify-content:center; flex-wrap:wrap; gap:14px}
+    .nav-button{
+      position:relative; background: linear-gradient(to bottom, #666, #333); color:#fff; border:2px solid var(--light-gray);
+      border-radius:10px; padding:12px 18px 12px 42px; font-weight:bold; text-decoration:none; cursor:pointer;
+      box-shadow:2px 2px 5px rgba(0,0,0,.5); transition:.2s;
     }
-    .nav-button::before {
-      content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); transition:.5s;
+    /* Flecha estilo clipart anos 2000 (SVG inline) */
+    .nav-button::before{
+      content:''; position:absolute; left:10px; top:50%; transform:translateY(-50%);
+      width:22px; height:22px; filter: drop-shadow(0 0 4px rgba(255,110,199,.8));
+      background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23FF6EC7'/%3E%3Cstop offset='1' stop-color='%23ADFF2F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 32 L40 12 L36 26 L56 26 L56 38 L36 38 L40 52 Z' fill='url(%23g)' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E");
+      background-size:contain; background-repeat:no-repeat;
     }
-    .nav-button:hover::before { left:100%; }
-    .nav-button:hover { background: linear-gradient(to bottom, #777, #444); transform: translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,.3);}
-    .nav-button:active { transform: translateY(2px) scale(.98); box-shadow:1px 1px 2px rgba(0,0,0,.5); }
+    .nav-button:hover{transform:translateY(-3px); background:linear-gradient(to bottom,#777,#444)}
+    .nav-button:active{transform:translateY(2px) scale(.98)}
 
-    .main-banner {
-      background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:15px; padding:20px; margin:30px 0; text-align:center;
-      box-shadow: 0 0 20px var(--neon-green); position:relative; overflow:hidden;
+    .main-banner{
+      background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:15px; padding:24px; margin:30px 0; text-align:center;
+      box-shadow:0 0 20px var(--neon-green); position:relative; overflow:hidden;
     }
     .main-banner::before{
-      content:''; position:absolute; inset:0; background:linear-gradient(45deg, transparent 48%, var(--neon-green) 49%, var(--neon-green) 51%, transparent 52%);
-      background-size:200% 200%; opacity:.1; animation: scanline 4s linear infinite;
+      content:''; position:absolute; inset:0; opacity:.08;
+      background:linear-gradient(45deg, transparent 48%, var(--neon-green) 49%, var(--neon-green) 51%, transparent 52%);
+      background-size:200% 200%; animation:scanline 4s linear infinite;
     }
-    @keyframes scanline { 0%{background-position:200% 200%}100%{background-position:0% 0%} }
-
-    .action-button {
+    .action-button{
       background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink));
-      color:#fff; border:none; border-radius:10px; padding:12px 25px; font-size:18px; font-weight:bold; cursor:pointer; margin:10px;
-      box-shadow:0 0 10px var(--neon-pink); transition:.3s; position:relative; overflow:hidden; z-index:1; text-decoration:none; display:inline-block;
+      color:#fff; border:none; border-radius:10px; padding:12px 22px; font-size:18px; font-weight:bold; cursor:pointer; margin:10px;
+      box-shadow:0 0 10px var(--neon-pink); transition:.3s; text-decoration:none; display:inline-block; position:relative; overflow:hidden;
     }
-    .action-button.clicked { animation: clickEffect .3s ease-out; }
-    @keyframes clickEffect { 0%{transform:scale(1)}50%{transform:scale(.95); box-shadow:0 0 20px var(--neon-pink)}100%{transform:scale(1)} }
-    .action-button::before{
-      content:''; position:absolute; inset:0; background: linear-gradient(to right, var(--hot-pink), var(--neon-pink));
-      z-index:-1; transition: transform .5s cubic-bezier(.5,1.6,.4,.7); transform-origin:0 0; transform: scaleX(0);
+    .action-button::after{
+      content:''; position:absolute; inset:0; transform:scaleX(0); transform-origin:left; transition:.5s; z-index:-1;
+      background:linear-gradient(to right, var(--hot-pink), var(--neon-pink));
     }
-    .action-button:hover::before{ transform: scaleX(1); }
-    .action-button:hover{ transform: translateY(-5px); box-shadow: 0 7px 20px rgba(255,20,147,.4); }
-    .action-button:active{ transform: translateY(2px) scale(.98); box-shadow: 0 2px 5px rgba(255,20,147,.2); }
+    .action-button:hover::after{transform:scaleX(1)}
+    .action-button:hover{transform:translateY(-5px)}
 
-    .countdown { background: rgba(0,0,0,.7); border:2px solid var(--hot-pink); border-radius:10px; padding:15px; margin:30px 0; text-align:center; box-shadow:0 0 15px var(--hot-pink); position:relative; overflow:hidden; }
-    .countdown::after{
-      content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle, var(--hot-pink) 0%, transparent 70%);
-      opacity:.05; animation: pulseBackground 5s infinite;
+    .countdown{background:rgba(0,0,0,.7); border:2px solid var(--hot-pink); border-radius:10px; padding:15px; margin:30px 0; text-align:center; box-shadow:0 0 15px var(--hot-pink)}
+    .countdown-title{font-family:'VT323', monospace; font-size:24px; margin-bottom:10px; color:var(--hot-pink)}
+    .countdown-timer{display:flex; justify-content:center; gap:15px; flex-wrap:wrap}
+    .countdown-box{background:var(--dark-gray); border:1px solid var(--light-gray); border-radius:5px; padding:10px; min-width:60px}
+    .countdown-number{font-size:28px; font-weight:bold; color:var(--hot-pink); text-shadow:0 0 5px var(--neon-pink)}
+    .countdown-label{font-size:12px; color:var(--light-gray); text-transform:uppercase}
+
+    .events-section{margin:40px 0}
+    .section-title{
+      font-family:'VT323', monospace; font-size:32px; margin:6px 0 14px; text-align:center; color:var(--neon-green);
     }
-    @keyframes pulseBackground { 0%{transform:scale(.8);opacity:.05}50%{transform:scale(1.2);opacity:.1}100%{transform:scale(.8);opacity:.05} }
-    .countdown-title { font-family:'VT323', monospace; font-size:24px; margin-bottom:10px; color:var(--hot-pink); position:relative; display:inline-block; }
-    .countdown-title::before { content:'⏰'; margin-right:10px; animation: shake 2s infinite; display:inline-block; }
-    @keyframes shake { 0%,100%{transform:rotate(0)}10%,30%,50%,70%,90%{transform:rotate(-10deg)}20%,40%,60%,80%{transform:rotate(10deg)} }
-    .countdown-timer { display:flex; justify-content:center; gap:15px; perspective:1000px; flex-wrap:wrap; }
-    .countdown-box { background:var(--dark-gray); border:1px solid var(--light-gray); border-radius:5px; padding:10px; min-width:60px; box-shadow:0 5px 15px rgba(0,0,0,.2); transition:.3s; transform-style:preserve-3d; }
-    .countdown-box:hover { transform: rotateY(10deg); box-shadow: -5px 5px 15px rgba(0,0,0,.3); }
-    .countdown-number { font-size:28px; font-weight:bold; color: var(--hot-pink); text-shadow:0 0 5px var(--neon-pink); }
-    .countdown-label { font-size:12px; color: var(--light-gray); text-transform:uppercase; letter-spacing:1px; }
+    .capacity-note{text-align:center; color:var(--light-gray); font-style:italic; margin-bottom:25px}
+    .events-list{display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:20px}
 
-    .events-section { margin: 40px 0; }
-    .section-title {
-      font-family:'VT323', monospace; font-size:32px; margin-bottom:10px; text-align:center; color:var(--neon-green);
-      position:relative; display:inline-block; left:50%; transform:translateX(-50%);
+    .event-card{
+      background: rgba(0,0,0,.7); border:2px solid var(--neon-green); border-radius:10px; padding:20px; transition:.4s;
+      box-shadow:0 0 10px rgba(0,0,0,.5); position:relative;
     }
-    .section-title::before { content:'🎟️'; margin-right:10px; } .section-title::after { content:'🎟️'; margin-left:10px; }
-    .capacity-note { text-align:center; color: var(--light-gray); font-style:italic; margin-bottom:25px; }
+    .event-card:hover{transform:translateY(-8px); border-color:var(--neon-pink); box-shadow:0 15px 30px rgba(0,0,0,.6)}
+    .event-title{font-size:22px; margin:0 0 10px; color:var(--neon-green)}
+    .event-date{font-size:16px; color:var(--light-gray); margin:0 0 12px}
+    .event-price{font-size:18px; font-weight:bold; color:var(--neon-pink); margin:0 0 14px}
 
-    .events-list { display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:20px; perspective:1000px; }
-    .event-card {
-      background: rgba(0,0,0,.7); border:2px solid var(--neon-green); border-radius:10px; padding:20px; transition:.5s;
-      box-shadow:0 0 10px rgba(0,0,0,.5); transform-style:preserve-3d; position:relative;
-    }
-    .event-card:hover { transform: translateY(-10px) rotateX(5deg) rotateY(5deg); box-shadow:0 15px 30px rgba(0,0,0,.6); border-color: var(--neon-pink); }
-    .event-card::before{
-      content:''; position:absolute; inset:0; background: linear-gradient(135deg, transparent 0%, rgba(173,255,47,.1) 100%);
-      border-radius:8px; z-index:-1; transition:.5s;
-    }
-    .event-card:hover::before{ background: linear-gradient(135deg, transparent 0%, rgba(255,110,199,.1) 100%); }
-    .event-title { font-size:22px; margin-bottom:10px; color:var(--neon-green); transition:.3s; position:relative; padding-left:28px; }
-    .event-title::before { content:'🎭'; position:absolute; left:0; top:50%; transform:translateY(-50%); }
-    .event-card:hover .event-title{ color: var(--neon-pink); }
-    .event-date { font-size:16px; color:var(--light-gray); margin-bottom:15px; position:relative; padding-left:28px; }
-    .event-date::before { content:'📅'; position:absolute; left:0; top:50%; transform:translateY(-50%); }
-    .event-price { font-size:18px; font-weight:bold; color:var(--neon-pink); margin-bottom:15px; position:relative; padding-left:28px; }
-    .event-price::before { content:'💰'; position:absolute; left:0; top:50%; transform:translateY(-50%); }
-
-    .event-button {
-      background: linear-gradient(to bottom, var(--neon-green), #8aff00); color: var(--dark-gray);
-      border:none; border-radius:8px; padding:10px 15px; font-size:16px; font-weight:bold; cursor:pointer; display:block; width:100%; text-align:center;
-      box-shadow:0 0 5px var(--neon-green); transition:.3s; position:relative; overflow:hidden; z-index:1;
-    }
-    .event-button:disabled { background:#555; color:#999; cursor:not-allowed; box-shadow:none; }
-    .event-button::before{
-      content:''; position:absolute; inset:0; background: linear-gradient(to right, #8aff00, var(--neon-green));
-      z-index:-1; transition: transform .5s cubic-bezier(.5,1.6,.4,.7); transform-origin:0 0; transform: scaleX(0);
-    }
-    .event-button:hover::before{ transform: scaleX(1); }
-    .event-card:hover .event-button:not(:disabled){
-      background: linear-gradient(to bottom, var(--neon-pink), var(--hot-pink)); color:#fff; box-shadow:0 0 10px var(--neon-pink);
-    }
-
-    .cast-section { margin: 40px 0; }
-    .cast-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:25px; justify-items:center; align-items:start; }
-    .cast-card { background: rgba(0,0,0,.7); border:2px solid var(--neon-pink); border-radius:10px; padding:20px; text-align:center; transition:.5s; box-shadow:0 0 10px rgba(0,0,0,.5); transform-style:preserve-3d; position:relative; width:100%; height:100%; box-sizing:border-box; }
-    .cast-card:hover { transform: translateY(-10px) rotateX(5deg) rotateY(5deg); box-shadow:0 15px 30px rgba(0,0,0,.6); border-color: var(--neon-green); }
-    .cast-card::before{
-      content:''; position:absolute; inset:0; background: linear-gradient(135deg, transparent 0%, rgba(255,110,199,.1) 100%);
-      border-radius:8px; z-index:-1; transition:.5s;
-    }
-    .cast-card:hover::before{ background: linear-gradient(135deg, transparent 0%, rgba(173,255,47,.1) 100%); }
-    .cast-photo { width:120px; height:120px; border-radius:50%; border:3px solid var(--neon-pink); margin:0 auto 15px; object-fit:cover; object-position:center top; transition:.3s; box-shadow:0 0 10px rgba(255,110,199,.5); }
-    .cast-photo.aquiles { object-position: center 30%; }
-    .cast-card:hover .cast-photo { border-color: var(--neon-green); box-shadow:0 0 15px rgba(173,255,47,.7); transform: scale(1.05); }
-
-    .scrap-section { background: rgba(0,0,0,.5); border:3px solid var(--hot-pink); border-radius:15px; padding:20px; margin:30px 0; text-align:center; box-shadow:0 0 20px var(--hot-pink); }
-    .scrap-input { width:100%; max-width:400px; padding:10px; border:2px solid var(--neon-pink); border-radius:5px; background: rgba(0,0,0,.7); color:#fff; font-size:16px; margin:10px 0; }
-    .scrap-input:focus{ outline:none; border-color: var(--neon-green); box-shadow:0 0 10px var(--neon-green); }
-    .scrap-result { background: rgba(0,0,0,.8); border:1px solid var(--light-gray); border-radius:5px; padding:15px; margin-top:15px; text-align:left; max-height:200px; overflow-y:auto; white-space:pre-wrap; }
-
-    .retro-loader { display:none; text-align:center; margin:20px 0; color: var(--neon-pink); font-family:'VT323', monospace; font-size:18px; }
-    .retro-loader.active { display:block; }
-    .loader-text { font-family:'VT323', monospace; font-size:18px; color:var(--neon-pink); animation: pulse 1.5s infinite; }
-    .loader-icon { font-size:24px; animation: spin 2s linear infinite; display:inline-block; margin-right:10px; }
-    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.5} }
-    @keyframes spin { 0%{transform:rotate(0)}100%{transform:rotate(360deg)} }
-
-    footer .contact-buttons { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-    .contact-title { text-align:center; }
-    .footer-text { text-align:center; opacity:.9; }
-
-    /* ===== Modal ===== */
-    .modal-overlay { position:fixed; inset:0; background: rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter: blur(5px); }
-    .modal-content {
-      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-      margin:5% auto; padding:20px; border:3px solid var(--neon-pink); border-radius:15px; width:90%; max-width:520px; max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 0 30px var(--neon-pink); animation: modalAppear .3s ease-out;
-    }
-    @keyframes modalAppear { from{transform:scale(.8); opacity:0} to{transform:scale(1); opacity:1} }
-    .modal-close { position:absolute; top:15px; right:20px; background:none; border:none; color:#fff; font-size:24px; cursor:pointer; transition:.3s; }
-    .modal-close:hover { color: var(--neon-pink); transform: scale(1.2); }
-    .modal-title { font-family:'VT323', monospace; font-size:28px; color:var(--neon-pink); margin-bottom:20px; text-align:center; position:relative; }
-    .modal-title::before { content:'🎟️'; margin-right:10px; }
-
-    .form-group { margin-bottom:20px; }
-    .form-group label { display:block; margin-bottom:5px; color:#fff; font-weight:bold; }
-    .form-group input, .form-group select {
-      width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:8px; background: rgba(0,0,0,.7); color:#fff; font-size:16px; transition:.3s; box-sizing:border-box;
-    }
-    .form-group input:focus, .form-group select:focus { outline:none; border-color: var(--neon-pink); box-shadow: 0 0 10px rgba(255,110,199,.3); }
-
-    .form-row { display:flex; gap:15px; }
-    .form-row .form-group { flex:1; }
-
-    .continue-button {
+    .event-button{
       background: linear-gradient(to bottom, var(--neon-green), #8aff00);
-      color:#333; border:none; border-radius:10px; padding:15px 30px; font-size:18px; font-weight:bold; cursor:pointer; width:100%; margin-top:10px; box-shadow:0 0 10px var(--neon-green); transition:.3s;
+      color:#222; border:none; border-radius:8px; padding:10px 15px; font-size:16px; font-weight:bold; cursor:pointer; width:100%;
+      box-shadow:0 0 5px var(--neon-green); transition:.3s;
     }
-    .continue-button:hover { transform: translateY(-3px); box-shadow:0 7px 20px rgba(173,255,47,.4); }
+    .event-button:hover{filter:brightness(1.05)}
+    .event-button:disabled{background:#555; color:#999; cursor:not-allowed; box-shadow:none}
 
-    .payment-section { display:none; margin-top:20px; padding-top:20px; border-top:2px solid var(--neon-pink); }
+    /* === SOBRE: centralização + cartaz ao lado (responsivo) === */
+    .about-section{margin:40px 0}
+    .about-content{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:24px; align-items:center;
+      max-width: 980px; margin: 0 auto;
+    }
+    .about-text{display:flex; flex-direction:column; gap:14px}
+    .about-text p{margin:0}
+    .highlight-box{
+      background: rgba(0,0,0,.65);
+      border: 2px solid var(--neon-pink);
+      box-shadow: 0 0 16px rgba(255,110,199,.35), inset 0 0 12px rgba(173,255,47,.15);
+      padding:14px 16px; border-radius:12px;
+    }
+    .about-image-container{display:flex; justify-content:center}
+    .about-image-container img{
+      max-width: 380px; width:100%; border-radius:12px; border:3px solid var(--neon-green);
+      box-shadow:0 0 18px rgba(173,255,47,.5);
+    }
 
-    /* Responsivo */
-    @media (max-width: 768px) {
-      .logo{ font-size:36px } .section-title{ font-size:28px }
-      .countdown-timer{ gap:10px } .countdown-box{ min-width:50px; padding:8px } .countdown-number{ font-size:24px }
-      .events-list{ grid-template-columns:1fr }
-      .cast-grid{ grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
-      .form-row{ flex-direction:column; gap:0; }
+    .location-section{margin:30px 0; text-align:center}
+    .location-section .location-address{margin:0}
+
+    .cast-section{margin:40px 0}
+    .cast-grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:25px; justify-items:center}
+    .cast-card{background: rgba(0,0,0,.7); border:2px solid var(--neon-pink); border-radius:10px; padding:20px; text-align:center; transition:.4s; width:100%}
+    .cast-card:hover{transform:translateY(-8px); border-color:var(--neon-green)}
+    .cast-photo{width:120px; height:120px; border-radius:50%; border:3px solid var(--neon-pink); object-fit:cover; object-position:center top; box-shadow:0 0 10px rgba(255,110,199,.5)}
+
+    .scrap-section{background: rgba(0,0,0,.5); border:3px solid var(--hot-pink); border-radius:15px; padding:20px; margin:30px 0; text-align:center; box-shadow:0 0 20px var(--hot-pink)}
+    .scrap-input{width:100%; max-width:420px; padding:10px; border:2px solid var(--neon-pink); border-radius:6px; background:rgba(0,0,0,.7); color:#fff; font-size:16px}
+    .scrap-result{background: rgba(0,0,0,.8); border:1px solid var(--light-gray); border-radius:6px; padding:15px; margin-top:15px; text-align:left; max-height:200px; overflow-y:auto; white-space:pre-wrap}
+    .retro-loader{display:none; color:var(--neon-pink); font-family:'VT323', monospace}
+    .retro-loader.active{display:block}
+
+    footer .contact-buttons{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+    .contact-title,.footer-text{text-align:center}
+
+    /* === Modal === */
+    .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter:blur(5px)}
+    .modal-content{
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+      padding:20px; border:3px solid var(--neon-pink); border-radius:15px; width:90%; max-width:520px; max-height:90vh; overflow-y:auto;
+      box-shadow:0 0 30px var(--neon-pink); position:relative; animation:modalAppear .25s ease-out;
+    }
+    @keyframes modalAppear{from{transform:scale(.9); opacity:0}to{transform:scale(1); opacity:1}}
+    .modal-close{position:absolute; top:12px; right:16px; background:none; border:none; color:#fff; font-size:26px; cursor:pointer}
+    .modal-title{font-family:'VT323', monospace; font-size:28px; color:var(--neon-pink); margin-bottom:18px; text-align:center}
+
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block; margin-bottom:6px; font-weight:bold}
+    .form-group input, .form-group select{
+      width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:8px; background:rgba(0,0,0,.7); color:#fff; font-size:16px
+    }
+    .form-row{display:flex; gap:12px}
+    .form-row .form-group{flex:1}
+    .continue-button{
+      background: linear-gradient(to bottom, var(--neon-green), #8aff00);
+      color:#222; border:none; border-radius:10px; padding:14px 18px; font-size:18px; font-weight:bold; cursor:pointer; width:100%; margin-top:6px;
+      box-shadow:0 0 10px var(--neon-green); transition:.25s;
+    }
+    .continue-button:hover{transform:translateY(-3px)}
+
+    .payment-section{display:none; margin-top:16px; padding-top:16px; border-top:2px solid var(--neon-pink)}
+
+    /* botão “subir” com flecha */
+    .back-to-top{
+      position:fixed; right:16px; bottom:16px; z-index:999; text-decoration:none;
+      background:#111; border:2px solid var(--neon-pink); border-radius:50px; padding:10px 14px; display:flex; align-items:center; gap:8px;
+      box-shadow:0 0 12px rgba(255,110,199,.5); font-weight:bold; color:#fff;
+    }
+    .back-to-top::before{
+      content:'➤'; display:inline-block; transform:rotate(-90deg); font-size:18px; text-shadow:0 0 8px var(--neon-pink);
+    }
+
+    /* responsivo */
+    @media (max-width:900px){ .about-content{grid-template-columns:1fr; text-align:center} .about-image-container{order:-1} }
+    @media (max-width:768px){
+      .logo{font-size:36px} .section-title{font-size:28px}
+      .countdown-number{font-size:24px}
     }
     @media (max-width:480px){
-      .container{ width:95%; padding:10px } .logo{ font-size:28px } .main-banner{ padding:15px }
-      .modal-content{ width:95%; padding:20px } .cast-grid{ grid-template-columns:1fr; }
+      .container{width:95%; padding:10px} .logo{font-size:28px} .main-banner{padding:15px}
+      .modal-content{width:95%; padding:18px}
     }
 
-    /* Tela final */
-    #final-screen { text-align:center; display:none; padding:20px; }
-    #final-screen img { max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 15px; display:block; }
-    .retro-code { font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px; }
+    /* tela final externa */
+    #final-screen{text-align:center; display:none; padding:20px}
+    #final-screen img{max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 15px; display:block}
+    .retro-code{font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px}
   </style>
 
-  <!-- EmailJS -->
- <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  (function () {
-    emailjs.init({ publicKey: "zWI9wjgMNAHJ0WV7f" });
-  })();
-</script>
+  <!-- EmailJS v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){ emailjs.init({ publicKey: "zWI9wjgMNAHJ0WV7f" }); })();
+  </script>
 </head>
 <body>
-  <!-- Partículas -->
   <div id="particles-container"></div>
 
   <div class="container">
@@ -268,9 +236,10 @@
     </header>
 
     <nav>
-      <a href="#eventos" class="nav-button">🎟️ Ingressos</a>
-      <a href="#elenco" class="nav-button">🎭 Elenco</a>
-      <a href="#scrap" class="nav-button">📝 Scrap Nostálgico</a>
+      <a href="#eventos" class="nav-button">Ingressos</a>
+      <a href="#sobre" class="nav-button">Sinopse</a>
+      <a href="#elenco" class="nav-button">Elenco</a>
+      <a href="#scrap" class="nav-button">Scrap</a>
     </nav>
 
     <div class="main-banner">
@@ -292,7 +261,7 @@
     <section id="eventos" class="events-section">
       <h2 class="section-title">Sessões Disponíveis</h2>
       <p class="capacity-note">Capacidade: 110 lugares por sessão</p>
-      <div class="events-list" id="events-list-container"><!-- render dinâmico --></div>
+      <div class="events-list" id="events-list-container"></div>
     </section>
 
     <section id="sobre" class="about-section">
@@ -315,7 +284,7 @@
 
     <section id="elenco" class="cast-section">
       <h2 class="section-title">Nosso Elenco</h2>
-      <div class="cast-grid" id="cast-grid-container"><!-- render dinâmico --></div>
+      <div class="cast-grid" id="cast-grid-container"></div>
     </section>
 
     <section id="scrap" class="scrap-section">
@@ -345,93 +314,104 @@
   </footer>
 
   <!-- Modal de Compra -->
-  <div id="purchase-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button id="modal-close-btn" class="modal-close">×</button>
-      <h3 class="modal-title">Comprar Ingresso</h3>
+  <div id="purchase-modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="compra-title">
+      <button id="modal-close-btn" class="modal-close" aria-label="Fechar">×</button>
+      <h3 id="compra-title" class="modal-title">Comprar Ingresso</h3>
 
-      <!-- Etapa 1: Dados + Quantidades -->
+      <!-- Etapa 1 -->
       <div id="personal-data-form">
-        <div class="form-group"><label for="full-name">Nome Completo:</label><input type="text" id="full-name" required></div>
-        <div class="form-group"><label for="email">E-mail:</label><input type="email" id="email" required></div>
-        <div class="form-group"><label for="phone">Telefone:</label><input type="tel" id="phone" required></div>
+        <div class="form-group"><label for="full-name">Nome Completo</label><input type="text" id="full-name" required></div>
+        <div class="form-group"><label for="email">E-mail</label><input type="email" id="email" required></div>
+        <div class="form-group"><label for="phone">Telefone</label><input type="tel" id="phone" placeholder="(41) 9 9999-9999"></div>
         <div class="form-group">
-          <label>Tipo de Ingresso:</label>
-          <div class="ticket-group"><label for="qty-inteira">Inteira (R$ 50,00)</label><input type="number" id="qty-inteira" min="0" value="1" max="8"></div>
-          <div class="ticket-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
+          <label>Tipo de Ingresso</label>
+          <div class="form-row">
+            <div class="form-group"><label for="qty-inteira">Inteira (R$ 50,00)</label><input type="number" id="qty-inteira" min="0" value="1" max="8"></div>
+            <div class="form-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
+          </div>
         </div>
-        <div class="total-section"><div class="total-amount" id="total-amount">R$ 50,00</div></div>
+        <div class="form-group"><strong>Total:</strong> <span id="total-amount">R$ 50,00</span></div>
         <button id="continue-to-payment" class="continue-button">Continuar para pagamento</button>
       </div>
 
-      <!-- Etapa 2: Confirmação de pagamento + upload -->
+      <!-- Etapa 2: sem upload; só nome do responsável pelo Pix -->
       <div id="post-payment-section" class="payment-section" style="display:none; text-align:center;">
-        <h4 style="color: var(--neon-pink); margin-bottom: 20px;">Pagamento aberto em uma nova aba</h4>
-        <p>Conclua o pagamento na aba do <b>Mercado Pago</b>. Assim que pagar, volte aqui e envie o comprovante para receber seu ingresso por e-mail.</p>
+        <h4 style="color: var(--neon-pink); margin-bottom: 12px;">Pagamento aberto em uma nova aba</h4>
+        <p>Conclua o pagamento no <b>Mercado Pago</b>. Depois, informe abaixo o <b>nome do responsável pelo Pix</b> e clique para receber o ingresso por e-mail.</p>
 
         <div class="form-group" style="text-align:left;">
-          <label for="proof-file">Comprovante de pagamento (imagem ou PDF):</label>
-          <input type="file" id="proof-file" accept="image/*,.pdf" />
+          <label for="pix-name">Nome do responsável pelo Pix</label>
+          <input type="text" id="pix-name" placeholder="Ex.: Maria Silva" />
         </div>
 
         <button id="send-ticket-btn" class="continue-button">Já paguei, enviar meu ingresso</button>
         <div id="sending-loader" class="retro-loader">Enviando seu ingresso...</div>
       </div>
 
-      <!-- Etapa Final: sucesso/erro -->
       <div id="final-status-screen" style="display:none; text-align:center; padding:20px;"></div>
     </div>
   </div>
 
-  <!-- Tela final externa (fallback se quiser usar fora do modal) -->
+  <!-- Botão “subir” com flecha retrô -->
+  <a href="#topo" class="back-to-top" id="top-btn" title="Voltar ao topo">Topo</a>
+
+  <!-- Tela final externa, se quiser usar fora do modal -->
   <section id="final-screen">
     <h2>✅ Compra confirmada!</h2>
     <p>Este é o seu ingresso digital:</p>
     <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
     <p>Seu código único:</p>
     <div class="retro-code" id="codigoUnico"></div>
-    <p>Guarde este código junto com seu comprovante. Ele é seu ingresso digital.</p>
+    <p>Guarde este código junto com o comprovante do seu pagamento.</p>
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      /* =====================
-         CONFIGURAÇÕES
-      ====================== */
-      // Links Mercado Pago de valores pré-definidos
+    document.addEventListener('DOMContentLoaded', function () {
+      /* ================= CONFIG ================= */
       const linksPagamento = {
-        25:  "https://mpago.li/1SDJxrj",
-        50:  "https://mpago.li/21ks87P",
-        75:  "https://mpago.li/1VmFtmt",
-        100: "https://mpago.li/2Lhv2M1",
-        125: "https://mpago.li/1a688tD",
-        150: "https://mpago.li/1uWW1XE",
-        175: "https://mpago.li/2a2GAF5",
-        200: "https://mpago.li/15tvMBA"
+        25:"https://mpago.li/1SDJxrj",
+        50:"https://mpago.li/21ks87P",
+        75:"https://mpago.li/1VmFtmt",
+        100:"https://mpago.li/2Lhv2M1",
+        125:"https://mpago.li/1a688tD",
+        150:"https://mpago.li/1uWW1XE",
+        175:"https://mpago.li/2a2GAF5",
+        200:"https://mpago.li/15tvMBA"
       };
 
-      // Sessões (as mesmas do seu index)
       const sessoes = [
-        { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-        { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-        { id: 'sessao-251004-2030', data: '2025-10-04T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-        { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
-        { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
+        { id:'sessao-251003-2030', data:'2025-10-03T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
+        { id:'sessao-251004-1730', data:'2025-10-04T17:30:00', precoInteira:50, precoMeia:25, esgotado:false },
+        { id:'sessao-251004-2030', data:'2025-10-04T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
+        { id:'sessao-251005-1730', data:'2025-10-05T17:30:00', precoInteira:50, precoMeia:25, esgotado:false },
+        { id:'sessao-251005-2030', data:'2025-10-05T20:30:00', precoInteira:50, precoMeia:25, esgotado:false },
       ];
 
       const elenco = [
-        { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
-        { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
-        { nome: 'Carolina Ribas', personagem: 'Raquel', foto: 'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
-        { nome: 'Jessica Nayara', personagem: 'Sofia', foto: 'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
-        { nome: 'Aquiles Amendola', personagem: 'Fernando', foto: 'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
-        { nome: 'Anthony Braga', personagem: 'Bruno', foto: 'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
-        { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
+        { nome:'Antônia Montemezzo', personagem:'Juliana',  foto:'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
+        { nome:'Evelyn Muller',      personagem:'Luana',    foto:'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
+        { nome:'Carolina Ribas',     personagem:'Raquel',   foto:'https://i.postimg.cc/Pxvnmgj0/IMG-0898.jpg' },
+        { nome:'Jessica Nayara',     personagem:'Sofia',    foto:'https://i.postimg.cc/qq8fF2gL/Jessica-Nayara.jpg' },
+        { nome:'Aquiles Amendola',   personagem:'Fernando', foto:'https://i.postimg.cc/Vksy7rwq/Aquiles-Amendola.jpg' },
+        { nome:'Anthony Braga',      personagem:'Bruno',    foto:'https://i.postimg.cc/SQcwk7NL/IMG-1979.jpg' },
+        { nome:'Pedro Ferraz',       personagem:'Marcelo',  foto:'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
       ];
 
-      /* =====================
-         ELEMENTOS
-      ====================== */
+      /* ============== SOM RETRÔ (WebAudio) ============== */
+      let audioCtx;
+      function playClick(){
+        try{
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.type = 'square'; o.frequency.value = 900;
+          g.gain.value = 0.06; o.connect(g); g.connect(audioCtx.destination);
+          o.start(); setTimeout(()=>{ o.stop(); }, 80);
+        }catch(e){}
+      }
+
+      /* ================= ELEMENTOS ================= */
       const modal = document.getElementById('purchase-modal');
       const closeBtn = document.getElementById('modal-close-btn');
       const continueBtn = document.getElementById('continue-to-payment');
@@ -444,41 +424,40 @@
       const qtyInteira = document.getElementById('qty-inteira');
       const qtyMeia = document.getElementById('qty-meia');
       const totalAmountDiv = document.getElementById('total-amount');
+      const pixName = document.getElementById('pix-name');
 
       let selectedSession = null;
 
-      /* =====================
-         RENDER / UTIL
-      ====================== */
-      function renderContent() {
+      /* ================= RENDER / UTIL ================= */
+      function renderContent(){
         const eventsContainer = document.getElementById('events-list-container');
         eventsContainer.innerHTML = '';
-        sessoes.forEach(sessao => {
-          const dataObj = new Date(sessao.data);
-          const diaDaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
-          const dataFormatada = dataObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-          const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        sessoes.forEach(sessao=>{
+          const d = new Date(sessao.data);
+          const dia = d.toLocaleDateString('pt-BR',{weekday:'long'});
+          const data = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+          const hora = d.toLocaleTimeString('pt-BR',{hour:'2-digit', minute:'2-digit'});
           const card = document.createElement('div');
-          card.className = 'event-card';
+          card.className='event-card';
           card.innerHTML = `
-            <h3 class="event-title">${diaDaSemana.charAt(0).toUpperCase() + diaDaSemana.slice(1)}, ${dataFormatada}</h3>
-            <p class="event-date">${horaFormatada}h</p>
+            <h3 class="event-title">${dia.charAt(0).toUpperCase()+dia.slice(1)}, ${data}</h3>
+            <p class="event-date">${hora}h</p>
             <p class="event-price">A partir de R$ ${sessao.precoMeia.toFixed(2).replace('.',',')}</p>
-            <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado ? 'disabled' : ''}>
-              ${sessao.esgotado ? 'ESGOTADO' : 'COMPRAR INGRESSO'}
-            </button>`;
+            <button class="event-button" data-session-id="${sessao.id}" ${sessao.esgotado?'disabled':''}>${sessao.esgotado?'ESGOTADO':'COMPRAR INGRESSO'}</button>
+          `;
           eventsContainer.appendChild(card);
         });
 
         const castContainer = document.getElementById('cast-grid-container');
-        castContainer.innerHTML = '';
-        elenco.forEach(m => {
+        castContainer.innerHTML='';
+        elenco.forEach(m=>{
           const card = document.createElement('div');
-          card.className = 'cast-card';
+          card.className='cast-card';
           card.innerHTML = `
-            <img src="${m.foto}" alt="${m.nome}" class="cast-photo ${m.nome === 'Aquiles Amendola' ? 'aquiles' : ''}">
+            <img src="${m.foto}" alt="${m.nome}" class="cast-photo">
             <h3 class="cast-name">${m.nome}</h3>
-            <p class="cast-character">${m.personagem}</p>`;
+            <p class="cast-character">${m.personagem}</p>
+          `;
           castContainer.appendChild(card);
         });
         const gifCard = document.createElement('div');
@@ -487,24 +466,27 @@
         castContainer.appendChild(gifCard);
       }
 
-      function updateCountdown() {
-        const proxima = sessoes.find(s => new Date(s.data) > new Date());
-        if (!proxima) return;
+      function updateCountdown(){
+        const proxima = sessoes.find(s=> new Date(s.data) > new Date());
+        if(!proxima) return;
         const target = new Date(proxima.data);
-        const now = new Date(); const diff = target - now;
-        if (diff > 0) {
-          document.getElementById('days').textContent = Math.floor(diff / (1000*60*60*24)).toString().padStart(2,'0');
-          document.getElementById('hours').textContent = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2,'0');
-          document.getElementById('minutes').textContent = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2,'0');
-          document.getElementById('seconds').textContent = Math.floor((diff % (1000*60)) / 1000).toString().padStart(2,'0');
+        const diff = target - new Date();
+        if(diff>0){
+          const d = Math.floor(diff/86400000);
+          const h = Math.floor((diff%86400000)/3600000);
+          const m = Math.floor((diff%3600000)/60000);
+          const s = Math.floor((diff%60000)/1000);
+          document.getElementById('days').textContent = String(d).padStart(2,'0');
+          document.getElementById('hours').textContent = String(h).padStart(2,'0');
+          document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+          document.getElementById('seconds').textContent = String(s).padStart(2,'0');
         }
       }
 
-      function createParticles() {
+      function createParticles(){
         const container = document.getElementById('particles-container');
-        const count = 50;
-        for (let i=0;i<count;i++){
-          const p=document.createElement('div');
+        for(let i=0;i<50;i++){
+          const p = document.createElement('div');
           p.className='particle';
           p.style.left = Math.random()*100 + '%';
           p.style.animationDelay = Math.random()*6 + 's';
@@ -513,62 +495,40 @@
         }
       }
 
-      function addClickEffect(el){ el.classList.add('clicked'); setTimeout(()=>el.classList.remove('clicked'),300); }
-
-      /* =====================
-         MODAL / FLUXO
-      ====================== */
       function openModal(sessionId){
-        selectedSession = sessoes.find(s => s.id === sessionId);
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        personalDataForm.style.display = 'block';
-        postPaymentSection.style.display = 'none';
-        finalStatusScreen.style.display = 'none';
+        selectedSession = sessoes.find(s=>s.id===sessionId);
+        modal.style.display='flex';
+        document.body.style.overflow='hidden';
+        personalDataForm.style.display='block';
+        postPaymentSection.style.display='none';
+        finalStatusScreen.style.display='none';
         updateTotalAmount();
       }
       function closeModal(){
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        modal.style.display='none';
+        document.body.style.overflow='auto';
       }
 
       function updateTotalAmount(){
         if(!selectedSession) return;
-        const qI = parseInt(qtyInteira.value||'0');
-        const qM = parseInt(qtyMeia.value||'0');
-        const total = (qI * selectedSession.precoInteira) + (qM * selectedSession.precoMeia);
-        totalAmountDiv.textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+        const qI = parseInt(qtyInteira.value||'0',10);
+        const qM = parseInt(qtyMeia.value||'0',10);
+        const total = qI*selectedSession.precoInteira + qM*selectedSession.precoMeia;
+        totalAmountDiv.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
       }
-
-      function validateForm(){
-        let ok = true;
-        const required = ['full-name','email'];
-        required.forEach(id=>{
-          const el = document.getElementById(id);
-          if(!el.value.trim()){ el.style.borderColor='red'; ok=false; } else { el.style.borderColor=''; }
-        });
-        const totalTickets = (parseInt(qtyInteira.value||'0') + parseInt(qtyMeia.value||'0'));
-        if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
-        if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
-        if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
-        return ok;
-      }
-
       function calcularTotalNumero(){
         const parsed = parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
-        return Math.round(parsed); // arredonda para inteiro: 25,50,...200
+        return Math.round(parsed);
       }
-
       function detalhesCompraString(){
-        const qI = parseInt(qtyInteira.value||'0');
-        const qM = parseInt(qtyMeia.value||'0');
+        const qI = parseInt(qtyInteira.value||'0',10);
+        const qM = parseInt(qtyMeia.value||'0',10);
         const tot = totalAmountDiv.textContent;
-        const dataObj = new Date(selectedSession.data);
-        const dataFormatada = dataObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-        const horaFormatada = dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-        return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${dataFormatada} ${horaFormatada}h`;
+        const d = new Date(selectedSession.data);
+        const data = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+        const hora = d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${data} ${hora}h`;
       }
-
       function gerarCodigoUnico(sessaoId){
         const sess = sessoes.find(s=>s.id===sessaoId);
         const d = new Date(sess.data);
@@ -580,115 +540,120 @@
         let rand=""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
         return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
       }
-
+      function validateForm(){
+        let ok = true;
+        ['full-name','email'].forEach(id=>{
+          const el = document.getElementById(id);
+          if(!el.value.trim()){ el.style.borderColor='red'; ok=false; } else { el.style.borderColor=''; }
+        });
+        const totalTickets = (parseInt(qtyInteira.value||'0',10) + parseInt(qtyMeia.value||'0',10));
+        if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
+        if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
+        if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
+        return ok;
+      }
       function openPaymentLinkForTotal(total){
         const link = linksPagamento[total];
-        if(!link){ alert('Valor não disponível. O total deve ser um dos valores pré-definidos (25 a 200).'); return false; }
-        window.open(link, '_blank');
-        return true;
+        if(!link){ alert('Valor não disponível. Ajuste as quantidades para um total pré-definido.'); return false; }
+        window.open(link,'_blank'); return true;
       }
 
-      /* ======= Eventos UI ======= */
-      closeBtn.addEventListener('click', closeModal);
+      /* ================== EVENTOS UI ================== */
+      closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
+      document.querySelectorAll('a,button').forEach(el=>{
+        el.addEventListener('click', ()=>{ playClick(); }, {passive:true});
+      });
+
       qtyInteira.addEventListener('input', updateTotalAmount);
       qtyMeia.addEventListener('input', updateTotalAmount);
 
       continueBtn.addEventListener('click', ()=>{
         if(!validateForm()) return;
         const total = calcularTotalNumero();
-
-        if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
-        if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
-        if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
-
-        // Abre o link do Mercado Pago e avança para a etapa de upload do comprovante
+        if(total===0){ alert('Selecione ao menos 1 ingresso.'); return; }
+        if(total>200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
+        if(!linksPagamento[total]){ alert('Para este total não há link configurado.'); return; }
         const ok = openPaymentLinkForTotal(total);
         if(ok){
           personalDataForm.style.display='none';
           postPaymentSection.style.display='block';
+          pixName.focus();
         }
       });
 
       sendTicketBtn.addEventListener('click', ()=>{
-        const file = document.getElementById('proof-file').files[0];
-        if(!file){ alert('Anexe o comprovante de pagamento.'); return; }
+        const payer = (pixName.value||'').trim();
+        if(!payer){ alert('Informe o nome do responsável pelo Pix.'); pixName.focus(); return; }
 
-        sendingLoader.style.display = 'block';
-        const reader = new FileReader();
-        reader.onload = function(){
-          const base64File = reader.result; // << link base64 no corpo
-          const code = gerarCodigoUnico(selectedSession.id);
-          const payload = {
-            from_name: document.getElementById('full-name').value,
-            from_email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            sessao: selectedSession.id,
-            ingresso: detalhesCompraString(),
-            comprovante: base64File,          // base64 no corpo do e-mail
-            code: code,
-            total_value: totalAmountDiv.textContent.replace('R$','').trim()
-          };
+        sendingLoader.style.display='block';
 
-          emailjs.send("service_c9ak8yp","template_5lax0jv", payload)
-            .then(()=>{
-              sendingLoader.style.display='none';
-              finalStatusScreen.innerHTML = `
-                <h2>✅ Sucesso!</h2>
-                <p>Seu ingresso foi enviado para <b>${payload.from_email}</b>.</p>
-                <p>Guarde este código único:</p>
-                <div class="retro-code">${payload.code}</div>
-                <div style="margin-top:15px;">
-                  <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso">
-                </div>
-                <p style="font-size:12px;opacity:.9;">Se não encontrar o e-mail, verifique o Spam/Lixo eletrônico.</p>
-              `;
-              finalStatusScreen.style.display='block';
-              postPaymentSection.style.display='none';
-            })
-            .catch(err=>{
-              sendingLoader.style.display='none';
-              finalStatusScreen.innerHTML = `
-                <h2>❌ Erro!</h2>
-                <p>Não foi possível enviar seu ingresso agora.</p>
-                <p style="font-size: 12px; color: #ccc; margin-top: 15px;">Detalhe técnico: ${JSON.stringify(err)}</p>
-              `;
-              finalStatusScreen.style.display='block';
-              postPaymentSection.style.display='none';
-            });
+        const code = gerarCodigoUnico(selectedSession.id);
+        const payload = {
+          from_name: document.getElementById('full-name').value,
+          from_email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          sessao: selectedSession.id,
+          ingresso: detalhesCompraString(),
+          code: code,
+          payer_name: payer,
+          total_value: totalAmountDiv.textContent.replace('R$','').trim()
         };
-        reader.readAsDataURL(file);
+
+        // EmailJS v4 (sem anexos/base64) -> evita erro 413
+        emailjs.send("service_c9ak8yp", "template_5lax0jv", payload)
+          .then(()=>{
+            sendingLoader.style.display='none';
+            finalStatusScreen.innerHTML = `
+              <h2>✅ Sucesso!</h2>
+              <p>Seu ingresso foi enviado para <b>${payload.from_email}</b>.</p>
+              <p>Guarde este código único:</p>
+              <div class="retro-code">${payload.code}</div>
+              <div style="margin-top:15px;">
+                <img src="https://i.postimg.cc/rsJNPTkN/ingresso-template.png" alt="Ingresso" style="max-width:260px; border-radius:10px; border:3px solid var(--neon-pink)">
+              </div>
+              <p style="font-size:12px;opacity:.9;">Se não encontrar o e-mail, verifique o Spam/Lixo eletrônico.</p>
+            `;
+            finalStatusScreen.style.display='block';
+            postPaymentSection.style.display='none';
+          })
+          .catch(err=>{
+            sendingLoader.style.display='none';
+            finalStatusScreen.innerHTML = `
+              <h2>❌ Erro!</h2>
+              <p>Não foi possível enviar seu ingresso agora.</p>
+              <p style="font-size:12px; color:#ccc; margin-top:12px;">Detalhe técnico: ${JSON.stringify(err)}</p>
+            `;
+            finalStatusScreen.style.display='block';
+            postPaymentSection.style.display='none';
+          });
       });
 
-      // Delegação para abrir modal nas sessões
+      // abrir modal pelas sessões
       document.body.addEventListener('click', (e)=>{
-        const target = e.target.closest('a, button');
-        if(!target) return;
-
-        if(target.matches('.action-button, .nav-button, .event-button, .continue-button')) addClickEffect(target);
-
-        if(target.matches('.event-button, .action-button[href="#eventos"]')){
+        const btn = e.target.closest('button.event-button');
+        if(btn && btn.dataset.sessionId){
           e.preventDefault();
-          const section = document.getElementById('eventos');
-          if(section) section.scrollIntoView({behavior:'smooth'});
-
-          if(target.dataset.sessionId) openModal(target.dataset.sessionId);
+          openModal(btn.dataset.sessionId);
         }
       });
 
-      // Âncoras suaves (exceto #eventos que já tratamos)
+      // âncoras suaves
       document.querySelectorAll('a[href^="#"]').forEach(a=>{
         a.addEventListener('click', function(e){
-          if(this.getAttribute('href') !== '#eventos'){
+          const hash = this.getAttribute('href');
+          const el = document.querySelector(hash);
+          if(el){
             e.preventDefault();
-            const el = document.querySelector(this.getAttribute('href'));
-            if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+            el.scrollIntoView({behavior:'smooth', block:'start'});
           }
         });
       });
 
-      /* =====================
-         SCRAP (brincadeira)
-      ====================== */
+      // botão topo visível após rolar
+      const topBtn = document.getElementById('top-btn');
+      window.addEventListener('scroll', ()=>{ topBtn.style.display = window.scrollY>300 ? 'flex':'none'; });
+
+      /* ================= SCRAP ================= */
       const scrapBtn = document.getElementById('scrap-button');
       const scrapInput = document.getElementById('scrap-input');
       const scrapLoading = document.getElementById('scrap-loading');
@@ -696,7 +661,7 @@
       if(scrapBtn){
         scrapBtn.addEventListener('click', ()=>{
           const txt = (scrapInput.value||'').trim();
-          if(!txt){ scrapResult.textContent = 'Escreve um tema nostálgico tipo “MSN”, “Orkut”, “lan house”...'; return; }
+          if(!txt){ scrapResult.textContent='Escreve um tema nostálgico tipo “MSN”, “Orkut”, “lan house”...'; return; }
           scrapLoading.classList.add('active');
           setTimeout(()=>{
             scrapLoading.classList.remove('active');
@@ -704,22 +669,20 @@
 `★ ${txt.toUpperCase()} 4EVER ★
 Se você lembra, sua infância/adolescência foi épica.
 Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
-          }, 800);
+          }, 700);
         });
       }
 
-      /* =====================
-         INIT
-      ====================== */
+      /* ================= INIT ================= */
+      function updateTotalOnInputs(){ updateTotalAmount(); }
+      qtyInteira.addEventListener('change', updateTotalOnInputs);
+      qtyMeia.addEventListener('change', updateTotalOnInputs);
+
       function initialize(){
-        renderContent();
-        createParticles();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        renderContent(); createParticles(); updateCountdown(); setInterval(updateCountdown, 1000);
       }
       initialize();
     });
   </script>
 </body>
 </html>
-
