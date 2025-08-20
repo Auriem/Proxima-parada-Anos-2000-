@@ -366,7 +366,7 @@
         <p>Conclua o pagamento no <b>Mercado Pago</b>. Caso voce não tenha sido redirecionado para a página de confirmação e envio de ingressos:  <b>Coloque aqui o nome do responsável pelo pagamento para gerar seu ingresso</b> Ja recebeu? Ignore este aviso .</p>
 
         <div class="form-group">
-          <label for="responsavel-pix">Nome do responsável pelo Pix *</label>
+          <label for="responsavel-pix">Nome do responsável pelo Pgto *</label>
           <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
         </div>
 
@@ -608,18 +608,36 @@
     qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
     qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
 
-    continueBtn.addEventListener('click', ()=>{
-      playClick();
-      if(!validateForm()) return;
-      const total = calcularTotalNumero();
-      if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
-      if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
-      if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
-      if(openPaymentLinkForTotal(total)){
-        personalDataForm.style.display='none';
-        postPaymentSection.style.display='block';
-      }
-    });
+continueBtn.addEventListener('click', ()=>{
+  playClick();
+  if(!validateForm()) return;
+  const total = calcularTotalNumero();
+  if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+  if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
+  if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+
+  // 🔹 Salvar dados da compra no localStorage
+  localStorage.setItem("compraAtual", JSON.stringify({
+    nome: document.getElementById('full-name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    telefone: document.getElementById('phone').value.trim(),
+    ingressos: detalhesCompraString(),
+    total: total,
+    sessao: selectedSession?.id
+  }));
+
+  // 🔹 Montar link do Mercado Pago com redirecionamento
+  const linkBase = linksPagamento[total];
+  const backUrl = encodeURIComponent("https://seudominio.com/confirmacao.html"); // 👉 troque pelo seu domínio real
+  const linkComRedirect = `${linkBase}?back_url=${backUrl}`;
+
+  // Abrir link do Mercado Pago
+  window.open(linkComRedirect, '_blank');
+
+  personalDataForm.style.display='none';
+  postPaymentSection.style.display='block';
+});
+
 
     sendTicketBtn.addEventListener('click', async ()=>{
       playClick();
@@ -747,4 +765,5 @@
   </script>
 </body>
 </html>
+
 
