@@ -1,161 +1,141 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirmação de Ingresso - Próxima Parada: Anos 2000</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação do Ingresso</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      color: #222;
+      font-family: 'Verdana', sans-serif;
+      background: linear-gradient(135deg, #ffe6f7, #d6c8ff);
       margin: 0;
-      padding: 20px;
+      padding: 0;
       text-align: center;
+      color: #2c003e;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 20px;
+      padding: 20px;
+      background: #ff69b4;
+      color: white;
+      text-shadow: 2px 2px #9b4dca;
     }
 
     h1 {
-      font-family: 'VT323', monospace;
-      font-size: 2.5rem;
-      color: #fff;
-      text-shadow: 0 0 5px #fff, 0 0 15px #FF1493, 0 0 25px #FF69B4;
+      font-size: 2.2rem;
       animation: brilho 2s infinite alternate;
     }
 
     @keyframes brilho {
-      0% { text-shadow: 0 0 5px #fff, 0 0 10px #FF1493, 0 0 20px #FF69B4; }
-      100% { text-shadow: 0 0 15px #fff, 0 0 25px #FF69B4, 0 0 35px #FF1493; }
+      from { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+      to { text-shadow: 0 0 10px #fff, 0 0 20px #d6c8ff, 0 0 30px #9b4dca; }
     }
 
-    .box {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
+    main {
+      padding: 30px;
+    }
+
+    .box-confirmacao {
+      background: white;
+      border: 3px solid #ff69b4;
       border-radius: 12px;
-      border: 3px dashed #FF1493;
-      padding: 20px;
-      box-shadow: 0 0 15px #ff69b4aa;
+      display: inline-block;
+      padding: 25px;
+      max-width: 500px;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
     }
 
-    input {
-      width: 90%;
+    .codigo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff1493;
+      margin: 15px 0;
       padding: 10px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      border: 2px dashed #ff69b4;
+      display: inline-block;
+      background: #fff0f8;
     }
 
     .btn {
-      background: #FF1493;
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ff69b4;
       color: white;
       border: none;
-      padding: 12px 20px;
-      margin: 12px 0;
       border-radius: 8px;
-      cursor: pointer;
       font-size: 1rem;
-      transition: transform .2s;
-    }
-    .btn:hover { transform: scale(1.05); }
-
-    #final {
-      display: none;
-      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    #codigoUnico {
-      font-family: monospace;
-      font-size: 1.5rem;
-      background: #111;
-      color: #ADFF2F;
-      padding: 10px;
-      border-radius: 8px;
-      display: inline-block;
+    .btn:hover {
+      background: #d63384;
+    }
+
+    img.ingresso {
+      max-width: 280px;
+      margin: 15px 0;
+      border-radius: 10px;
+      border: 2px solid #ff69b4;
+    }
+
+    img.gif {
+      max-width: 220px;
       margin-top: 15px;
-      box-shadow: 0 0 10px #ADFF2F;
+      border-radius: 10px;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 15px;
+      background: #f2e6ff;
+      font-size: 0.9rem;
+      color: #333;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Confirmação de Ingresso</h1>
+    <h1>🎟 Compra Confirmada!</h1>
   </header>
 
-  <div class="box">
-    <h2>🎟️ Confirmação de Pagamento</h2>
-    <p>Preencha os dados abaixo para liberar seu ingresso digital:</p>
+  <main>
+    <div class="box-confirmacao">
+      <p>Obrigado por garantir seu ingresso para <strong>Próxima Parada: Anos 2000</strong>!</p>
+      <p>Este é o seu código único. 📸 Tire print desta tela e guarde com você.</p>
 
-    <div id="form">
-      <input type="text" id="nome" placeholder="Nome completo"><br>
-      <input type="email" id="email" placeholder="Seu e-mail"><br>
-      <input type="tel" id="telefone" placeholder="Telefone (opcional)"><br>
-      <input type="text" id="responsavelPix" placeholder="Responsável pelo Pix"><br>
-      <button class="btn" onclick="enviar()">Confirmar</button>
-    </div>
+      <div id="codigo" class="codigo">GERANDO...</div>
 
-    <div id="final">
-      <h3>✅ Seu ingresso está confirmado!</h3>
-      <p>Código único:</p>
-      <div id="codigoUnico"></div>
-      <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso" style="max-width:250px; margin:20px;">
+      <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso Digital" class="ingresso">
+
+      <p style="margin-top:10px; font-weight:bold; color:#9b4dca;">
+        Apresente este ingresso digital no dia da apresentação.
+      </p>
+
+      <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Gif divertido" class="gif">
+
       <br>
-      <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Gif" style="max-width:250px; border-radius:8px;">
-      <p style="color:#FF1493; font-weight:bold; margin-top:15px;">📸 Tire print desta tela e guarde seu código!</p>
+      <a href="index.html"><button class="btn">⬅️ Voltar à Página Principal</button></a>
     </div>
-  </div>
+  </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <footer>
+    <p>© 2025 Auriem Produções Artísticas</p>
+  </footer>
+
   <script>
-    (function(){
-      emailjs.init({ publicKey: "zWI9wjgMNAHJ0WV7f" });
-    })();
-
+    // Gerar código único aleatório
     function gerarCodigo() {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let code = "PRX2000-";
-      for (let i=0;i<6;i++) {
-        code += chars.charAt(Math.floor(Math.random()*chars.length));
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+      let codigo = "";
+      for (let i = 0; i < 8; i++) {
+        codigo += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      return code;
+      return codigo;
     }
 
-    function enviar(){
-      let nome = document.getElementById("nome").value;
-      let email = document.getElementById("email").value;
-      let telefone = document.getElementById("telefone").value;
-      let responsavel = document.getElementById("responsavelPix").value;
-
-      if(!nome || !email || !responsavel){
-        alert("Preencha todos os campos obrigatórios (nome, email e responsável Pix).");
-        return;
-      }
-
-      let codigo = gerarCodigo();
-
-      emailjs.send("service_c9ak8yp","template_5lax0jv",{
-        to_email: "auriemcompany@gmail.com",
-        from_name: nome,
-        from_email: email,
-        phone: telefone,
-        responsavel_pix: responsavel,
-        codigoUnico: codigo
-      })
-      .then(()=>{
-        document.getElementById("form").style.display="none";
-        document.getElementById("final").style.display="block";
-        document.getElementById("codigoUnico").textContent = codigo;
-      },(err)=>{
-        alert("❌ Erro ao enviar: "+JSON.stringify(err));
-      });
-    }
+    document.getElementById("codigo").textContent = gerarCodigo();
   </script>
 </body>
 </html>
