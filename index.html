@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Próxima Parada: Anos 2000 - Ingressos</title>
 
-  <!-- Fonte opcional 2000s vibe -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -15,7 +14,6 @@
       --primary-purple:#8A2BE2;
       --neon-pink:#FF6EC7;
       --hot-pink:#FF1493;
-      --light-pink:#FFC0CB;
       --neon-green:#ADFF2F;
       --white:#FFFFFF;
       --light-gray:#DDDDDD;
@@ -23,29 +21,30 @@
       --bg-grad: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
     }
 
-    *{ box-sizing: border-box }
-    html,body{ margin:0; padding:0 }
+    *{ box-sizing: border-box; margin:0; padding:0; }
+    html,body{ height:100%; }
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       background: var(--bg-grad);
       color: var(--white);
       line-height: 1.55;
       background-attachment: fixed;
       overflow-x: hidden;
       position: relative;
-      padding-top: 42px;
+      padding-top: 56px; /* espaço para ticker */
     }
 
-    /* Scanlines/ruído leve */
+    /* Scanlines / ruído leve */
     body::before{
       content:'';
       position: fixed; inset: 0;
-      pointer-events:none; z-index:1;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.03) 2px, rgba(255,255,255,.03) 4px);
+      pointer-events: none; z-index: 1;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
       animation: scanlines 2s linear infinite;
     }
-    @keyframes scanlines{ 0%{transform:translateY(0)} 100%{transform:translateY(4px)} }
+    @keyframes scanlines{ 0%{transform:translateY(0)}100%{transform:translateY(4px)} }
 
+    /* Partículas */
     #particles-container{ position: fixed; inset:0; pointer-events:none; z-index:2; }
     .particle{ position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation: float 6s infinite linear; }
     @keyframes float{
@@ -54,36 +53,69 @@
       100%{ transform: translateY(-10px) translateX(100px); opacity:0 }
     }
 
-    .container{ width: 92%; max-width: 1100px; margin: 0 auto; padding: 20px; position:relative; z-index: 10; }
+    .container{ width: 92%; max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
 
     header{
       text-align:center; padding:22px 0; border-bottom:3px solid var(--neon-pink);
-      background: rgba(0,0,0,.55); box-shadow:0 0 18px var(--neon-pink);
-      position:relative; overflow:hidden;
+      background: rgba(0,0,0,0.55); box-shadow: 0 0 18px var(--neon-pink);
+      position: relative; overflow: hidden;
     }
     .logo{
       font-family: 'VT323', monospace;
       font-size: clamp(36px, 5vw, 64px);
-      letter-spacing:1px; margin:0;
-      text-shadow:0 0 5px #fff, 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
+      letter-spacing: 1px;
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      text-shadow: 0 0 5px #fff, 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
+      animation: shine 2s infinite alternate;
+    }
+    @keyframes shine{
+      0%{ text-shadow: 0 0 4px #fff, 0 0 10px var(--neon-pink) }
+      100%{ text-shadow: 0 0 8px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-green) }
     }
 
-    /* Nav com flecha retrô */
-    nav{ margin: 18px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    /* TICKER / FAIXA ANIMADA */
+    .ticker{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--hot-pink);
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 8px 0;
+      overflow: hidden;
+      z-index: 2000;
+      box-shadow: 0 0 10px var(--neon-pink);
+      text-align:center;
+    }
+    .ticker span{
+      display: inline-block;
+      white-space: nowrap;
+      padding-right: 100%;
+      animation: tickerMove 12s linear infinite;
+    }
+    @keyframes tickerMove {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Nav */
+    nav{ margin: 18px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; z-index:11; position:relative; }
     .nav-button{
       background: linear-gradient(180deg, #3a3a3a, #1e1e1e);
-      color:#fff; border:2px solid #cfcfcf; border-radius:10px;
-      padding:10px 18px; font-weight:700; cursor:pointer; text-decoration:none;
+      color: #fff; border: 2px solid #cfcfcf; border-radius: 10px;
+      padding: 10px 18px; font-weight:700; cursor:pointer; text-decoration:none;
       display:inline-flex; align-items:center; gap:10px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,.4); transition:.2s;
+      box-shadow: 2px 2px 6px rgba(0,0,0,.4); transition: .2s;
       position:relative; overflow:hidden;
     }
     .nav-button .arrow{
-      font-family:'VT323', monospace;
-      font-size:20px; line-height:1;
+      font-family:'VT323', monospace; font-size:20px; line-height:1;
       background: linear-gradient(90deg, #fff, #ff9de3, #7aff3a);
-      -webkit-background-clip: text; background-clip:text;
-      color: transparent; filter: drop-shadow(0 0 6px rgba(255,110,199,.8));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 6px rgba(255,110,199,.8));
     }
     .nav-button:hover{ transform: translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,.35); }
     .nav-button:active{ transform: translateY(0); }
@@ -108,7 +140,7 @@
     .countdown-number{ font-size:28px; font-weight:800; color:var(--neon-pink) }
     .countdown-label{ font-size:12px; color:#cfcfcf; letter-spacing:.04em }
 
-    /* Sessões/Ingressos */
+    /* Events */
     .events-section{ margin: 38px 0 }
     .section-title{
       font-family:'VT323', monospace; font-size:34px; text-align:center; color:var(--neon-green);
@@ -132,7 +164,7 @@
     .event-button:hover{ transform: translateY(-2px) }
     .event-button:disabled{ background:#555; color:#999; cursor:not-allowed; box-shadow:none }
 
-    /* Sobre a peça (cartaz + sinopse centralizados) */
+    /* About (cartaz + sinopse) */
     .about-section{ margin: 44px 0 }
     .about-content{
       display:grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items:center;
@@ -152,11 +184,11 @@
       border:4px solid var(--neon-pink); border-radius:14px; box-shadow:0 0 16px var(--neon-pink);
     }
 
-    /* Local */
+    /* Location */
     .location-section{ margin: 30px 0; text-align:center }
     .location-address{ font-weight:600 }
 
-    /* Elenco */
+    /* Cast */
     .cast-section{ margin: 44px 0 }
     .cast-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:18px; }
     .cast-card{ background: rgba(0,0,0,.66); border:2px solid var(--neon-pink); border-radius:12px; padding:18px; text-align:center; transition:.3s }
@@ -170,7 +202,7 @@
     .retro-loader.active{ display:block }
     .scrap-result{ background: rgba(0,0,0,.8); border:1px solid #ccc; border-radius:8px; padding:14px; margin-top:12px; white-space:pre-wrap; text-align:left }
 
-    /* Modal compra */
+    /* Modal */
     .modal-overlay{ position:fixed; inset:0; background: rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter: blur(5px) }
     .modal-content{
       background: var(--bg-grad); color:#fff; width:92%; max-width:560px; max-height:90vh; overflow-y:auto;
@@ -197,47 +229,22 @@
 
     .payment-section{ display:none; margin-top:16px; padding-top:16px; border-top:2px solid var(--neon-pink) }
 
-    /* Final screen (dentro do modal) */
     #final-status-screen{ display:none; text-align:center; padding:12px }
     #final-status-screen img{ max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 12px; display:block }
     .retro-code{ font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px }
 
     footer{ text-align:center; padding:24px 0; background: rgba(0,0,0,.5); margin-top:32px; border-top:3px solid #ffffff33 }
 
-    /* Responsivo */
     @media (max-width: 900px){
       .about-content{ grid-template-columns: 1fr; text-align:left }
       .about-image-container{ order:-1 }
-      /* === Faixa animada (Ticker) === */
-.ticker {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  background: var(--hot-pink);
-  color: #fff;
-  font-weight: 800;
-  font-size: 18px;
-  padding: 8px 0;
-  overflow: hidden;
-  z-index: 2000;
-  box-shadow: 0 0 10px var(--neon-pink);
-}
-.ticker span {
-  display: inline-block;
-  white-space: nowrap;
-  padding-right: 100%;
-  animation: tickerMoveRight 12s linear infinite;
-}
-@keyframes tickerMoveRight {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(0); }
-}
-
+      .ticker{ font-size:14px; }
     }
   </style>
 </head>
-<body><!-- Faixa animada -->
-<div class="ticker"><span>🚨 Garanta seu ingresso! Não mosca senão acaba! 🚨</span></div>
+<body>
+  <!-- Ticker / Faixa fixa -->
+  <div class="ticker" id="global-ticker"><span>🚨 Garanta seu ingresso! Não mosca senão acaba! 🚨</span></div>
 
   <!-- Partículas -->
   <div id="particles-container"></div>
@@ -286,7 +293,7 @@
           </div>
         </div>
         <div class="about-image-container">
-          <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça Próxima Parada: Anos 2000">
+          <img src="https://i.postimg.cc/yYW55Cxh/material-pe-a.png" alt="Pôster da Peça">
         </div>
       </div>
     </section>
@@ -309,23 +316,23 @@
       <div class="retro-loader" id="scrap-loading">Gerando sua nostalgia...</div>
       <div id="scrap-result" class="scrap-result"></div>
     </section>
-  </div>
 
-  <footer id="contato">
-    <div class="container">
-      <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
-      <h3>Fale Conosco ::: Mande um Scrap!</h3>
-      <p>Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-        <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
-        <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
-        <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
-        <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
-        <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+    <footer id="contato">
+      <div class="container">
+        <img src="https://i.postimg.cc/H8phbYvx/ce6dae6d-822a-4f90-9415-f73e5ac34390.png" alt="Logo Auriem Produções" style="width: 100px; margin-bottom: 15px;">
+        <h3>Fale Conosco ::: Mande um Scrap!</h3>
+        <p>Dúvidas, sugestões ou só quer mandar um "Oi!"? Entre em contato!</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+          <a href="mailto:auriemcompany@gmail.com" class="action-button">Enviar E-mail 📧</a>
+          <a href="https://wa.me/5541985031409" target="_blank" class="action-button">Chama no Zap 📱</a>
+          <a href="https://www.instagram.com/auriem_company/" target="_blank" class="action-button">Instagram 📸</a>
+          <a href="https://www.youtube.com/@auriemcompany" target="_blank" class="action-button">YouTube 🎥</a>
+          <a href="https://www.tiktok.com/@auriemcompany" target="_blank" class="action-button">TikTok 🎵</a>
+        </div>
+        <p style="opacity:.9">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
       </div>
-      <p style="opacity:.9">2025 Auriem Produções Artísticas. Todos os direitos reservados.</p>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <!-- Modal de Compra -->
   <div id="purchase-modal" class="modal-overlay">
@@ -367,24 +374,31 @@
         <div id="sending-loader" class="retro-loader">Enviando dados...</div>
       </div>
 
-      <!-- Etapa Final: sucesso/erro (Mostra ingresso pro cliente) -->
+      <!-- Etapa Final (mostra ingresso pro cliente) -->
       <div id="final-status-screen"></div>
     </div>
   </div>
 
-  <!-- Sons -->
+  <!-- UI Sound -->
   <audio id="ui-click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
 
-  <!-- EmailJS SDK v4 -->
+  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <script>
-    // ======== CONFIG ========
-    const OWNER_EMAIL = "auriemcompany@gmail.com"; // <— seu e-mail fixo
+    /***********************
+     CONFIGURAÇÕES PRINCIPAIS
+    ***********************/
+    const OWNER_EMAIL = "auriemcompany@gmail.com"; // seu e-mail fixo (não mude o nome da constante)
     const EMAILJS_SERVICE_ID = "service_c9ak8yp";
     const EMAILJS_TEMPLATE_ID = "template_5lax0jv";
     const EMAILJS_PUBLIC_KEY = "zWI9wjgMNAHJ0WV7f";
 
-    // Links Mercado Pago (totais permitidos)
+    // BACK_URL: página que recebe o cliente após o pagamento do Mercado Pago.
+    // Substitua pelo seu domínio final se quiser (ex: https://meudominio.com/confirmacao.html)
+    const BACK_URL = `${window.location.origin}/confirmacao.html`;
+
+    // Links Mercado Pago (valores pré-definidos)
     const linksPagamento = {
       25:  "https://mpago.li/1SDJxrj",
       50:  "https://mpago.li/21ks87P",
@@ -396,7 +410,7 @@
       200: "https://mpago.li/15tvMBA"
     };
 
-    // Sessões
+    // SESSÕES (mantive seu array original)
     const sessoes = [
       { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
       { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
@@ -415,9 +429,12 @@
       { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
     ];
 
-    // ======== INIT ========
+    /***********************
+     INICIALIZAÇÃO
+    ***********************/
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
+    // DOM elements
     const uiClick = document.getElementById('ui-click');
     const modal = document.getElementById('purchase-modal');
     const closeBtn = document.getElementById('modal-close-btn');
@@ -434,7 +451,7 @@
     let selectedSession = null;
     let generatedCode = null;
 
-    function playClick(){ uiClick.currentTime = 0; uiClick.play().catch(()=>{}); }
+    function playClick(){ try{ uiClick.currentTime = 0; uiClick.play(); }catch(e){} }
 
     function createParticles(){
       const container = document.getElementById('particles-container');
@@ -571,14 +588,22 @@
       return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
     }
 
+    // Abre o link do Mercado Pago adicionando redirect_uri (BACK_URL)
     function openPaymentLinkForTotal(total){
-      const link = linksPagamento[total];
-      if(!link){ alert('Valor não disponível. Ajuste as quantidades para um total válido (25 a 200).'); return false; }
-      window.open(link, '_blank');
+      const baseLink = linksPagamento[total];
+      if(!baseLink){ alert('Valor não disponível. Ajuste as quantidades para um total válido (25 a 200).'); return false; }
+
+      // se o link já tem "?" usa &, senão usa ?
+      const sep = baseLink.includes('?') ? '&' : '?';
+      const finalLink = baseLink + sep + 'redirect_uri=' + encodeURIComponent(BACK_URL);
+
+      window.open(finalLink, '_blank');
       return true;
     }
 
-    // ======== Listeners ========
+    /***********************
+     EVENT LISTENERS & FLUXO
+    ***********************/
     closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
     qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
     qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
@@ -606,7 +631,7 @@
       // Gera código e prepara payload
       generatedCode = gerarCodigoUnico(selectedSession.id);
       const payload = {
-        to_email: OWNER_EMAIL,               // <- garante destinatário
+        to_email: OWNER_EMAIL,               // garante destinatário fixo do OWNER
         from_name: document.getElementById('full-name').value,
         from_email: document.getElementById('email').value,
         phone: document.getElementById('phone').value || '—',
@@ -618,9 +643,11 @@
       };
 
       try{
+        // envia para o Owner via EmailJS usando o template
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
-        // Mostra ingresso pro cliente na HORA
-       finalStatusScreen.innerHTML = `
+
+        // mostra ingresso pro cliente imediatamente (não depende do email)
+        finalStatusScreen.innerHTML = `
   <h2>✅ Compra confirmada!</h2>
   <p>Este é o seu ingresso digital. <b>Tire um print desta tela</b> e guarde o código abaixo.</p>
   <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
@@ -628,7 +655,6 @@
   <div class="retro-code">${generatedCode}</div>
   <p style="font-size:12px; opacity:.9; margin-top:10px;">Você também receberá instruções no e-mail informado durante a compra (verifique o Spam).</p>
 
-  <!-- GIF Anahí pedido -->
   <a href="https://postimages.org/" target="_blank" style="display:inline-block; margin-top:12px;">
     <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" 
          alt="Anahí RBD GIF" 
@@ -652,96 +678,72 @@
       }
     });
 
-    // Abrir modal ao clicar nos cards / CTA
+    // Click delegation for buttons and anchor behavior
     document.body.addEventListener('click', (e)=>{
       const target = e.target.closest('a,button');
       if(!target) return;
 
-      if(target.matches('.action-button,.nav-button,.event-button,.continue-button')) playClick();
+      if(target.matches('.action-button, .nav-button, .event-button, .continue-button')) playClick();
 
-      // Rola até sessões
-      if(target.matches('.action-button[href="#eventos"], .nav-button[href="#eventos"]')){
-        e.preventDefault();
-        document.getElementById('eventos')?.scrollIntoView({behavior:'smooth'});
-      }
-
-      // Abrir modal com sessão específica
+      // abrir modal quando clicar nos botões de sessão
       if(target.matches('.event-button') && target.dataset.sessionId){
         e.preventDefault();
         openModal(target.dataset.sessionId);
       }
+
+      // âncoras suaves (exceto #eventos que tratamos via botão principal)
+      if(target.matches('a[href^="#"]')){
+        const href = target.getAttribute('href');
+        if(href === '#eventos'){ document.getElementById('eventos')?.scrollIntoView({behavior:'smooth'}); e.preventDefault(); }
+        else { e.preventDefault(); document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
     });
 
-    // Âncoras suaves gerais
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', function(e){
-        if(this.getAttribute('href') === '#eventos') return; // já tratamos
-        e.preventDefault();
-        const el = document.querySelector(this.getAttribute('href'));
-        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    // Scrap: variações + som tipo MSN
+    const scrapBtn = document.getElementById('scrap-button');
+    const scrapInput = document.getElementById('scrap-input');
+    const scrapLoading = document.getElementById('scrap-loading');
+    const scrapResult = document.getElementById('scrap-result');
+
+    // Som estilo MSN (se o navegador permitir)
+    const msnSound = new Audio("https://www.myinstants.com/media/sounds/msn_nudge.mp3");
+
+    const scrapsVariacoes = [
+      txt => `★ ${txt.toUpperCase()} 4EVER ★\nSe você lembra, sua infância/adolescência foi épica.\nAss: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`,
+      txt => `(${txt}) era tudo!\nSó quem viveu sabe. 🤩\n#Saudades2000`,
+      txt => `Sdds de quando ${txt} fazia a gente sorrir sem internet no celular 💾📟`,
+      txt => `${txt} >>> qualquer coisa de hoje.\nAssinado: Nostalgia pura 🕹️`,
+      txt => `Lembra do ${txt}? Se sim, você desbloqueou uma memória rara 🔓✨`
+    ];
+
+    if(scrapBtn){
+      scrapBtn.addEventListener('click', ()=>{
+        const txt = (scrapInput.value||'').trim();
+        if(!txt){ scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...'; return; }
+        scrapLoading.classList.add('active');
+        setTimeout(()=>{
+          scrapLoading.classList.remove('active');
+          const variation = scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
+          scrapResult.textContent = variation(txt);
+          try{ msnSound.currentTime = 0; msnSound.play(); }catch(e){}
+        }, 700);
       });
-    });
-
-    // Scrap com variações e som MSN
-const scrapBtn = document.getElementById('scrap-button');
-const scrapInput = document.getElementById('scrap-input');
-const scrapLoading = document.getElementById('scrap-loading');
-const scrapResult = document.getElementById('scrap-result');
-
-// Som estilo MSN (nudge/alerta)
-const msnSound = new Audio("https://www.myinstants.com/media/sounds/msn_nudge.mp3");
-
-const scrapsVariacoes = [
-  txt => `★ ${txt.toUpperCase()} 4EVER ★
-Se você lembra, sua infância/adolescência foi épica.
-Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`,
-
-  txt => `(${txt}) era tudo!
-Só quem viveu sabe. 🤩
-#Saudades2000`,
-
-  txt => `Sdds de quando ${txt} fazia a gente sorrir sem internet no celular 💾📟`,
-
-  txt => `${txt} >>> qualquer coisa de hoje.
-Assinado: Nostalgia pura 🕹️`,
-
-  txt => `Lembra do ${txt}? Se sim, você desbloqueou uma memória rara 🔓✨`
-];
-
-if(scrapBtn){
-  scrapBtn.addEventListener('click', ()=>{
-    const txt = (scrapInput.value||'').trim();
-    if(!txt){
-      scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...';
-      return;
     }
-    scrapLoading.classList.add('active');
-    setTimeout(()=>{
-      scrapLoading.classList.remove('active');
-      const variation = scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
-      scrapResult.textContent = variation(txt);
 
-      // Toca o som ao exibir o scrap
-      try{
-        msnSound.currentTime = 0;
-        msnSound.play();
-      }catch(e){}
-    }, 700);
-  });
-}
-
-
-    // ======== START ========
+    // INITIALIZE
     function initialize(){
       createParticles();
       renderContent();
       updateCountdown();
       setInterval(updateCountdown, 1000);
+
+      // bind events for dynamically added buttons (delegation already set)
+      // ensure modal can be closed by clicking overlay (optional)
+      document.getElementById('purchase-modal').addEventListener('click', (e)=>{
+        if(e.target === document.getElementById('purchase-modal')) closeModal();
+      });
     }
     initialize();
   </script>
 </body>
 </html>
-
-
-
