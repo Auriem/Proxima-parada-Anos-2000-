@@ -33,6 +33,7 @@
       background-attachment: fixed;
       overflow-x: hidden;
       position: relative;
+      padding-top: 42px;
     }
 
     /* Scanlines/ruído leve */
@@ -207,10 +208,37 @@
     @media (max-width: 900px){
       .about-content{ grid-template-columns: 1fr; text-align:left }
       .about-image-container{ order:-1 }
+      /* === Faixa animada (Ticker) === */
+.ticker {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: var(--hot-pink);
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 8px 0;
+  overflow: hidden;
+  z-index: 2000;
+  box-shadow: 0 0 10px var(--neon-pink);
+}
+.ticker span {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 100%;
+  animation: tickerMoveRight 12s linear infinite;
+}
+@keyframes tickerMoveRight {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
     }
   </style>
 </head>
-<body>
+<body><!-- Faixa animada -->
+<div class="ticker"><span>🚨 Garanta seu ingresso! Não mosca senão acaba! 🚨</span></div>
+
   <!-- Partículas -->
   <div id="particles-container"></div>
 
@@ -677,4 +705,5 @@ Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
   </script>
 </body>
 </html>
+
 
