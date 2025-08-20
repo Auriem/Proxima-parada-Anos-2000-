@@ -251,8 +251,12 @@
   </style>
 
   <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-  <script> (function(){ emailjs.init("zWI9wjgMNAHJ0WV7f"); })(); </script>
+ <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function () {
+    emailjs.init({ publicKey: "zWI9wjgMNAHJ0WV7f" });
+  })();
+</script>
 </head>
 <body>
   <!-- Partículas -->
@@ -625,7 +629,7 @@
             total_value: totalAmountDiv.textContent.replace('R$','').trim()
           };
 
-          emailjs.send("service_c9ak8yp","template_5lax0jv", payload, "zWI9wjgMNAHJ0WV7f")
+          emailjs.send("service_c9ak8yp","template_5lax0jv", payload)
             .then(()=>{
               sendingLoader.style.display='none';
               finalStatusScreen.innerHTML = `
@@ -718,3 +722,4 @@ Ass: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`;
   </script>
 </body>
 </html>
+
