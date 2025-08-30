@@ -1,13 +1,3 @@
-Show! Abaixo está o **index.html completo**, já com o novo fluxo “gera ingresso primeiro, paga depois”, sem EmailJS no front, com geração de **1 código por ingresso**, envio para a **Function Netlify** (`/.netlify/functions/send-tickets`) e **abertura do Mercado Pago em nova aba**.
-
-> ⚠️ Lembretes:
->
-> * Deixe sua função `send-tickets` publicada em `/.netlify/functions/send-tickets` (com MailerSend configurado nas variáveis de ambiente do Netlify).
-> * Os **links do Mercado Pago** continuam os mesmos (25–200). Não usamos `redirect/back_url`.
-
----
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -777,3 +767,4 @@ Show! Abaixo está o **index.html completo**, já com o novo fluxo “gera ingre
 ```
 
 Se quiser, eu também te mando (ou ajusto) a **Netlify Function `send-tickets.js`** para casar exatamente com os campos (`cliente`, `admin`, `codigos`) e com seus **IDs de template do MailerSend** que você já me passou.
+
