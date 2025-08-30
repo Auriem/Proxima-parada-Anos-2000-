@@ -410,8 +410,8 @@
 
     const EMAILJS_SERVICE_ID    = "service_c9ak8yp";
     const EMAILJS_PUBLIC_KEY    = "zWI9wjgMNAHJ0WV7f";
-    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // seu template de admin (já existia)
-    const EMAILJS_TEMPLATE_CLIENT = "template_w1t8lt8"; // opcional: crie um template para cliente; se não existir, usamos o de admin
+    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // Template do admin (você)
+    const EMAILJS_TEMPLATE_CLIENT = "template_w1t8lt8";     // Template do cliente
 
     // Links Mercado Pago (valores pré-definidos)
     const linksPagamento = {
@@ -653,109 +653,126 @@
     });
 
     // Gera ingresso + envia e-mail (adm + cliente)
-   // Gera ingresso + envia e-mail (adm + cliente)
-sendTicketBtn.addEventListener('click', async ()=>{
-  playClick();
+    sendTicketBtn.addEventListener('click', async ()=>{
+      playClick();
 
-  const nome = document.getElementById('full-name').value.trim();
-  const emailCliente = document.getElementById('email').value.trim();
-  const telefone = document.getElementById('phone').value || '—';
-  const respPix = document.getElementById('responsavel-pix').value.trim();
-  const totalNumero = calcularTotalNumero();
-  const linkPagamento = linksPagamento[totalNumero] || '';
+      const nome = document.getElementById('full-name').value.trim();
+      const emailCliente = document.getElementById('email').value.trim();
+      const telefone = document.getElementById('phone').value || '—';
+      const respPix = document.getElementById('responsavel-pix').value.trim();
+      const totalNumero = calcularTotalNumero();
+      const linkPagamento = linksPagamento[totalNumero] || '';
 
-  if(!nome || !emailCliente){
-    alert('Preencha nome e e-mail.');
-    return;
-  }
+      if(!nome || !emailCliente){
+        alert('Preencha nome e e-mail.');
+        return;
+      }
 
-  sendingLoader.classList.add('active');
-  generatedCode = gerarCodigoUnico(selectedSession.id);
+      sendingLoader.classList.add('active');
+      generatedCode = gerarCodigoUnico(selectedSession.id);
 
-  const d = new Date(selectedSession.data);
-  const sessaoStr = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' +
-                    d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + 'h';
+      const d = new Date(selectedSession.data);
+      const sessaoStr = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' +
+                        d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + 'h';
 
-  try {
-    // 1) Envia para o ADMIN
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
-      to_email: OWNER_EMAIL,
-      from_name: nome,
-      from_email: emailCliente,
-      phone: telefone,
-      responsavel_pix: respPix || '—',
-      sessao: selectedSession.id,
-      ingresso: detalhesCompraString(),
-      code: generatedCode,
-      total_value: totalAmountDiv.textContent.replace('R$','').trim()
-    });
+      try {
+        // 1) Envia para o ADMIN
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
+          to_email: OWNER_EMAIL,
+          from_name: nome,
+          from_email: emailCliente,
+          phone: telefone,
+          responsavel_pix: respPix || '—',
+          sessao: selectedSession.id,
+          ingresso: detalhesCompraString(),
+          code: generatedCode,
+          total_value: totalAmountDiv.textContent.replace('R$','').trim()
+        });
 
-    // 2) Envia para o CLIENTE
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, {
-      to_email: emailCliente,
-      reply_to: OWNER_EMAIL,
-      nome_cliente: nome,
-      codigo_ingresso: generatedCode,
-      sessao_escolhida: sessaoStr,
-      ingresso: detalhesCompraString(),
-      valor_ingresso: totalAmountDiv.textContent.replace('R$','').trim(),
-      link_pagamento: linkPagamento,
-      suporte_email: OWNER_EMAIL,
-      suporte_whatsapp: "5541985031409"
-    });
+        // 2) Envia para o CLIENTE (com link de pagamento e contatos)
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, {
+          to_email: emailCliente,
+          reply_to: OWNER_EMAIL,
+          nome_cliente: nome,
+          codigo_ingresso: generatedCode,
+          sessao_escolhida: sessaoStr,
+          ingresso: detalhesCompraString(),
+          valor_ingresso: totalAmountDiv.textContent.replace('R$','').trim(),
+          link_pagamento: linkPagamento,
+          suporte_email: OWNER_EMAIL,
+          suporte_whatsapp: "5541985031409"
+        });
 
-    // Tela final (mantém botão de pagar visível)
-    finalStatusScreen.innerHTML = `
-      <h2>✅ Ingresso gerado e enviado por e-mail!</h2>
-      <div class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</div>
-      <p>Guarde este código:</p>
-      <div class="retro-code">${generatedCode}</div>
-      <p style="font-size:12px;opacity:.9;">Já mandamos para: <b>${emailCliente}</b></p>
-      <div style="margin-top:14px;">
-        <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
-      </div>
-      <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-        <button id="pay-after-generated" class="continue-button" style="max-width:260px;">💳 Pagar pelo Mercado Pago</button>
-        <button id="copy-summary" class="continue-button" style="max-width:260px;">📋 Copiar resumo</button>
-      </div>
-    `;
-    finalStatusScreen.style.display='block';
+        // Tela final (mantém opção de pagar)
+        finalStatusScreen.innerHTML = `
+          <h2>✅ Ingresso gerado e enviado por e-mail!</h2>
+          <div class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</div>
+          <p>Guarde este código:</p>
+          <div class="retro-code">${generatedCode}</div>
+          <p style="font-size:12px;opacity:.9;">Já mandamos para: <b>${emailCliente}</b></p>
 
-    // Reaplica botão de pagar
-    const payAfter = document.getElementById('pay-after-generated');
-    if(payAfter){
-      payAfter.addEventListener('click', ()=>{
-        if(totalNumero===0){ alert('Selecione ao menos 1 ingresso.'); return; }
-        openPaymentLinkForTotal(totalNumero);
-      });
-    }
+          <div style="margin-top:14px;">
+            <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
+          </div>
 
-    // Botão copiar resumo
-    const copyBtn = document.getElementById('copy-summary');
-    if(copyBtn){
-      copyBtn.addEventListener('click', ()=>{
-        const resumo = `INGRESSO - Próxima Parada: Anos 2000
+          <div style="text-align:left; margin:10px auto 0; max-width:440px; font-size:14px; background:rgba(0,0,0,.4); padding:10px 12px; border-radius:10px;">
+            <b>Resumo</b><br>
+            Nome: ${nome}<br>
+            E-mail: ${emailCliente}<br>
+            Sessão: ${sessaoLegivel(selectedSession.id)}<br>
+            Itens: ${detalhesCompraString()}<br>
+            Resp. Pgto: ${respPix || '—'}
+          </div>
+
+          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+            <button id="pay-after-generated" class="continue-button" style="max-width:260px;">💳 Pagar pelo Mercado Pago</button>
+            <button id="copy-summary" class="continue-button" style="max-width:260px;">📋 Copiar resumo</button>
+          </div>
+
+          <div style="margin-top:10px; font-size:12px; opacity:.9;">
+            Você receberá este código por e-mail. Após o pagamento, a equipe valida e confirma.
+          </div>
+        `;
+        finalStatusScreen.style.display='block';
+
+        // Pagar (pós-geração)
+        const payAfter = document.getElementById('pay-after-generated');
+        if(payAfter){
+          payAfter.addEventListener('click', ()=>{
+            const total = calcularTotalNumero();
+            if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+            if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+            openPaymentLinkForTotal(total);
+          });
+        }
+
+        // Copiar resumo
+        const copyBtn = document.getElementById('copy-summary');
+        if(copyBtn){
+          copyBtn.addEventListener('click', ()=>{
+            const resumo = `INGRESSO - Próxima Parada: Anos 2000
 Código: ${generatedCode}
 Nome: ${nome}
 Sessão: ${sessaoLegivel(selectedSession.id)}
 ${detalhesCompraString()}`;
-        navigator.clipboard.writeText(resumo).then(()=>alert('Resumo copiado!'));
-      });
-    }
+            navigator.clipboard.writeText(resumo).then(()=>alert('Resumo copiado!'));
+          });
+        }
 
-  } catch(err) {
-    console.error('Erro EmailJS:', err);
-    finalStatusScreen.innerHTML = `
-      <h2>⚠️ Seu ingresso foi gerado, mas não conseguimos enviar o e-mail.</h2>
-      <p>Tire um print deste código:</p>
-      <div class="retro-code">${generatedCode}</div>
-      <p style="font-size:12px;opacity:.9;">Se precisar, fale com a produção: <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a></p>
-    `;
-    finalStatusScreen.style.display='block';
-  } finally {
-    sendingLoader.classList.remove('active');
-  }
-});
+      } catch(err) {
+        console.error('Erro EmailJS:', err);
+        finalStatusScreen.innerHTML = `
+          <h2>⚠️ Seu ingresso foi gerado, mas não conseguimos enviar o e-mail.</h2>
+          <p>Tire um print deste código:</p>
+          <div class="retro-code">${generatedCode}</div>
+          <p style="font-size:12px;opacity:.9;">Se precisar, fale com a produção: <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a></p>
+          <p style="font-size:11px;opacity:.7;margin-top:8px;">Detalhe técnico: ${err?.text || err?.message || 'Falha no envio EmailJS.'}</p>
+        `;
+        finalStatusScreen.style.display='block';
+      } finally {
+        sendingLoader.classList.remove('active');
+      }
+    });
 
     // Botão de pagamento Mercado Pago (antes de gerar)
     if(payMpBtn){
@@ -785,7 +802,7 @@ ${detalhesCompraString()}`;
         e.preventDefault();
         document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'});
       }
-    }); 
+    });
 
     /***********************
      SCRAP
@@ -831,6 +848,3 @@ ${detalhesCompraString()}`;
   </script>
 </body>
 </html>
-
-
-
