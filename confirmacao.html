@@ -1,147 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Confirmação do Ingresso - Anos 2000</title>
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Confirmação de Compra — Próxima Parada: Anos 2000</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0000CD, #8A2BE2);
-      color: #fff;
-      margin: 0; padding: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh;
-      text-align: center;
+    :root{
+      --primary-blue:#0000CD; --primary-purple:#8A2BE2; --neon-pink:#FF6EC7;
+      --hot-pink:#FF1493; --neon-green:#ADFF2F; --white:#fff; --dark:#111;
     }
-    .box {
-      background: rgba(0,0,0,.6);
-      border: 3px solid #FF1493;
-      border-radius: 14px;
-      padding: 20px;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 0 22px #FF1493;
+    body{
+      margin:0; font-family:Inter,system-ui,Arial,sans-serif; color:#fff;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+      min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:24px;
     }
-    h1 { color: #ADFF2F; }
-    .retro-code {
-      font-family: monospace;
-      font-size: 22px;
-      background: #111;
-      color: #ADFF2F;
-      padding: 8px 14px;
-      border-radius: 8px;
-      display: inline-block;
-      margin: 10px 0;
-      letter-spacing: 1px;
+    .card{
+      width:100%; max-width:760px; background:rgba(0,0,0,.55);
+      border:3px solid var(--neon-pink); border-radius:16px; box-shadow:0 0 28px var(--neon-pink);
+      padding:24px 20px;
     }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 12px 0;
-      border: 2px solid #ADFF2F;
-      border-radius: 8px;
-      background: rgba(0,0,0,.5);
-      color: #fff;
-      font-size: 16px;
+    h1{ font-family:'VT323',monospace; font-size:40px; margin:4px 0 12px; text-align:center; text-shadow:0 0 10px var(--neon-pink);}
+    .muted{ opacity:.9; text-align:center; margin:0 0 10px }
+    .highlight{
+      background:#fff; color:#222; border-radius:12px; padding:16px; margin:18px 0;
+      border-left:6px solid var(--neon-pink);
     }
-    button {
-      background: linear-gradient(180deg, #FF6EC7, #FF1493);
-      border: none; border-radius: 8px;
-      color: #fff; font-weight: bold;
-      padding: 12px 20px;
-      cursor: pointer;
-      margin-top: 10px;
-      box-shadow: 0 0 12px #FF6EC7;
+    .codes{
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:18px 0;
     }
-    button:hover { transform: scale(1.05); }
-    img {
-      max-width: 280px;
-      border: 4px solid #FF1493;
-      border-radius: 12px;
-      margin: 12px auto;
-      display: block;
+    .code{
+      background: var(--dark); color: var(--neon-green); border: 2px solid var(--neon-pink);
+      border-radius:10px; padding:12px; font-family:'VT323',monospace; font-size:20px; text-align:center;
+      box-shadow:0 0 12px rgba(255,110,199,.35);
     }
-    .note { font-size: 13px; opacity: .85; margin-top: 10px; }
-    .summary { font-size: 14px; margin-top: 12px; text-align:left; background:#0009; padding:10px; border-radius:8px }
+    .btn{
+      display:inline-block; width:100%; padding:14px 16px; text-align:center; border-radius:12px; font-weight:800;
+      color:#222; background: linear-gradient(180deg, var(--neon-green), #8aff00); border:none; cursor:pointer;
+      box-shadow:0 0 12px var(--neon-green);
+    }
+    .small{ font-size:12px; opacity:.9; text-align:center; margin-top:10px }
+    .warn{ background:#fff3cd; color:#664d03; border:1px solid #ffe69c; padding:12px; border-radius:10px; }
+    .loader{ text-align:center; margin:12px 0; display:none }
   </style>
 </head>
 <body>
-  <div class="box" id="box">
-    <h1>🎟️ Confirme seu ingresso</h1>
-    <p>Pagamento aprovado! Digite o nome do <b>responsável pelo Pix</b> para gerar seu ingresso.</p>
-
-    <!-- Resumo -->
-    <div id="resumo" class="summary"></div>
-
-    <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
-    <button id="gerar-btn">Gerar meu ingresso</button>
-
-    <div id="status"></div>
+  <div class="card" id="card">
+    <h1>Confirmação de Compra</h1>
+    <p class="muted" id="status">
+      Validando dados da compra e gerando seus ingressos...
+    </p>
+    <div id="info" class="highlight" style="display:none"></div>
+    <div class="loader" id="loader">Enviando e-mails...</div>
+    <div class="codes" id="codes" style="display:none"></div>
+    <button class="btn" id="btnVoltar" style="display:none" onclick="window.location.href='/'">Voltar ao site</button>
+    <p class="small">Se não encontrar o e-mail, verifique também a pasta Spam/Lixo eletrônico.</p>
   </div>
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    const OWNER_EMAIL = "auriemcompany@gmail.com";
-    const EMAILJS_SERVICE_ID = "service_c9ak8yp";
-    const EMAILJS_TEMPLATE_ID = "template_5lax0jv";
-    const EMAILJS_PUBLIC_KEY = "zWI9wjgMNAHJ0WV7f";
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
-    // Carrega dados do localStorage
-    const dadosCompra = JSON.parse(localStorage.getItem("compraAtual")) || {};
-    const resumoDiv = document.getElementById("resumo");
-    resumoDiv.innerHTML = `
-      <b>Nome:</b> ${dadosCompra.nome||"—"}<br>
-      <b>Email:</b> ${dadosCompra.email||"—"}<br>
-      <b>Telefone:</b> ${dadosCompra.telefone||"—"}<br>
-      <b>Ingressos:</b> ${dadosCompra.ingressos||"—"}<br>
-      <b>Sessão:</b> ${dadosCompra.sessao||"—"}<br>
-      <b>Total:</b> R$ ${dadosCompra.total||"—"}
-    `;
-
-    function gerarCodigo() {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let rand = "";
-      for (let i = 0; i < 6; i++) rand += chars.charAt(Math.floor(Math.random() * chars.length));
-      return `PRX2000-${rand}`;
+    // ===== Helpers =====
+    function gerarCodigoUnico(prefixoDataHora){
+      const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let rand=""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
+      return `${prefixoDataHora}-${rand}`;
+    }
+    function prefixoSessao(sessaoISO){
+      const d = new Date(sessaoISO);
+      const dia = String(d.getDate()).padStart(2,'0');
+      const mes = String(d.getMonth()+1).padStart(2,'0');
+      const hh  = String(d.getHours()).padStart(2,'0');
+      const mm  = String(d.getMinutes()).padStart(2,'0');
+      return `PRX2000-${dia}${mes}-${hh}${mm}`;
     }
 
-    document.getElementById('gerar-btn').addEventListener('click', async ()=>{
-      const nomePix = document.getElementById('responsavel-pix').value.trim();
-      if(!nomePix){ alert("Digite o nome do responsável pelo Pix!"); return; }
+    async function sendTicketsViaFunction(payload){
+      const resp = await fetch('/.netlify/functions/send-tickets', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if(!resp.ok){
+        const txt = await resp.text();
+        throw new Error(txt || 'Falha ao enviar e-mails.');
+      }
+    }
 
-      const codigo = gerarCodigo();
-      const statusDiv = document.getElementById('status');
+    (async function main(){
+      const status = document.getElementById('status');
+      const info   = document.getElementById('info');
+      const loader = document.getElementById('loader');
+      const codesEl= document.getElementById('codes');
+      const btnVoltar = document.getElementById('btnVoltar');
 
-      // envia email para você
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          to_email: OWNER_EMAIL,
-          responsavel_pix: nomePix,
-          code: codigo,
-          nome: dadosCompra.nome,
-          email: dadosCompra.email,
-          telefone: dadosCompra.telefone,
-          ingressos: dadosCompra.ingressos,
-          sessao: dadosCompra.sessao,
-          total: dadosCompra.total
+      // 1) Ler localStorage
+      const raw = localStorage.getItem('compraAtual');
+      if(!raw){
+        status.innerHTML = `<div class="warn">Não encontramos os dados da compra no navegador. Volte para o site e inicie novamente.</div>`;
+        btnVoltar.style.display='inline-block';
+        return;
+      }
+      const compra = JSON.parse(raw);
+
+      // 2) Evitar reenvio em refresh: se já enviou, apenas mostre os códigos salvos
+      if(compra.enviado && Array.isArray(compra.ingressoCodigos) && compra.ingressoCodigos.length>0){
+        status.textContent = 'Compra já confirmada anteriormente. Aqui estão seus ingressos:';
+        info.style.display='block';
+        info.innerHTML = `
+          <b>Nome:</b> ${compra.nome}<br>
+          <b>E-mail:</b> ${compra.email}<br>
+          <b>Sessão:</b> ${compra.sessao_label || compra.sessao}<br>
+          <b>Ingressos:</b> ${compra.ingressos_texto}<br>
+        `;
+        codesEl.style.display='grid';
+        codesEl.innerHTML = compra.ingressoCodigos.map(c=>`<div class="code">${c}</div>`).join('');
+        btnVoltar.style.display='inline-block';
+        return;
+      }
+
+      // 3) Gerar códigos (1 por ingresso)
+      const totalQtd = (parseInt(compra.qty_inteira||0,10) + parseInt(compra.qty_meia||0,10)) || 1;
+      const prefixo = prefixoSessao(
+        // tentamos converter de um label para a ISO salva no index. Se não houver ISO, usa label no prefixo
+        (window.__SESSAO_ISO__ || '')
+      );
+      const codes = [];
+      for(let i=0;i<totalQtd;i++){
+        codes.push(gerarCodigoUnico(prefixo || 'PRX2000-XXXX-XXXX'));
+      }
+
+      // 4) Mostrar resumo na tela já
+      status.textContent = '✅ Compra confirmada! Seus ingressos estão abaixo e também foram enviados por e-mail.';
+      info.style.display='block';
+      info.innerHTML = `
+        <b>Nome:</b> ${compra.nome}<br>
+        <b>E-mail:</b> ${compra.email}<br>
+        <b>Sessão:</b> ${compra.sessao_label || compra.sessao}<br>
+        <b>Ingressos:</b> ${compra.ingressos_texto}<br>
+        <b>Total:</b> ${compra.total_str || ('R$ '+compra.total_num)}
+      `;
+      codesEl.style.display='grid';
+      codesEl.innerHTML = codes.map(c=>`<div class="code">${c}</div>`).join('');
+      btnVoltar.style.display='inline-block';
+
+      // 5) Enviar e-mails via Function (cliente + admin)
+      loader.style.display='block';
+      try{
+        await sendTicketsViaFunction({
+          cliente: {
+            nome: compra.nome,
+            email: compra.email,
+            telefone: compra.telefone || '—',
+            sessao_label: compra.sessao_label || compra.sessao,
+            valor: (compra.total_str || String(compra.total_num)).replace('R$','').trim()
+          },
+          admin: {
+            from_name: compra.nome,
+            from_email: compra.email,
+            phone: compra.telefone || '—',
+            responsavel_pix: '—', // no novo fluxo não pedimos, mantém compatível
+            sessao: compra.sessao_label || compra.sessao,
+            ingresso: compra.ingressos_texto
+          },
+          codigos: codes
         });
 
-        statusDiv.innerHTML = `
-          <h2>✅ Ingresso Gerado!</h2>
-          <p>Mostre este ingresso na entrada:</p>
-          <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso Digital">
-          <div class="retro-code">${codigo}</div>
-          <p class="note">⚠️ Tire print desta tela e guarde bem seu código.</p>
-          <img src="https://i.postimg.cc/4496yMT8/Anahi-Rbd-GIF-Anahi-Rbd-Rebelde-Way-Descubre-y-comparte-GIF.gif" alt="Anahi RBD" style="max-width:200px;">
-        `;
-      } catch(err) {
-        statusDiv.innerHTML = `<p style="color:red;">❌ Erro ao enviar informações: ${JSON.stringify(err)}</p>`;
+        // 6) Marcar como enviado para evitar duplicidade em refresh
+        compra.enviado = true;
+        compra.ingressoCodigos = codes;
+        localStorage.setItem('compraAtual', JSON.stringify(compra));
+      }catch(err){
+        status.innerHTML = `❌ Ocorreu um erro ao enviar os e-mails. Seus códigos estão acima. Se precisar, envie este print e fale com a produção.<br><small>${(err && err.message) || err}</small>`;
+      }finally{
+        loader.style.display='none';
       }
-    });
+    })();
   </script>
 </body>
 </html>
