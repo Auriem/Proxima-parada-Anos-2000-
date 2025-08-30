@@ -398,17 +398,18 @@
     // Substitua pelo seu domínio final se quiser (ex: https://meudominio.com/confirmacao.html)
     const BACK_URL = `${window.location.origin}/confirmacao.html`;
 
-    // Links Mercado Pago (valores pré-definidos)
-    const linksPagamento = {
-      25:  "https://mpago.li/1SDJxrj",
-      50:  "https://mpago.li/21ks87P",
-      75:  "https://mpago.li/1VmFtmt",
-      100: "https://mpago.li/2Lhv2M1",
-      125: "https://mpago.li/1a688tD",
-      150: "https://mpago.li/1uWW1XE",
-      175: "https://mpago.li/2a2GAF5",
-      200: "https://mpago.li/15tvMBA"
-    };
+  // Links Mercado Pago (valores pré-definidos)
+const linksPagamento = {
+  25:  "https://mpago.li/1SDJxrj?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  50:  "https://mpago.li/21ks87P?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  75:  "https://mpago.li/1VmFtmt?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  100: "https://mpago.li/2Lhv2M1?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  125: "https://mpago.li/1a688tD?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  150: "https://mpago.li/1uWW1XE?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  175: "https://mpago.li/2a2GAF5?back_url=https://proximaparadaanos2000.online/confirmacao.html",
+  200: "https://mpago.li/15tvMBA?back_url=https://proximaparadaanos2000.online/confirmacao.html"
+};
+
 
     // SESSÕES (mantive seu array original)
     const sessoes = [
@@ -782,6 +783,7 @@ continueBtn.addEventListener('click', ()=>{
   </script>
 </body>
 </html>
+
 
 
 
