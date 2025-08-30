@@ -212,7 +212,6 @@
     @keyframes modalAppear{ from{transform:scale(.92); opacity:0} to{transform:scale(1); opacity:1} }
     .modal-close{ position:absolute; top:10px; right:12px; background:none; border:none; color:#fff; font-size:26px; cursor:pointer }
     .modal-title{ font-family:'VT323', monospace; font-size:30px; color:var(--neon-pink); margin:6px 0 16px 0; text-align:center }
-
     .form-group{ margin-bottom:14px }
     .form-group label{ display:block; font-weight:700; margin-bottom:6px }
     .form-group input, .form-group select{
@@ -251,7 +250,7 @@
 </head>
 <body>
   <!-- Ticker / Faixa fixa -->
-  <div class="ticker" id="global-ticker"><span>🚨 Garanta seu ingresso! Lote promocional ativo. 🚨</span></div>
+  <div class="ticker" id="global-ticker"><span>🚨 Garanta seu ingresso! Não mosca senão acaba! 🚨</span></div>
 
   <!-- Partículas -->
   <div id="particles-container"></div>
@@ -359,50 +358,34 @@
             <div class="form-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
           </div>
         </div>
-
         <div id="session-picked" style="font-size:14px;opacity:.85;margin:6px 0 0 0;"></div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0">
           <strong>Total:</strong>
           <div class="retro-code" id="total-amount">R$ 50,00</div>
         </div>
-
         <button id="continue-to-payment" class="continue-button">Avançar</button>
-        <p style="font-size:12px; opacity:.85; margin-top:8px;">
-          Limite: 8 ingressos por compra • Você poderá pagar na próxima etapa (Mercado Pago) e receberá o ingresso agora, com status <b>PENDENTE</b> até a confirmação.
-        </p>
+        <p style="font-size:12px; opacity:.85; margin-top:8px;">Limite: 8 ingressos por compra • Você pode pagar no Mercado Pago e o ingresso chega por e-mail agora (status <b>PENDENTE</b> até confirmarmos).</p>
       </div>
 
       <!-- Etapa 2: Geração do ingresso + pagamento -->
       <div id="post-payment-section" class="payment-section" style="display:none;">
         <span class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</span>
-        <p style="margin-bottom:10px;">
-          Seu ingresso será gerado agora e enviado por e-mail. O pagamento pode ser feito em seguida.
-        </p>
+        <p style="margin-bottom:10px;">Seu ingresso será gerado e enviado por e-mail. O pagamento pode ser feito em seguida.</p>
 
         <div class="form-group">
-          <label for="responsavel-pix">Nome do responsável pelo pagamento (opcional, ajuda a identificar)</label>
+          <label for="responsavel-pix">Nome do responsável pelo pagamento (opcional)</label>
           <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <button id="send-ticket-btn" class="continue-button">🪄 Gerar e enviar meu ingresso</button>
-          </div>
+          <div class="form-group"><button id="send-ticket-btn" class="continue-button">🪄 Gerar e enviar meu ingresso</button></div>
         </div>
 
-        <div style="margin:12px 0; text-align:center; font-size:12px; opacity:.85;">Depois de gerar, você pode pagar:</div>
+        <div style="margin:12px 0; text-align:center; font-size:12px; opacity:.85;">Depois de gerar, você também pode pagar:</div>
 
         <div class="form-row">
-          <div class="form-group">
-            <button id="pay-mp-btn" class="continue-button" style="background:linear-gradient(180deg,#35d0ff,#00a3e0);box-shadow:0 0 12px #35d0ff;">
-              💳 Pagar pelo Mercado Pago (abre nova aba)
-            </button>
-          </div>
-        </div>
-
-        <div style="text-align:center; font-size:12px; opacity:.8; margin-top:6px;">
-          Preferiu Pix? Fale no WhatsApp e informe seu código: <a href="https://wa.me/5541985031409" target="_blank">abrir Whats</a>
+          <div class="form-group"><button id="pay-mp-btn" class="continue-button">💳 Pagar pelo Mercado Pago</button></div>
         </div>
 
         <div id="sending-loader" class="retro-loader">Enviando dados...</div>
@@ -416,19 +399,19 @@
   <!-- UI Sound -->
   <audio id="ui-click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
 
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <script>
     /***********************
-     CONFIGURAÇÕES
+     CONFIGURAÇÕES (EMAILJS + CONSTANTES)
     ***********************/
-    // Apps Script Web App (MailerSend)
-    const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGLmV72SujrxecOhhnzos8mp-j7-sNO7KlF5TOzWaUkh1yY6W0HafQjTSR8oq0hckgJw/exec";
+    const OWNER_EMAIL = "auriemcompany@gmail.com";
 
-    // Opcional: remetente para constar no e-mail (o Apps Script usa MailerSend com domínio verificado)
-    const FROM_EMAIL = "ingressos@proximaparadaanos2000.online";
-
-    // IDs dos templates no MailerSend (você já me passou)
-    const TEMPLATE_CLIENTE = "v69oxl5oz2rg785k";
-    const TEMPLATE_ADMIN   = "zr6ke4njzx3gon12";
+    const EMAILJS_SERVICE_ID    = "service_c9ak8yp";
+    const EMAILJS_PUBLIC_KEY    = "zWI9wjgMNAHJ0WV7f";
+    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // seu template de admin (já existia)
+    const EMAILJS_TEMPLATE_CLIENT = "template_cliente_123"; // opcional: crie um template para cliente; se não existir, usamos o de admin
 
     // Links Mercado Pago (valores pré-definidos)
     const linksPagamento = {
@@ -462,8 +445,11 @@
     ];
 
     /***********************
-     DOM / VARS
+     INICIALIZAÇÃO
     ***********************/
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    // DOM elements
     const uiClick = document.getElementById('ui-click');
     const modal = document.getElementById('purchase-modal');
     const closeBtn = document.getElementById('modal-close-btn');
@@ -501,7 +487,6 @@
     }
 
     function renderContent(){
-      // Sessões
       const eventsContainer = document.getElementById('events-list-container');
       eventsContainer.innerHTML = '';
       sessoes.forEach(sessao=>{
@@ -649,22 +634,6 @@
       return true;
     }
 
-    async function postToWebhook(data){
-      // Para evitar CORS chato no Apps Script, usamos no-cors (não lemos a resposta; focamos na entrega)
-      try{
-        await fetch(APPSCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify(data),
-          mode: 'no-cors'
-        });
-        // Pequeno delay só para UX
-        await new Promise(r=>setTimeout(r, 400));
-      }catch(e){
-        console.warn('Falha no envio ao Apps Script:', e);
-      }
-    }
-
     /***********************
      EVENTOS
     ***********************/
@@ -679,12 +648,11 @@
     continueBtn.addEventListener('click', ()=>{
       playClick();
       if(!validateForm()) return;
-
-      // Avança para passo 2 (gerar e pagar)
       personalDataForm.style.display='none';
       postPaymentSection.style.display='block';
     });
 
+    // Gera ingresso + envia e-mail (adm + cliente)
     sendTicketBtn.addEventListener('click', async ()=>{
       playClick();
 
@@ -697,30 +665,43 @@
 
       sendingLoader.classList.add('active');
 
-      // Gera código único e prepara payload
       generatedCode = gerarCodigoUnico(selectedSession.id);
-      const payload = {
-        action: "send_order",
-        from_email: FROM_EMAIL,
-        template_admin_id: TEMPLATE_ADMIN,
-        template_cliente_id: TEMPLATE_CLIENTE,
 
-        nome: nome,
-        email: email,
-        telefone: telefone || '—',
+      const payloadBase = {
+        to_email: OWNER_EMAIL,                 // será ajustado por envio
+        from_name: nome,
+        from_email: email,
+        phone: telefone || '—',
         responsavel_pix: respPix || '—',
-
         sessao: selectedSession.id,
         sessao_legivel: sessaoLegivel(selectedSession.id),
         ingresso: detalhesCompraString(),
-        total_value: totalAmountDiv.textContent.replace('R$','').trim(),
-        code: generatedCode
+        code: generatedCode,
+        total_value: totalAmountDiv.textContent.replace('R$','').trim()
       };
 
-      // Dispara envios (admin + cliente) via Apps Script / MailerSend
-      await postToWebhook(payload);
+      try{
+        // 1) e-mail para ADM
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
+          ...payloadBase,
+          to_email: OWNER_EMAIL
+        });
 
-      // Mostra ingresso imediatamente
+        // 2) e-mail para CLIENTE (se não houver template, usamos o do admin mesmo)
+        const templateCliente = EMAILJS_TEMPLATE_CLIENT || EMAILJS_TEMPLATE_ADMIN;
+        await emailjs.send(EMAILJS_SERVICE_ID, templateCliente, {
+          ...payloadBase,
+          to_email: email
+        });
+
+      }catch(err){
+        console.warn('Falha EmailJS:', err);
+        alert('Não consegui enviar o e-mail agora, mas seu ingresso foi gerado nesta tela. Tire um print e fale com a produção se precisar.');
+      }finally{
+        sendingLoader.classList.remove('active');
+      }
+
+      // Mostra ingresso + mantém botão de pagamento disponível
       finalStatusScreen.innerHTML = `
         <h2>🎟️ Ingresso gerado!</h2>
         <div class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</div>
@@ -731,32 +712,43 @@
           <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
         </div>
 
-        <div style="text-align:left; margin:10px auto 0; max-width:420px; font-size:14px; background:rgba(0,0,0,.4); padding:10px 12px; border-radius:10px;">
+        <div style="text-align:left; margin:10px auto 0; max-width:440px; font-size:14px; background:rgba(0,0,0,.4); padding:10px 12px; border-radius:10px;">
           <b>Resumo</b><br>
           Nome: ${nome}<br>
           E-mail: ${email}<br>
           Sessão: ${sessaoLegivel(selectedSession.id)}<br>
           Itens: ${detalhesCompraString()}<br>
-          Responsável Pgto: ${respPix || '—'}
+          Resp. Pgto: ${respPix || '—'}
         </div>
 
-        <div style="margin-top:16px; font-size:12px; opacity:.9;">
-          Você também receberá este código por e-mail.<br>
-          Depois de pagar, sua validação é confirmada pela equipe.
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+          <button id="pay-after-generated" class="continue-button" style="max-width:260px;">💳 Pagar pelo Mercado Pago</button>
+          <button id="copy-summary" class="continue-button" style="max-width:260px;">📋 Copiar resumo</button>
         </div>
 
-        <div style="margin-top:16px;">
-          <button id="botao-copiar" class="continue-button" style="max-width:320px;margin:0 auto;">📋 Copiar resumo</button>
+        <div style="margin-top:10px; font-size:12px; opacity:.9;">
+          Você receberá este código por e-mail. Após o pagamento, a equipe valida e confirma.
         </div>
       `;
       finalStatusScreen.style.display='block';
-      postPaymentSection.style.display='none';
-      sendingLoader.classList.remove('active');
+      // NÃO escondemos mais a seção de pagamento; mas não precisamos dela a partir daqui.
+      // postPaymentSection.style.display='none';
 
-      // Habilita copiar resumo
-      const botaoCopiar = document.getElementById('botao-copiar');
-      if(botaoCopiar){
-        botaoCopiar.addEventListener('click', ()=>{
+      // Botão pagar (pós-geração)
+      const payAfter = document.getElementById('pay-after-generated');
+      if(payAfter){
+        payAfter.addEventListener('click', ()=>{
+          const total = calcularTotalNumero();
+          if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+          if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+          openPaymentLinkForTotal(total);
+        });
+      }
+
+      // Botão copiar
+      const copyBtn = document.getElementById('copy-summary');
+      if(copyBtn){
+        copyBtn.addEventListener('click', ()=>{
           const resumo = `INGRESSO - Próxima Parada: Anos 2000
 Código: ${generatedCode}
 Nome: ${nome}
@@ -767,7 +759,7 @@ ${detalhesCompraString()}`;
       }
     });
 
-    // Botão de pagamento Mercado Pago (abre link conforme total)
+    // Botão de pagamento Mercado Pago (antes de gerar)
     if(payMpBtn){
       payMpBtn.addEventListener('click', ()=>{
         playClick();
@@ -785,13 +777,11 @@ ${detalhesCompraString()}`;
 
       if(target.matches('.action-button, .nav-button, .event-button, .continue-button')) playClick();
 
-      // abrir modal quando clicar nos botões de sessão
       if(target.matches('.event-button') && target.dataset.sessionId){
         e.preventDefault();
         openModal(target.dataset.sessionId);
       }
 
-      // âncoras suaves
       if(target.matches('a[href^="#"]')){
         const href = target.getAttribute('href');
         e.preventDefault();
