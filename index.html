@@ -20,119 +20,45 @@
       --dark-gray:#222;
       --bg-grad: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
     }
-
     *{ box-sizing: border-box; margin:0; padding:0; }
     html,body{ height:100%; }
     body{
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      background: var(--bg-grad);
-      color: var(--white);
-      line-height: 1.55;
-      background-attachment: fixed;
-      overflow-x: hidden;
-      position: relative;
-      padding-top: 56px; /* espaço para ticker */
+      background: var(--bg-grad); color: var(--white); line-height: 1.55;
+      background-attachment: fixed; overflow-x: hidden; position: relative;
+      padding-top: 56px;
     }
-
-    /* Scanlines / ruído leve */
     body::before{
-      content:'';
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 1;
+      content:''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
       background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
       animation: scanlines 2s linear infinite;
     }
     @keyframes scanlines{ 0%{transform:translateY(0)}100%{transform:translateY(4px)} }
-
-    /* Partículas */
     #particles-container{ position: fixed; inset:0; pointer-events:none; z-index:2; }
     .particle{ position:absolute; width:2px; height:2px; background:var(--neon-pink); border-radius:50%; opacity:.6; animation: float 6s infinite linear; }
-    @keyframes float{
-      0%{ transform: translateY(100vh) translateX(0); opacity:0 }
-      10%,90%{ opacity:.6 }
-      100%{ transform: translateY(-10px) translateX(100px); opacity:0 }
-    }
-
+    @keyframes float{ 0%{ transform: translateY(100vh) translateX(0); opacity:0 } 10%,90%{ opacity:.6 } 100%{ transform: translateY(-10px) translateX(100px); opacity:0 } }
     .container{ width: 92%; max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
 
-    header{
-      text-align:center; padding:22px 0; border-bottom:3px solid var(--neon-pink);
-      background: rgba(0,0,0,0.55); box-shadow: 0 0 18px var(--neon-pink);
-      position: relative; overflow: hidden;
-    }
-    .logo{
-      font-family: 'VT323', monospace;
-      font-size: clamp(36px, 5vw, 64px);
-      letter-spacing: 1px;
-      margin: 0;
-      -webkit-font-smoothing: antialiased;
-      text-shadow: 0 0 5px #fff, 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
-      animation: shine 2s infinite alternate;
-    }
-    @keyframes shine{
-      0%{ text-shadow: 0 0 4px #fff, 0 0 10px var(--neon-pink) }
-      100%{ text-shadow: 0 0 8px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-green) }
-    }
+    header{ text-align:center; padding:22px 0; border-bottom:3px solid var(--neon-pink); background: rgba(0,0,0,0.55); box-shadow: 0 0 18px var(--neon-pink); position: relative; overflow: hidden; }
+    .logo{ font-family: 'VT323', monospace; font-size: clamp(36px, 5vw, 64px); letter-spacing: 1px; margin: 0; -webkit-font-smoothing: antialiased;
+      text-shadow: 0 0 5px #fff, 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink); animation: shine 2s infinite alternate; }
+    @keyframes shine{ 0%{ text-shadow: 0 0 4px #fff, 0 0 10px var(--neon-pink) } 100%{ text-shadow: 0 0 8px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-green) } }
 
-    /* TICKER / FAIXA ANIMADA */
-    .ticker{
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: var(--hot-pink);
-      color: #fff;
-      font-weight: 800;
-      font-size: 18px;
-      padding: 8px 0;
-      overflow: hidden;
-      z-index: 2000;
-      box-shadow: 0 0 10px var(--neon-pink);
-      text-align:center;
-    }
-    .ticker span{
-      display: inline-block;
-      white-space: nowrap;
-      padding-right: 100%;
-      animation: tickerMove 12s linear infinite;
-    }
-    @keyframes tickerMove {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
+    .ticker{ position: fixed; top: 0; left: 0; width: 100%; background: var(--hot-pink); color: #fff; font-weight: 800; font-size: 18px; padding: 8px 0; overflow: hidden; z-index: 2000; box-shadow: 0 0 10px var(--neon-pink); text-align:center; }
+    .ticker span{ display: inline-block; white-space: nowrap; padding-right: 100%; animation: tickerMove 12s linear infinite; }
+    @keyframes tickerMove { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-    /* Nav */
     nav{ margin: 18px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; z-index:11; position:relative; }
-    .nav-button{
-      background: linear-gradient(180deg, #3a3a3a, #1e1e1e);
-      color: #fff; border: 2px solid #cfcfcf; border-radius: 10px;
-      padding: 10px 18px; font-weight:700; cursor:pointer; text-decoration:none;
-      display:inline-flex; align-items:center; gap:10px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,.4); transition: .2s;
-      position:relative; overflow:hidden;
-    }
-    .nav-button .arrow{
-      font-family:'VT323', monospace; font-size:20px; line-height:1;
-      background: linear-gradient(90deg, #fff, #ff9de3, #7aff3a);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      filter: drop-shadow(0 0 6px rgba(255,110,199,.8));
-    }
+    .nav-button{ background: linear-gradient(180deg, #3a3a3a, #1e1e1e); color: #fff; border: 2px solid #cfcfcf; border-radius: 10px; padding: 10px 18px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:10px; box-shadow: 2px 2px 6px rgba(0,0,0,.4); transition: .2s; position:relative; overflow:hidden; }
+    .nav-button .arrow{ font-family:'VT323', monospace; font-size:20px; line-height:1; background: linear-gradient(90deg, #fff, #ff9de3, #7aff3a); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 6px rgba(255,110,199,.8)); }
     .nav-button:hover{ transform: translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,.35); }
     .nav-button:active{ transform: translateY(0); }
 
-    .main-banner{
-      background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:16px; padding:22px; margin:28px 0; text-align:center;
-      box-shadow: 0 0 22px var(--neon-green); position:relative; overflow:hidden;
-    }
+    .main-banner{ background: rgba(0,0,0,.5); border:3px solid var(--neon-green); border-radius:16px; padding:22px; margin:28px 0; text-align:center; box-shadow: 0 0 22px var(--neon-green); position:relative; overflow:hidden; }
     .main-banner h2{ margin: 0 0 8px 0 }
-    .action-button{
-      background: linear-gradient(180deg, var(--neon-pink), var(--hot-pink));
-      color:#fff; border:none; border-radius:12px; padding:12px 22px; font-size:18px; font-weight:800; cursor:pointer; margin-top:10px;
-      box-shadow:0 0 14px var(--neon-pink); transition:.25s; display:inline-flex; align-items:center; gap:10px; text-decoration:none;
-    }
+    .action-button{ background: linear-gradient(180deg, var(--neon-pink), var(--hot-pink)); color:#fff; border:none; border-radius:12px; padding:12px 22px; font-size:18px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 0 14px var(--neon-pink); transition:.25s; display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
     .action-button:hover{ transform: translateY(-4px); box-shadow: 0 10px 24px rgba(255,20,147,.45); }
 
-    /* Countdown */
     .countdown{ background: rgba(0,0,0,.7); border:2px solid var(--hot-pink); border-radius:12px; padding:16px; margin:26px 0; text-align:center; box-shadow:0 0 16px var(--hot-pink); }
     .countdown-title{ font-family:'VT323', monospace; font-size:26px; color:var(--hot-pink); margin:0 0 10px 0 }
     .countdown-timer{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
@@ -140,99 +66,56 @@
     .countdown-number{ font-size:28px; font-weight:800; color:var(--neon-pink) }
     .countdown-label{ font-size:12px; color:#cfcfcf; letter-spacing:.04em }
 
-    /* Events */
     .events-section{ margin: 38px 0 }
-    .section-title{
-      font-family:'VT323', monospace; font-size:34px; text-align:center; color:var(--neon-green);
-      display:block; margin: 0 auto 10px auto;
-    }
+    .section-title{ font-family:'VT323', monospace; font-size:34px; text-align:center; color:var(--neon-green); display:block; margin: 0 auto 10px auto; }
     .capacity-note{ text-align:center; color:#e9e9e9; opacity:.9; margin: 0 0 20px 0 }
     .events-list{ display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:18px; }
-    .event-card{
-      background: rgba(0,0,0,.66); border:2px solid var(--neon-green); border-radius:12px; padding:18px; box-shadow:0 0 12px rgba(0,0,0,.5);
-      transition:.35s;
-    }
+    .event-card{ background: rgba(0,0,0,.66); border:2px solid var(--neon-green); border-radius:12px; padding:18px; box-shadow:0 0 12px rgba(0,0,0,.5); transition:.35s; }
     .event-card:hover{ transform: translateY(-6px); border-color: var(--neon-pink); box-shadow:0 16px 30px rgba(0,0,0,.45); }
     .event-title{ font-size:22px; color:var(--neon-green); margin:0 0 6px 0 }
     .event-date, .event-price{ margin: 6px 0; color:#e8e8e8 }
-    .event-button{
-      margin-top:10px; width:100%;
-      background: linear-gradient(180deg, var(--neon-green), #8aff00);
-      color:#222; border:none; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer; box-shadow:0 0 8px var(--neon-green);
-      transition:.25s;
-    }
+    .event-button{ margin-top:10px; width:100%; background: linear-gradient(180deg, var(--neon-green), #8aff00); color:#222; border:none; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer; box-shadow:0 0 8px var(--neon-green); transition:.25s; }
     .event-button:hover{ transform: translateY(-2px) }
     .event-button:disabled{ background:#555; color:#999; cursor:not-allowed; box-shadow:none }
 
-    /* About (cartaz + sinopse) */
     .about-section{ margin: 44px 0 }
-    .about-content{
-      display:grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items:center;
-      background: rgba(0,0,0,.45); border:2px solid #ffffff22; border-radius:16px; padding:20px;
-    }
+    .about-content{ display:grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items:center; background: rgba(0,0,0,.45); border:2px solid #ffffff22; border-radius:16px; padding:20px; }
     .about-text{ text-align:left }
-    .highlight-box{
-      margin-top:12px; padding:16px;
-      background: #ffffffee; color:#222; border-radius:12px;
-      border: 3px dashed var(--hot-pink);
-      box-shadow: 0 0 18px #ff69b4aa;
-      font-size: 15.5px;
-    }
+    .highlight-box{ margin-top:12px; padding:16px; background: #ffffffee; color:#222; border-radius:12px; border: 3px dashed var(--hot-pink); box-shadow: 0 0 18px #ff69b4aa; font-size: 15.5px; }
     .about-image-container{ text-align:center }
-    .about-image-container img{
-      max-width: 380px; width:100%;
-      border:4px solid var(--neon-pink); border-radius:14px; box-shadow:0 0 16px var(--neon-pink);
-    }
+    .about-image-container img{ max-width: 380px; width:100%; border:4px solid var(--neon-pink); border-radius:14px; box-shadow:0 0 16px var(--neon-pink); }
 
-    /* Location */
     .location-section{ margin: 30px 0; text-align:center }
     .location-address{ font-weight:600 }
 
-    /* Cast */
     .cast-section{ margin: 44px 0 }
     .cast-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:18px; }
     .cast-card{ background: rgba(0,0,0,.66); border:2px solid var(--neon-pink); border-radius:12px; padding:18px; text-align:center; transition:.3s }
     .cast-card:hover{ transform: translateY(-6px); border-color:var(--neon-green) }
     .cast-photo{ width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid var(--neon-pink); box-shadow:0 0 12px rgba(255,110,199,.6) }
 
-    /* Scrap */
     .scrap-section{ background: rgba(0,0,0,.5); border:3px solid var(--hot-pink); border-radius:16px; padding:20px; margin:36px 0; text-align:center; box-shadow:0 0 20px var(--hot-pink) }
     .scrap-input{ width:100%; max-width:420px; padding:10px; border:2px solid var(--neon-pink); border-radius:8px; background: rgba(0,0,0,.7); color:#fff; font-size:16px; }
     .retro-loader{ display:none; color:var(--neon-pink); margin-top:10px }
     .retro-loader.active{ display:block }
     .scrap-result{ background: rgba(0,0,0,.8); border:1px solid #ccc; border-radius:8px; padding:14px; margin-top:12px; white-space:pre-wrap; text-align:left }
 
-    /* Modal */
     .modal-overlay{ position:fixed; inset:0; background: rgba(0,0,0,.8); display:none; justify-content:center; align-items:center; z-index:1000; backdrop-filter: blur(5px) }
-    .modal-content{
-      background: var(--bg-grad); color:#fff; width:92%; max-width:560px; max-height:90vh; overflow-y:auto;
-      border:3px solid var(--neon-pink); border-radius:16px; padding:20px; position:relative; box-shadow:0 0 28px var(--neon-pink);
-      animation: modalAppear .25s ease-out;
-    }
+    .modal-content{ background: var(--bg-grad); color:#fff; width:92%; max-width:560px; max-height:90vh; overflow-y:auto; border:3px solid var(--neon-pink); border-radius:16px; padding:20px; position:relative; box-shadow:0 0 28px var(--neon-pink); animation: modalAppear .25s ease-out; }
     @keyframes modalAppear{ from{transform:scale(.92); opacity:0} to{transform:scale(1); opacity:1} }
     .modal-close{ position:absolute; top:10px; right:12px; background:none; border:none; color:#fff; font-size:26px; cursor:pointer }
     .modal-title{ font-family:'VT323', monospace; font-size:30px; color:var(--neon-pink); margin:6px 0 16px 0; text-align:center }
     .form-group{ margin-bottom:14px }
     .form-group label{ display:block; font-weight:700; margin-bottom:6px }
-    .form-group input, .form-group select{
-      width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:10px; background: rgba(0,0,0,.65); color:#fff; font-size:16px;
-    }
+    .form-group input, .form-group select{ width:100%; padding:12px; border:2px solid var(--neon-green); border-radius:10px; background: rgba(0,0,0,.65); color:#fff; font-size:16px; }
     .form-row{ display:flex; gap:14px }
     .form-row .form-group{ flex:1 }
-
-    .continue-button{
-      background: linear-gradient(180deg, var(--neon-green), #8aff00);
-      color:#222; border:none; border-radius:12px; padding:14px 18px; font-weight:800; cursor:pointer; width:100%;
-      box-shadow:0 0 12px var(--neon-green); transition:.22s;
-    }
+    .continue-button{ background: linear-gradient(180deg, var(--neon-green), #8aff00); color:#222; border:none; border-radius:12px; padding:14px 18px; font-weight:800; cursor:pointer; width:100%; box-shadow:0 0 12px var(--neon-green); transition:.22s; }
     .continue-button:hover{ transform: translateY(-3px) }
-
     .payment-section{ display:none; margin-top:16px; padding-top:16px; border-top:2px solid var(--neon-pink) }
-
     #final-status-screen{ display:none; text-align:center; padding:12px }
     #final-status-screen img{ max-width:280px; border:4px solid var(--neon-pink); border-radius:12px; margin:10px auto 12px; display:block }
     .retro-code{ font-family:'VT323', monospace; font-size:22px; color:var(--neon-green); background:#111; padding:10px 14px; border-radius:8px; display:inline-block; letter-spacing:1px }
-
     footer{ text-align:center; padding:24px 0; background: rgba(0,0,0,.5); margin-top:32px; border-top:3px solid #ffffff33 }
 
     @media (max-width: 900px){
@@ -243,16 +126,11 @@
   </style>
 </head>
 <body>
-  <!-- Ticker / Faixa fixa -->
   <div class="ticker" id="global-ticker"><span>🚨 Garanta seu ingresso! Não mosca senão acaba! 🚨</span></div>
-
-  <!-- Partículas -->
   <div id="particles-container"></div>
 
   <div class="container">
-    <header>
-      <h1 class="logo">Próxima Parada: Anos 2000</h1>
-    </header>
+    <header><h1 class="logo">Próxima Parada: Anos 2000</h1></header>
 
     <nav>
       <a href="#eventos" class="nav-button"><span class="arrow">➤</span> Ingressos</a>
@@ -280,7 +158,7 @@
     <section id="eventos" class="events-section">
       <h2 class="section-title">Sessões Disponíveis</h2>
       <p class="capacity-note">Capacidade: 110 lugares por sessão</p>
-      <div class="events-list" id="events-list-container"><!-- render dinâmico --></div>
+      <div class="events-list" id="events-list-container"></div>
     </section>
 
     <section id="sobre" class="about-section">
@@ -305,7 +183,7 @@
 
     <section id="elenco" class="cast-section">
       <h2 class="section-title">Nosso Elenco</h2>
-      <div class="cast-grid" id="cast-grid-container"><!-- render dinâmico --></div>
+      <div class="cast-grid" id="cast-grid-container"></div>
     </section>
 
     <section id="scrap" class="scrap-section">
@@ -340,17 +218,11 @@
       <button id="modal-close-btn" class="modal-close">×</button>
       <h3 class="modal-title">Comprar Ingresso</h3>
 
-      <!-- Etapa Única: Dados + Quantidades + Responsável -->
+      <!-- Etapa 1 -->
       <div id="personal-data-form">
         <div class="form-group"><label for="full-name">Nome Completo *</label><input type="text" id="full-name" required></div>
         <div class="form-group"><label for="email">E-mail *</label><input type="email" id="email" required></div>
         <div class="form-group"><label for="phone">Telefone</label><input type="tel" id="phone"></div>
-
-        <div class="form-group">
-          <label for="responsavel-pix">Nome do responsável pelo Pgto *</label>
-          <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal" required>
-        </div>
-
         <div class="form-group">
           <label>Tipo de Ingresso</label>
           <div class="form-row">
@@ -358,19 +230,29 @@
             <div class="form-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
           </div>
         </div>
-
         <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0">
           <strong>Total:</strong>
           <div class="retro-code" id="total-amount">R$ 50,00</div>
         </div>
-
-        <button id="continue-to-payment" class="continue-button">Gerar ingressos e pagar</button>
-        <p style="font-size:12px; opacity:.85; margin-top:8px;">
-          Limite: 8 ingressos por compra • Os <b>códigos são gerados agora</b> e o pagamento abre em nova aba.
-        </p>
+        <button id="continue-to-payment" class="continue-button">Continuar para pagamento</button>
+        <p style="font-size:12px; opacity:.85; margin-top:8px;">Limite: 8 ingressos por compra • VOCÊ SERÁ REDIRECIONADO PARA UMA NOVA ABA. <b>DEPOIS DE PAGAR, VOLTE AO SITE PARA RECEBER SEU INGRESSO</b></p>
       </div>
 
-      <!-- Etapa Final (mostra ingressos ao cliente) -->
+      <!-- Etapa 2 -->
+      <div id="post-payment-section" class="payment-section" style="display:none;">
+        <h4 style="color: var(--neon-pink); margin:0 0 12px 0;">Pagamento aberto em uma nova aba</h4>
+        <p>Conclua o pagamento no <b>Mercado Pago</b>. Já efetuou o pagamento? <b>Informe abaixo o nome do responsável pelo Pix</b> e clique em “Gerar meu ingresso”.</p>
+
+        <div class="form-group">
+          <label for="responsavel-pix">Nome do responsável pelo Pgto *</label>
+          <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
+        </div>
+
+        <button id="send-ticket-btn" class="continue-button">Já paguei, gerar meu ingresso</button>
+        <div id="sending-loader" class="retro-loader">Enviando dados...</div>
+      </div>
+
+      <!-- Etapa Final -->
       <div id="final-status-screen"></div>
     </div>
   </div>
@@ -378,16 +260,16 @@
   <!-- UI Sound -->
   <audio id="ui-click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
 
-  <!-- (Removido EmailJS – agora envio é via Function Netlify) -->
-
   <script>
     /***********************
-     CONFIGURAÇÕES PRINCIPAIS
+     CONFIG PRINCIPAL
     ***********************/
-    // URL da Netlify Function que envia e-mails via MailerSend
-    const FN_URL = '/.netlify/functions/send-tickets';
+    const OWNER_EMAIL        = "auriemcompany@gmail.com";
+    const APPS_SCRIPT_URL    = "COLE_AQUI_A_URL_DO_APPS_SCRIPT_/exec"; // <<<<<< ATUALIZE
+    const MS_TPL_ADMIN       = "zr6ke4njzx3gon12"; // template admin (você)
+    const MS_TPL_CLIENT      = "v69oxl5oz2rg785k"; // template cliente
 
-    // Links Mercado Pago (valores pré-definidos)
+    // Links Mercado Pago (não dependemos mais de redirect)
     const linksPagamento = {
       25:  "https://mpago.li/1SDJxrj",
       50:  "https://mpago.li/21ks87P",
@@ -399,7 +281,6 @@
       200: "https://mpago.li/15tvMBA"
     };
 
-    // SESSÕES
     const sessoes = [
       { id: 'sessao-251003-2030', data: '2025-10-03T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
       { id: 'sessao-251004-1730', data: '2025-10-04T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
@@ -407,7 +288,6 @@
       { id: 'sessao-251005-1730', data: '2025-10-05T17:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
       { id: 'sessao-251005-2030', data: '2025-10-05T20:30:00', precoInteira: 50.00, precoMeia: 25.00, esgotado: false },
     ];
-
     const elenco = [
       { nome: 'Antônia Montemezzo', personagem: 'Juliana', foto: 'https://i.postimg.cc/x8HYSWpL/Ant-nia-Montemezzo.jpg' },
       { nome: 'Evelyn Muller', personagem: 'Luana', foto: 'https://i.postimg.cc/9XqcT7Xz/Evelyn-Muller.jpg' },
@@ -418,49 +298,41 @@
       { nome: 'Pedro Ferraz', personagem: 'Marcelo', foto: 'https://i.postimg.cc/66V1DWYY/Pedro-Ferraz.jpg' },
     ];
 
-    /***********************
-     INICIALIZAÇÃO
-    ***********************/
-    // DOM elements
+    // DOM
     const uiClick = document.getElementById('ui-click');
     const modal = document.getElementById('purchase-modal');
     const closeBtn = document.getElementById('modal-close-btn');
     const continueBtn = document.getElementById('continue-to-payment');
     const personalDataForm = document.getElementById('personal-data-form');
+    const postPaymentSection = document.getElementById('post-payment-section');
+    const sendTicketBtn = document.getElementById('send-ticket-btn');
+    const sendingLoader = document.getElementById('sending-loader');
     const finalStatusScreen = document.getElementById('final-status-screen');
     const qtyInteira = document.getElementById('qty-inteira');
     const qtyMeia = document.getElementById('qty-meia');
     const totalAmountDiv = document.getElementById('total-amount');
 
     let selectedSession = null;
+    let generatedCode = null;
 
     function playClick(){ try{ uiClick.currentTime = 0; uiClick.play(); }catch(e){} }
-
     function createParticles(){
       const container = document.getElementById('particles-container');
-      const count = 50;
-      for(let i=0;i<count;i++){
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random()*100 + '%';
-        p.style.animationDelay = Math.random()*6 + 's';
-        p.style.animationDuration = (Math.random()*3 + 3) + 's';
-        container.appendChild(p);
+      for(let i=0;i<50;i++){
+        const p=document.createElement('div'); p.className='particle';
+        p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*6+'s';
+        p.style.animationDuration=(Math.random()*3+3)+'s'; container.appendChild(p);
       }
     }
-
     function renderContent(){
-      // Sessões
       const eventsContainer = document.getElementById('events-list-container');
-      eventsContainer.innerHTML = '';
-      sessoes.forEach(sessao=>{
+      eventsContainer.innerHTML=''; sessoes.forEach(sessao=>{
         const d = new Date(sessao.data);
-        const dia = d.toLocaleDateString('pt-BR', { weekday:'long' });
-        const dataF = d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
-        const horaF = d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
-
+        const dia = d.toLocaleDateString('pt-BR',{weekday:'long'});
+        const dataF = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+        const horaF = d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
         const card = document.createElement('div');
-        card.className = 'event-card';
+        card.className='event-card';
         card.innerHTML = `
           <h3 class="event-title">${dia.charAt(0).toUpperCase()+dia.slice(1)}, ${dataF}</h3>
           <p class="event-date">${horaF}h</p>
@@ -471,261 +343,206 @@
         eventsContainer.appendChild(card);
       });
 
-      // Elenco
       const castContainer = document.getElementById('cast-grid-container');
-      castContainer.innerHTML = '';
-      elenco.forEach(m=>{
-        const card = document.createElement('div');
-        card.className = 'cast-card';
-        card.innerHTML = `
-          <img src="${m.foto}" class="cast-photo" alt="${m.nome}">
-          <h3 style="margin:10px 0 4px 0">${m.nome}</h3>
-          <p style="opacity:.9">${m.personagem}</p>
-        `;
+      castContainer.innerHTML=''; elenco.forEach(m=>{
+        const card=document.createElement('div'); card.className='cast-card';
+        card.innerHTML=`<img src="${m.foto}" class="cast-photo" alt="${m.nome}">
+                        <h3 style="margin:10px 0 4px 0">${m.nome}</h3>
+                        <p style="opacity:.9">${m.personagem}</p>`;
         castContainer.appendChild(card);
       });
-      // GIF extra
-      const gif = document.createElement('div');
-      gif.className = 'cast-card';
-      gif.innerHTML = `<img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô" style="width:120px; height:120px; border-radius:10px; border:3px solid var(--neon-pink);">`;
+      const gif=document.createElement('div'); gif.className='cast-card';
+      gif.innerHTML=`<img src="https://i.postimg.cc/g2pMsfv1/original-720d9864401760525b4ddf084f3dc161.gif" alt="TV Retrô" style="width:120px;height:120px;border-radius:10px;border:3px solid var(--neon-pink);">`;
       castContainer.appendChild(gif);
     }
-
     function updateCountdown(){
-      const next = sessoes.find(s => new Date(s.data) > new Date());
-      if(!next) return;
-      const target = new Date(next.data);
-      const now = new Date();
-      const diff = target - now;
-      if(diff <= 0) return;
-      const d = Math.floor(diff / (1000*60*60*24));
-      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-      const s = Math.floor((diff % (1000*60)) / 1000);
-      document.getElementById('days').textContent = String(d).padStart(2,'0');
-      document.getElementById('hours').textContent = String(h).padStart(2,'0');
-      document.getElementById('minutes').textContent = String(m).padStart(2,'0');
-      document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+      const next=sessoes.find(s=>new Date(s.data)>new Date()); if(!next) return;
+      const target=new Date(next.data), now=new Date(); const diff=target-now; if(diff<=0) return;
+      const d=Math.floor(diff/(1000*60*60*24));
+      const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      const m=Math.floor((diff%(1000*60*60))/(1000*60));
+      const s=Math.floor((diff%(1000*60))/1000);
+      document.getElementById('days').textContent=String(d).padStart(2,'0');
+      document.getElementById('hours').textContent=String(h).padStart(2,'0');
+      document.getElementById('minutes').textContent=String(m).padStart(2,'0');
+      document.getElementById('seconds').textContent=String(s).padStart(2,'0');
     }
-
     function openModal(sessionId){
-      selectedSession = sessoes.find(s=>s.id===sessionId);
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      personalDataForm.style.display = 'block';
-      finalStatusScreen.style.display = 'none';
-      updateTotalAmount();
+      selectedSession=sessoes.find(s=>s.id===sessionId);
+      modal.style.display='flex'; document.body.style.overflow='hidden';
+      personalDataForm.style.display='block'; postPaymentSection.style.display='none';
+      finalStatusScreen.style.display='none'; generatedCode=null; updateTotalAmount();
     }
-    function closeModal(){
-      modal.style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-
+    function closeModal(){ modal.style.display='none'; document.body.style.overflow='auto'; }
     function updateTotalAmount(){
       if(!selectedSession) return;
-      const qI = parseInt(qtyInteira.value||'0');
-      const qM = parseInt(qtyMeia.value||'0');
-      const total = (qI * selectedSession.precoInteira) + (qM * selectedSession.precoMeia);
-      totalAmountDiv.textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+      const qI=parseInt(qtyInteira.value||'0'); const qM=parseInt(qtyMeia.value||'0');
+      const total=(qI*selectedSession.precoInteira)+(qM*selectedSession.precoMeia);
+      totalAmountDiv.textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
     }
-
     function validateForm(){
-      let ok = true;
-      const name = document.getElementById('full-name');
-      const email = document.getElementById('email');
-      const resp = document.getElementById('responsavel-pix');
+      let ok=true;
+      const name=document.getElementById('full-name'); const email=document.getElementById('email');
       if(!name.value.trim()){ name.style.borderColor='red'; ok=false } else name.style.borderColor='';
       if(!email.value.trim()){ email.style.borderColor='red'; ok=false } else email.style.borderColor='';
-      if(!resp.value.trim()){ resp.style.borderColor='red'; ok=false } else resp.style.borderColor='';
-      const totalTickets = (parseInt(qtyInteira.value||'0') + parseInt(qtyMeia.value||'0'));
+      const totalTickets=(parseInt(qtyInteira.value||'0')+parseInt(qtyMeia.value||'0'));
       if(totalTickets===0){ alert('Você precisa selecionar pelo menos um ingresso.'); ok=false; }
       if(totalTickets>8){ alert('A compra é limitada a 8 ingressos por vez.'); ok=false; }
       if(!ok) alert('Por favor, preencha os campos obrigatórios e verifique as quantidades.');
       return ok;
     }
-
     function calcularTotalNumero(){
-      const parsed = parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
+      const parsed=parseFloat(totalAmountDiv.textContent.replace('R$','').replace('.','').replace(',','.').trim());
       return Math.round(parsed);
     }
-
     function detalhesCompraString(){
-      const qI = parseInt(qtyInteira.value||'0');
-      const qM = parseInt(qtyMeia.value||'0');
-      const tot = totalAmountDiv.textContent;
-      const dataObj = new Date(selectedSession.data);
-      const dataF = dataObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-      const horaF = dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      const qI=parseInt(qtyInteira.value||'0');
+      const qM=parseInt(qtyMeia.value||'0');
+      const tot=totalAmountDiv.textContent;
+      const dataObj=new Date(selectedSession.data);
+      const dataF=dataObj.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+      const horaF=dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
       return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${dataF} ${horaF}h`;
     }
-
-    // Gera 1 código por ingresso (diferenciando I/M)
-    function gerarCodigoUnicoComTipo(sessaoId, tipo){
-      const sess = sessoes.find(s=>s.id===sessaoId);
-      const d = new Date(sess.data);
-      const dia = String(d.getDate()).padStart(2,'0');
-      const mes = String(d.getMonth()+1).padStart(2,'0');
-      const hora = String(d.getHours()).padStart(2,'0');
-      const min  = String(d.getMinutes()).padStart(2,'0');
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // evita 0/1 confusos
-      let rand = ""; for(let i=0;i<5;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
-      return `PRX2000-${dia}${mes}-${hora}${min}-${tipo}-${rand}`;
+    function gerarCodigoUnico(sessaoId){
+      const sess=sessoes.find(s=>s.id===sessaoId);
+      const d=new Date(sess.data);
+      const dia=String(d.getDate()).padStart(2,'0');
+      const mes=String(d.getMonth()+1).padStart(2,'0');
+      const hora=String(d.getHours()).padStart(2,'0');
+      const min=String(d.getMinutes()).padStart(2,'0');
+      const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let rand=""; for(let i=0;i<5;i++) rand+=chars.charAt(Math.floor(Math.random()*chars.length));
+      return `PRX2000-${dia}${mes}-${hora}${min}-${rand}`;
     }
-    function gerarCodigosIngressos(sessaoId, qI, qM){
-      const arr=[];
-      for(let i=0;i<qI;i++) arr.push(gerarCodigoUnicoComTipo(sessaoId,'I'));
-      for(let i=0;i<qM;i++) arr.push(gerarCodigoUnicoComTipo(sessaoId,'M'));
-      return arr;
-    }
-    function formatSessionLabel(sessao){
-      const d = new Date(sessao.data);
-      const data = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-      const hora = d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      return `${data} às ${hora}`;
-    }
-
     function openPaymentLinkForTotal(total){
-      const link = linksPagamento[total];
-      if(!link){ alert('Valor não disponível. Ajuste as quantidades para um total válido.'); return false; }
-      const win = window.open(link, '_blank');
-      if(!win){
-        alert('Se o pop-up foi bloqueado, clique em "Pagar agora" novamente ou habilite pop-ups.');
-      }
+      const baseLink=linksPagamento[total];
+      if(!baseLink){ alert('Valor não disponível. Ajuste as quantidades (25 a 200).'); return false; }
+      window.open(baseLink, '_blank');
       return true;
     }
 
-    /***********************
-     EVENT LISTENERS & FLUXO
-    ***********************/
+    // eventos
     closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
     qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
     qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
 
-    // NOVO FLUXO: gera códigos, mostra na tela, abre MP e envia e-mails via função
-    continueBtn.addEventListener('click', async ()=>{
+    continueBtn.addEventListener('click', ()=>{
       playClick();
       if(!validateForm()) return;
-
-      const nameEl  = document.getElementById('full-name');
-      const emailEl = document.getElementById('email');
-      const phoneEl = document.getElementById('phone');
-      const respEl  = document.getElementById('responsavel-pix');
-
-      const nome = nameEl.value.trim();
-      const email = emailEl.value.trim();
-      const telefone = (phoneEl.value||'').trim();
-      const responsavelPix = respEl.value.trim();
-
-      const total = calcularTotalNumero();
-      if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
-      if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
+      const total=calcularTotalNumero();
+      if(total===0){ alert('Selecione ao menos 1 ingresso.'); return; }
+      if(total>200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
       if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
 
-      const qI = parseInt(qtyInteira.value||'0');
-      const qM = parseInt(qtyMeia.value||'0');
-      const codigos = gerarCodigosIngressos(selectedSession.id, qI, qM);
-
-      // Guarda localmente (resiliência)
+      // Guarda contexto (opcional)
       localStorage.setItem("compraAtual", JSON.stringify({
-        nome, email, telefone,
-        responsavelPix,
+        nome: document.getElementById('full-name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefone: document.getElementById('phone').value.trim(),
         ingressos: detalhesCompraString(),
-        total, sessao: selectedSession.id,
-        codigos
+        total: total,
+        sessao: selectedSession?.id
       }));
 
-      // HTML de códigos
-      const codesHtml = codigos.map(c => `<div class="retro-code" style="display:block;margin:6px auto">${c}</div>`).join('');
-      finalStatusScreen.innerHTML = `
-        <h2>🎟️ Ingressos gerados — <span style="color:var(--neon-pink)">PENDENTE</span></h2>
-        <p>Enviamos os códigos para <b>${email}</b> (e também para nossa equipe).<br>
-        Se o e-mail demorar, <b>tudo que você precisa está aqui</b>:</p>
-        <div style="margin:12px 0">${codesHtml}</div>
-
-        <button id="btn-pagar" class="continue-button" style="margin-top:10px">Pagar agora pelo Mercado Pago</button>
-        <p style="font-size:12px;opacity:.85;margin-top:8px;">Após o pagamento, nossa equipe confere e valida seu(s) código(s). Você receberá confirmação por e-mail/WhatsApp.</p>
-
-        <div style="margin-top:10px">
-          <a class="action-button" target="_blank"
-             href="https://wa.me/5541985031409?text=Oi!%20Comprei%20para%20${encodeURIComponent(formatSessionLabel(selectedSession))}%20e%20meus%20c%C3%B3digos%20s%C3%A3o%20${encodeURIComponent(codigos.join(', '))}">
-             Preciso de ajuda no WhatsApp
-          </a>
-        </div>
-      `;
-      finalStatusScreen.style.display='block';
+      openPaymentLinkForTotal(total); // abre o MP numa nova aba
       personalDataForm.style.display='none';
+      postPaymentSection.style.display='block';
+    });
 
-      // Botão "Pagar agora" (reabre o link se necessário)
-      document.getElementById('btn-pagar')?.addEventListener('click', ()=> openPaymentLinkForTotal(total));
+    // 🔔 Envia e-mails via Apps Script + mostra ingresso na tela
+    sendTicketBtn.addEventListener('click', async ()=>{
+      playClick();
+      const respPix = document.getElementById('responsavel-pix').value.trim();
+      if(!respPix){ alert('Informe o nome do responsável pelo Pix.'); return; }
 
-      // Abre o MP imediatamente em nova aba
-      openPaymentLinkForTotal(total);
+      // Dados
+      const name  = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = (document.getElementById('phone').value || '—').trim();
+      const det   = detalhesCompraString();
+      const totalStr = totalAmountDiv.textContent.replace('R$','').trim();
+      generatedCode = gerarCodigoUnico(selectedSession.id);
 
-      // Monta payload p/ Netlify Function (MailerSend)
+      // Monta payload para o relay
       const payload = {
-        cliente: {
-          nome,
-          email,
-          telefone,
-          sessao_label: formatSessionLabel(selectedSession),
-          valor: total
-        },
-        admin: {
-          from_name: nome,
+        adminTemplateId:  MS_TPL_ADMIN,
+        clientTemplateId: MS_TPL_CLIENT,
+        ownerEmail: OWNER_EMAIL,
+        clientEmail: email,
+        clientName: name,
+        dataAdmin: {
+          from_name: name,
           from_email: email,
-          phone: telefone || '—',
-          responsavel_pix: responsavelPix || '—',
+          phone: phone,
+          responsavel_pix: respPix,
           sessao: selectedSession.id,
-          ingresso: detalhesCompraString()
+          ingresso: det,
+          code: generatedCode,
+          total_value: totalStr
         },
-        codigos
+        dataClient: {
+          nome_cliente: name,
+          email_cliente: email,
+          telefone_cliente: phone,
+          codigo_ingresso: generatedCode,
+          sessao_escolhida: det.replace('— Total', '<br>— Total'), // melhora leitura no template
+          valor_ingresso: totalStr
+        }
       };
 
-      // Envia e-mails (não bloqueante)
+      // Mostra loader + dispara relay
+      sendingLoader.classList.add('active');
+
+      // Envia como "simple request" (sem headers customizados) p/ evitar preflight CORS
+      let ok = false;
       try{
-        const res = await fetch(FN_URL, {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify(payload)
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: new URLSearchParams({ payload: JSON.stringify(payload) })
         });
-        if(!res.ok){
-          console.warn('Falha no envio de e-mails', await res.text());
-        }
-      }catch(err){
-        console.warn('Erro ao enviar e-mails', err);
+        // tenta ler resposta (Apps Script devolve JSON)
+        const text = await res.text();
+        try {
+          const out = JSON.parse(text || '{}');
+          ok = !!out.ok;
+        } catch { ok = res.ok; }
+      } catch (e) {
+        ok = false;
+      } finally {
+        sendingLoader.classList.remove('active');
       }
+
+      // Mostra ingresso na tela SEM depender do e-mail
+      finalStatusScreen.innerHTML = `
+        <h2>${ok ? '✅' : '⚠️'} Compra registrada!</h2>
+        <p>Este é o seu ingresso digital. <b>Tire um print desta tela</b> e guarde o código abaixo.</p>
+        <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
+        <p>Seu código único:</p>
+        <div class="retro-code">${generatedCode}</div>
+        <p style="font-size:12px; opacity:.9; margin-top:10px;">
+          ${ok ? 'Também enviamos uma cópia por e-mail.' : 'Não conseguimos enviar o e-mail agora.'}
+          ${ok ? '' : ' Mas seu código acima é válido. Se precisar, chame no WhatsApp.'}
+        </p>
+      `;
+      finalStatusScreen.style.display='block';
+      postPaymentSection.style.display='none';
     });
 
-    // Delegação de cliques gerais (botões, âncoras)
+    // Delegação de cliques
     document.body.addEventListener('click', (e)=>{
-      const target = e.target.closest('a,button');
-      if(!target) return;
-
+      const target=e.target.closest('a,button'); if(!target) return;
       if(target.matches('.action-button, .nav-button, .event-button, .continue-button')) playClick();
-
-      // abrir modal quando clicar nos botões de sessão
-      if(target.matches('.event-button') && target.dataset.sessionId){
-        e.preventDefault();
-        openModal(target.dataset.sessionId);
-      }
-
-      // âncoras suaves (exceto #eventos que tratamos via botão principal)
-      if(target.matches('a[href^="#"]')){
-        const href = target.getAttribute('href');
-        if(href === '#eventos'){ document.getElementById('eventos')?.scrollIntoView({behavior:'smooth'}); e.preventDefault(); }
-        else { e.preventDefault(); document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'}); }
-      }
+      if(target.matches('.event-button') && target.dataset.sessionId){ e.preventDefault(); openModal(target.dataset.sessionId); }
+      if(target.matches('a[href^="#"]')){ const href=target.getAttribute('href'); e.preventDefault(); document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'}); }
     });
 
-    // Scrap: variações + som tipo MSN
+    // Scrap
     const scrapBtn = document.getElementById('scrap-button');
     const scrapInput = document.getElementById('scrap-input');
     const scrapLoading = document.getElementById('scrap-loading');
     const scrapResult = document.getElementById('scrap-result');
-
-    // Som estilo MSN (se o navegador permitir)
     const msnSound = new Audio("https://www.myinstants.com/media/sounds/msn_nudge.mp3");
-
     const scrapsVariacoes = [
       txt => `★ ${txt.toUpperCase()} 4EVER ★\nSe você lembra, sua infância/adolescência foi épica.\nAss: Quem decorava o nick no MSN com ✨•°* ~*~ *°•✨`,
       txt => `(${txt}) era tudo!\nSó quem viveu sabe. 🤩\n#Saudades2000`,
@@ -733,35 +550,26 @@
       txt => `${txt} >>> qualquer coisa de hoje.\nAssinado: Nostalgia pura 🕹️`,
       txt => `Lembra do ${txt}? Se sim, você desbloqueou uma memória rara 🔓✨`
     ];
-
     if(scrapBtn){
       scrapBtn.addEventListener('click', ()=>{
-        const txt = (scrapInput.value||'').trim();
-        if(!txt){ scrapResult.textContent = 'Escreva algo tipo “MSN”, “Orkut” ou “lan house”...'; return; }
+        const txt=(scrapInput.value||'').trim();
+        if(!txt){ scrapResult.textContent='Escreva algo tipo “MSN”, “Orkut” ou “lan house”...'; return; }
         scrapLoading.classList.add('active');
         setTimeout(()=>{
           scrapLoading.classList.remove('active');
-          const variation = scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
-          scrapResult.textContent = variation(txt);
-          try{ msnSound.currentTime = 0; msnSound.play(); }catch(e){}
-        }, 700);
+          const variation=scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
+          scrapResult.textContent=variation(txt);
+          try{ msnSound.currentTime=0; msnSound.play(); }catch(e){}
+        },700);
       });
     }
 
-    // INITIALIZE
+    // INIT
     function initialize(){
-      createParticles();
-      renderContent();
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-
-      // fechar modal ao clicar fora (overlay)
-      document.getElementById('purchase-modal').addEventListener('click', (e)=>{
-        if(e.target === document.getElementById('purchase-modal')) closeModal();
-      });
+      createParticles(); renderContent(); updateCountdown(); setInterval(updateCountdown, 1000);
+      document.getElementById('purchase-modal').addEventListener('click', (e)=>{ if(e.target===document.getElementById('purchase-modal')) closeModal(); });
     }
     initialize();
   </script>
 </body>
 </html>
-```
