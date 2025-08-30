@@ -575,6 +575,15 @@
       const horaF = dataObj.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
       return `${qI} inteira(s), ${qM} meia(s) — Total ${tot} — Sessão ${dataF} ${horaF}h`;
     }
+    function sessaoLabel(sessaoId){
+  const s = sessoes.find(x => x.id === sessaoId);
+  if(!s) return sessaoId;
+  const d = new Date(s.data);
+  const dataF = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const horaF = d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  return `${dataF} ${horaF}h`;
+}
+
 
     function gerarCodigoUnico(sessaoId){
       const sess = sessoes.find(s=>s.id===sessaoId);
@@ -589,17 +598,19 @@
     }
 
     // Abre o link do Mercado Pago adicionando redirect_uri (BACK_URL)
-    function openPaymentLinkForTotal(total){
-      const baseLink = linksPagamento[total];
-      if(!baseLink){ alert('Valor não disponível. Ajuste as quantidades para um total válido (25 a 200).'); return false; }
+function openPaymentLinkForTotal(total){
+  const baseLink = linksPagamento[total];
+  if(!baseLink){
+    alert('Valor não disponível. Ajuste as quantidades para um total válido (25 a 200).');
+    return false;
+  }
+  const sep = baseLink.includes('?') ? '&' : '?';
+  const paramName = baseLink.includes('mpago.li') ? 'back_url' : 'redirect_uri';
+  const finalLink = `${baseLink}${sep}${paramName}=${encodeURIComponent(BACK_URL)}`;
+  window.open(finalLink, '_blank');
+  return true;
+}
 
-      // se o link já tem "?" usa &, senão usa ?
-      const sep = baseLink.includes('?') ? '&' : '?';
-      const finalLink = baseLink + sep + 'redirect_uri=' + encodeURIComponent(BACK_URL);
-
-      window.open(finalLink, '_blank');
-      return true;
-    }
 
     /***********************
      EVENT LISTENERS & FLUXO
@@ -611,33 +622,39 @@
 continueBtn.addEventListener('click', ()=>{
   playClick();
   if(!validateForm()) return;
+
   const total = calcularTotalNumero();
   if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
   if(total > 200){ alert('Limite máximo de R$ 200,00 por compra.'); return; }
   if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
 
-  // 🔹 Salvar dados da compra no localStorage
-  localStorage.setItem("compraAtual", JSON.stringify({
-    nome: document.getElementById('full-name').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    telefone: document.getElementById('phone').value.trim(),
-    ingressos: detalhesCompraString(),
-    total: total,
-    sessao: selectedSession?.id
-  }));
+  const nome = document.getElementById('full-name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const telefone = document.getElementById('phone').value.trim();
+  const qI = parseInt(qtyInteira.value||'0',10);
+  const qM = parseInt(qtyMeia.value||'0',10);
 
-  // 🔹 Montar link do Mercado Pago com redirecionamento
-  const linkBase = linksPagamento[total];
-  const backUrl = encodeURIComponent("https://seudominio.com/confirmacao.html"); // 👉 troque pelo seu domínio real
-  const linkComRedirect = `${linkBase}?back_url=${backUrl}`;
+  const compra = {
+    nome,
+    email,
+    telefone,
+    sessao: selectedSession?.id || '',
+    sessao_label: selectedSession ? sessaoLabel(selectedSession.id) : '',
+    qty_inteira: qI,
+    qty_meia: qM,
+    total_num: total,
+    total_str: document.getElementById('total-amount').textContent,
+    ingressos_texto: detalhesCompraString(),
+    aguardando_retorno: true
+  };
+  localStorage.setItem('compraAtual', JSON.stringify(compra));
 
-  // Abrir link do Mercado Pago
-  window.open(linkComRedirect, '_blank');
+  const ok = openPaymentLinkForTotal(total);
+  if(!ok) return;
 
   personalDataForm.style.display='none';
   postPaymentSection.style.display='block';
 });
-
 
     sendTicketBtn.addEventListener('click', async ()=>{
       playClick();
@@ -765,6 +782,7 @@ continueBtn.addEventListener('click', ()=>{
   </script>
 </body>
 </html>
+
 
 
 
