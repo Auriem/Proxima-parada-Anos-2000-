@@ -680,26 +680,80 @@
         total_value: totalAmountDiv.textContent.replace('R$','').trim()
       };
 
-      try{
-        // 1) e-mail para ADM
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
-          ...payloadBase,
-          to_email: OWNER_EMAIL
-        });
+     sendTicketBtn.addEventListener('click', async ()=>{
+  playClick();
+  const respPix = document.getElementById('responsavel-pix').value.trim();
+  if(!respPix){ alert('Informe o nome do responsável pelo Pix.'); return; }
 
-        // 2) e-mail para CLIENTE (se não houver template, usamos o do admin mesmo)
-        const templateCliente = EMAILJS_TEMPLATE_CLIENT || EMAILJS_TEMPLATE_ADMIN;
-        await emailjs.send(EMAILJS_SERVICE_ID, templateCliente, {
-          ...payloadBase,
-          to_email: email
-        });
+  sendingLoader.classList.add('active');
 
-      }catch(err){
-        console.warn('Falha EmailJS:', err);
-        alert('Não consegui enviar o e-mail agora, mas seu ingresso foi gerado nesta tela. Tire um print e fale com a produção se precisar.');
-      }finally{
-        sendingLoader.classList.remove('active');
-      }
+  // Gera o código único
+  generatedCode = gerarCodigoUnico(selectedSession.id);
+
+  // Dados do cliente e compra
+  const nome = document.getElementById('full-name').value.trim();
+  const emailCliente = document.getElementById('email').value.trim();
+  const telefone = document.getElementById('phone').value || '—';
+  const totalNumero = calcularTotalNumero();
+  const linkPagamento = linksPagamento[totalNumero] || '';
+  const d = new Date(selectedSession.data);
+  const sessaoStr = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' +
+                    d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + 'h';
+
+  try{
+    // 1) Envia para o ADMIN (você)
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
+      to_email: OWNER_EMAIL,
+      from_name: nome,
+      from_email: emailCliente,
+      phone: telefone,
+      responsavel_pix: respPix,
+      sessao: selectedSession.id,
+      ingresso: detalhesCompraString(),
+      code: generatedCode,
+      total_value: totalAmountDiv.textContent.replace('R$','').trim()
+    });
+
+    // 2) Envia para o CLIENTE
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, {
+      to_email: emailCliente,                 // ⚠️ no template do cliente o "To email" deve ser {{to_email}}
+      reply_to: OWNER_EMAIL,                  // respostas vêm pra você
+      nome_cliente: nome,
+      codigo_ingresso: generatedCode,
+      sessao_escolhida: sessaoStr,
+      ingresso: detalhesCompraString(),
+      valor_ingresso: totalAmountDiv.textContent.replace('R$','').trim(),
+      link_pagamento: linkPagamento,          // se ainda não pagou, pode pagar por aqui
+      suporte_email: OWNER_EMAIL,
+      suporte_whatsapp: "5541985031409"
+    });
+
+    // Sucesso na UI
+    finalStatusScreen.innerHTML = `
+      <h2>✅ Ingresso gerado e enviado por e-mail!</h2>
+      <p>Confirme na sua caixa de entrada (<b>${emailCliente}</b>) e guarde o código abaixo:</p>
+      <div class="retro-code">${generatedCode}</div>
+      <p style="font-size:12px;opacity:.9;">Não achou? Veja o Spam/Lixo eletrônico.</p>
+    `;
+    finalStatusScreen.style.display='block';
+    postPaymentSection.style.display='none';
+
+  }catch(err){
+    console.error('Erro no envio via EmailJS:', err);
+    finalStatusScreen.innerHTML = `
+      <h2>⚠️ Seu ingresso foi gerado, mas houve um erro ao enviar e-mail.</h2>
+      <p><b>Tire um print deste código e guarde:</b></p>
+      <div class="retro-code">${generatedCode}</div>
+      <p style="font-size:12px;opacity:.9;">Se precisar, fale com a produção: <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a></p>
+      <p style="font-size:11px;opacity:.7;margin-top:8px;">Detalhe técnico: ${JSON.stringify(err)}</p>
+    `;
+    finalStatusScreen.style.display='block';
+    postPaymentSection.style.display='none';
+  }finally{
+    sendingLoader.classList.remove('active');
+  }
+});
+
 
       // Mostra ingresso + mantém botão de pagamento disponível
       finalStatusScreen.innerHTML = `
@@ -833,4 +887,5 @@ ${detalhesCompraString()}`;
   </script>
 </body>
 </html>
+
 
