@@ -1,126 +1,183 @@
 // netlify/functions/send-tickets.js
+// Envia e-mails via MailerSend (admin + cliente) usando templates.
+// Espera POST com body:
+// {
+//   cliente: { nome, email, telefone, sessao_label, valor },
+//   admin:   { from_name, from_email, phone, responsavel_pix, sessao, ingresso },
+//   codigos: ["PRX2000-...","PRX2000-..."]
+// }
 
-export async function handler(event) {
-  // Permite preflight se algum dia você chamar de outro domínio
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-      body: ''
-    };
+const API_URL = 'https://api.mailersend.com/v1/email';
+
+function currencyBRL(v) {
+  if (typeof v === 'number') {
+    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  // se vier "50" como string
+  const num = Number(v);
+  if (!isNaN(num)) return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return String(v);
+}
+
+function buildCodesHtml(codes = []) {
+  if (!codes || !codes.length) return '<p>—</p>';
+  const items = codes.map(c => `<li style="font-family:monospace">${c}</li>`).join('');
+  return `<ul style="margin:8px 0 0 18px; padding:0">${items}</ul>`;
+}
+
+async function sendMailerSend({
+  apiKey,
+  fromEmail,
+  fromName,
+  toEmail,
+  toName,
+  subject,
+  templateId,
+  variablesObj,   // objeto { chave: valor } para {{chave}} no template
+  replyToEmail,   // opcional
+}) {
+  const headers = {
+    'Authorization': `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+  };
+
+  // MailerSend usa "personalization" para passar variáveis por destinatário
+  const body = {
+    from: { email: fromEmail, name: fromName },
+    to: [{ email: toEmail, name: toName || '' }],
+    subject,
+    template_id: templateId,
+    personalization: [
+      { email: toEmail, data: variablesObj }
+    ],
+  };
+
+  if (replyToEmail) {
+    body.reply_to = { email: replyToEmail };
   }
 
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`MailerSend error ${res.status}: ${text || res.statusText}`);
   }
 
+  return res.status; // 202 esperado
+}
+
+exports.handler = async (event) => {
   try {
-    const API_KEY = process.env.MAILERSEND_API_KEY;
-    if (!API_KEY) {
-      return { statusCode: 500, body: 'MAILERSEND_API_KEY ausente nas variáveis de ambiente.' };
+    if (event.httpMethod !== 'POST') {
+      return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const OWNER_EMAIL      = process.env.OWNER_EMAIL || 'auriemcompany@gmail.com';
-    const TEMPLATE_CLIENTE = 'v69oxl5oz2rg785k';  // seu template do cliente
-    const TEMPLATE_ADMIN   = 'zr6ke4njzx3gon12';  // seu template do admin
+    const {
+      cliente,
+      admin,
+      codigos
+    } = JSON.parse(event.body || '{}');
 
-    const payloadIn = JSON.parse(event.body || '{}');
-    const { cliente, admin, codigos } = payloadIn;
-
-    if (!cliente || !admin || !Array.isArray(codigos) || !cliente.email) {
+    if (!cliente || !admin || !Array.isArray(codigos)) {
       return {
         statusCode: 400,
-        body: 'Payload inválido. Esperado { cliente:{nome,email,telefone,sessao_label,valor}, admin:{from_name,from_email,phone,responsavel_pix,sessao,ingresso}, codigos:[...] }'
+        body: JSON.stringify({ error: 'Payload inválido. Esperado { cliente, admin, codigos[] }.' })
       };
     }
 
-    // ------- Formatação de códigos (um por linha) -------
-    // Para texto simples:
-    const codesText = codigos.join(', ');
+    const MAILERSEND_API_KEY = process.env.MAILERSEND_API_KEY;
+    const FROM_EMAIL = process.env.FROM_EMAIL || 'no-reply@proximaparadaanos2000.online';
+    const FROM_NAME  = process.env.FROM_NAME  || 'Próxima Parada: Anos 2000';
+    const OWNER_EMAIL = process.env.OWNER_EMAIL || 'auriemcompany@gmail.com';
 
-    // Para HTML (um código por linha)
-    const codesHtml = codigos.map(c => `• ${c}`).join('<br>');
+    const TEMPLATE_CLIENTE_ID = process.env.MAILERSEND_TEMPLATE_CLIENT || 'v69oxl5oz2rg785k';
+    const TEMPLATE_ADMIN_ID   = process.env.MAILERSEND_TEMPLATE_ADMIN  || 'zr6ke4njzx3gon12';
 
-    // ------- EMAIL PARA O CLIENTE (template visual) -------
-    // Seu template usa: {{nome_cliente}}, {{codigo_ingresso}}, {{email_cliente}}, {{telefone_cliente}},
-    // {{sessao_escolhida}}, {{valor_ingresso}}
-    const mailCliente = {
-      from: { email: "ingressos@proximaparadaanos2000.online", name: "Próxima Parada: Anos 2000" },
-      to:   [{ email: cliente.email, name: cliente.nome }],
-      template_id: TEMPLATE_CLIENTE,
-      personalization: [{
-        email: cliente.email,
-        data: {
-          nome_cliente:      cliente.nome,
-          email_cliente:     cliente.email,
-          telefone_cliente:  cliente.telefone || '—',
-          sessao_escolhida:  cliente.sessao_label || '—',
-          valor_ingresso:    (cliente.valor || '—').toString().replace('R$','').trim(),
-          // Você pode usar este campo no template: ex.: <div>{{codigo_ingresso}}</div>
-          // (o template é HTML, então as <br> serão renderizadas)
-          codigo_ingresso:   codesHtml
-        }
-      }]
+    if (!MAILERSEND_API_KEY) {
+      return { statusCode: 500, body: JSON.stringify({ error: 'MAILERSEND_API_KEY não configurada.' }) };
+    }
+
+    // Normalizações e auxiliares
+    const codes = Array.isArray(codigos) ? codigos : [];
+    const codesFirst = codes[0] || '—';
+    const codesJoined = codes.join(', ');
+    const codesHtml = buildCodesHtml(codes);
+    const valorBRL = currencyBRL(cliente.valor);
+
+    // ===== E-MAIL DO ADMIN =====
+    // Seu template adm antigo usava variáveis: {{from_name}}, {{from_email}}, {{phone}},
+    // {{responsavel_pix}}, {{sessao}}, {{ingresso}}, {{code}}
+    // Para suportar múltiplos códigos, também enviamos {{codes}} e {{codes_html}} (se quiser, adicione ao template).
+    const adminVars = {
+      from_name:       admin.from_name,
+      from_email:      admin.from_email,
+      phone:           admin.phone || '—',
+      responsavel_pix: admin.responsavel_pix || '—',
+      sessao:          admin.sessao,
+      ingresso:        admin.ingresso,
+      code:            codesFirst,     // compat c/ template antigo (1 código)
+      codes:           codesJoined,    // novo
+      codes_html:      codesHtml       // novo (se usar no template)
     };
 
-    // ------- EMAIL PARA O ADMIN (tabela) -------
-    // Seu template usa: {{from_name}}, {{from_email}}, {{phone}}, {{responsavel_pix}},
-    // {{sessao}}, {{ingresso}}, {{code}}
-    const mailAdmin = {
-      from: { email: "ingressos@proximaparadaanos2000.online", name: "Próxima Parada: Anos 2000" },
-      to:   [{ email: OWNER_EMAIL, name: "Admin Ingressos" }],
-      template_id: TEMPLATE_ADMIN,
-      personalization: [{
-        email: OWNER_EMAIL,
-        data: {
-          from_name:       admin.from_name,
-          from_email:      admin.from_email,
-          phone:           admin.phone || '—',
-          responsavel_pix: admin.responsavel_pix || '—',
-          sessao:          admin.sessao || '—',
-          ingresso:        admin.ingresso || '—',
-          // Aqui também mandamos linhas separadas:
-          code:            codesHtml
-        }
-      }]
+    // ===== E-MAIL DO CLIENTE =====
+    // Seu template cliente antigo usava: {{nome_cliente}}, {{email_cliente}}, {{telefone_cliente}},
+    // {{sessao_escolhida}}, {{valor_ingresso}}, {{codigo_ingresso}}
+    // Para múltiplos códigos enviamos também: {{codigos}} e {{codigos_html}} (opcional no template).
+    const clienteVars = {
+      nome_cliente:     cliente.nome,
+      email_cliente:    cliente.email,
+      telefone_cliente: cliente.telefone || '—',
+      sessao_escolhida: cliente.sessao_label,
+      valor_ingresso:   valorBRL,
+      codigo_ingresso:  codesJoined, // compat c/ template antigo (vai exibir todos numa linha)
+      codigos:          codesJoined, // novo
+      codigos_html:     codesHtml    // novo
     };
 
-    // ------- Envio paralelo -------
-    const url = 'https://api.mailersend.com/v1/email';
-    const send = (body) => fetch(url, {
-      method:'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    const [resCliente, resAdmin] = await Promise.all([ send(mailCliente), send(mailAdmin) ]);
-
-    if (!resCliente.ok) {
-      const t = await resCliente.text();
-      return { statusCode: 502, body: `Falha ao enviar para CLIENTE: ${t}` };
-    }
-    if (!resAdmin.ok) {
-      const t = await resAdmin.text();
-      return { statusCode: 502, body: `Falha ao enviar para ADMIN: ${t}` };
-    }
+    // Disparo em paralelo
+    const [admStatus, cliStatus] = await Promise.all([
+      sendMailerSend({
+        apiKey: MAILERSEND_API_KEY,
+        fromEmail: FROM_EMAIL,
+        fromName: FROM_NAME,
+        toEmail: OWNER_EMAIL,
+        toName: 'Admin - Auriem',
+        subject: '🎟️ Novo pedido de ingresso (pendente de pagamento)',
+        templateId: TEMPLATE_ADMIN_ID,
+        variablesObj: adminVars,
+        replyToEmail: admin.from_email, // responder cai no e-mail do cliente
+      }),
+      sendMailerSend({
+        apiKey: MAILERSEND_API_KEY,
+        fromEmail: FROM_EMAIL,
+        fromName: FROM_NAME,
+        toEmail: cliente.email,
+        toName: cliente.nome,
+        subject: 'Seus ingressos chegaram! (aguardando pagamento)',
+        templateId: TEMPLATE_CLIENTE_ID,
+        variablesObj: clienteVars,
+      })
+    ]);
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({ ok: true, sent: { cliente: true, admin: true } })
+      body: JSON.stringify({
+        ok: true,
+        admin_status: admStatus,
+        cliente_status: cliStatus
+      })
     };
 
   } catch (err) {
-    return { statusCode: 500, body: `Erro interno: ${err?.message || String(err)}` };
+    console.error('send-tickets error:', err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: String(err && err.message ? err.message : err) })
+    };
   }
-}
+};
