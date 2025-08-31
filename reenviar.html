@@ -60,6 +60,7 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
+      margin-bottom: 10px;
     }
     .ingresso-ctrl button {
       width: 40px;
@@ -80,12 +81,24 @@
       emailjs.init("zWI9wjgMNAHJ0WV7f"); // SUA PUBLIC KEY
     })();
 
-    function atualizarIngressos(qtd) {
-      let campo = document.getElementById("ingresso");
+    function atualizarIngressos(tipo, qtd) {
+      let campo = document.getElementById(tipo);
       let valor = parseInt(campo.value) || 0;
       valor += qtd;
-      if (valor < 1) valor = 1;
+      if (valor < 0) valor = 0;
       campo.value = valor;
+      atualizarResumo();
+    }
+
+    function atualizarResumo() {
+      let inteiras = parseInt(document.getElementById("inteiras").value) || 0;
+      let meias = parseInt(document.getElementById("meias").value) || 0;
+
+      let resumo = [];
+      if (inteiras > 0) resumo.push(inteiras + " inteira" + (inteiras > 1 ? "s" : ""));
+      if (meias > 0) resumo.push(meias + " meia" + (meias > 1 ? "s" : ""));
+
+      document.getElementById("ingresso").value = resumo.join(", ");
     }
 
     function reenviarIngresso(e) {
@@ -122,7 +135,7 @@
   <p>Você já pagou seu ingresso, agora preencha os dados abaixo para recebê-lo em seu e-mail.</p>
 
   <form onsubmit="reenviarIngresso(event)">
-    <label>Nome do Responsável pelo Pagamento (Pix):</label>
+    <label>Nome do Responsável pelo Pagamento:</label>
     <input type="text" id="nome" required>
 
     <label>Seu E-mail:</label>
@@ -142,11 +155,23 @@
     </select>
 
     <label>Quantidade de Ingressos:</label>
+
     <div class="ingresso-ctrl">
-      <button type="button" onclick="atualizarIngressos(-1)">-</button>
-      <input type="text" id="ingresso" value="1" readonly>
-      <button type="button" onclick="atualizarIngressos(1)">+</button>
+      <span>Inteiras:</span>
+      <button type="button" onclick="atualizarIngressos('inteiras', -1)">-</button>
+      <input type="text" id="inteiras" value="0" readonly>
+      <button type="button" onclick="atualizarIngressos('inteiras', 1)">+</button>
     </div>
+
+    <div class="ingresso-ctrl">
+      <span>Meias:</span>
+      <button type="button" onclick="atualizarIngressos('meias', -1)">-</button>
+      <input type="text" id="meias" value="0" readonly>
+      <button type="button" onclick="atualizarIngressos('meias', 1)">+</button>
+    </div>
+
+    <!-- Campo oculto que junta os valores -->
+    <input type="hidden" id="ingresso" name="ingresso" value="">
 
     <label>Nomes dos Convidados:</label>
     <textarea id="convidados" placeholder="Separe os nomes por vírgula"></textarea>
