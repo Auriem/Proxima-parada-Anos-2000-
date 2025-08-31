@@ -19,7 +19,7 @@
       color: black;
       padding: 20px;
       border-radius: 10px;
-      max-width: 500px;
+      max-width: 550px;
       margin: 0 auto;
       box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
     }
@@ -36,7 +36,26 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
-    button {
+    .contador {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .contador button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(45deg, #ff00ff, #8000ff);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .contador span {
+      font-size: 16px;
+      margin: 0 10px;
+    }
+    button[type="submit"] {
       margin-top: 20px;
       padding: 12px 20px;
       border: none;
@@ -48,87 +67,78 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    button:hover {
+    button[type="submit"]:hover {
       opacity: 0.9;
     }
     .msg {
       margin-top: 20px;
       font-weight: bold;
     }
-    .ingresso-group {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-    .ingresso-group div {
-      flex: 1;
-      margin: 0 5px;
-      text-align: center;
-    }
-    .ingresso-group button {
-      padding: 5px 10px;
-      font-size: 14px;
-      margin: 0 5px;
-    }
   </style>
-  <!-- SDK atualizado -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     (function() {
-      emailjs.init("zWI9wjgMNAHJ0WV7f"); // SUA PUBLIC KEY
+      emailjs.init("zWI9wjgMNAHJ0WV7f"); // sua Public Key
     })();
 
-    let qtd_inteira = 0;
-    let qtd_meia = 0;
+    let qntMeia = 0;
+    let qntInteira = 0;
 
-    function mudarQtd(tipo, valor) {
-      if (tipo === 'inteira') {
-        qtd_inteira = Math.max(0, qtd_inteira + valor);
-        document.getElementById("qtd_inteira").innerText = qtd_inteira;
+    function atualizarValor() {
+      const valor = (qntMeia * 25) + (qntInteira * 50);
+      document.getElementById("resumo").innerText = 
+        `${qntMeia} meia(s), ${qntInteira} inteira(s) — Total: R$ ${valor.toFixed(2)}`;
+      return valor;
+    }
+
+    function alterarQtd(tipo, delta) {
+      if (tipo === "meia") {
+        qntMeia = Math.max(0, qntMeia + delta);
       } else {
-        qtd_meia = Math.max(0, qtd_meia + valor);
-        document.getElementById("qtd_meia").innerText = qtd_meia;
+        qntInteira = Math.max(0, qntInteira + delta);
       }
-      document.getElementById("ingresso").value = `${qtd_inteira} inteiras, ${qtd_meia} meias`;
+      atualizarValor();
     }
 
     function reenviarIngresso(e) {
       e.preventDefault();
       document.getElementById("msg").innerText = "⏳ Enviando ingresso...";
 
-      // Código único
       const codigo = "ING-" + Math.random().toString(36).substring(2,10).toUpperCase();
+      const valorTotal = atualizarValor();
 
-      // Dados do formulário
       const data = {
         from_name: document.getElementById("nome").value,
         from_email: document.getElementById("email").value,
         phone: document.getElementById("telefone").value,
         sessao: document.getElementById("sessao").value,
-        ingresso: document.getElementById("ingresso").value,
+        ingresso: `${qntMeia} meia(s), ${qntInteira} inteira(s)`,
         convidados: document.getElementById("convidados").value,
-        code: codigo
+        code: codigo,
+        valor_total: valorTotal.toFixed(2)
       };
 
-      // Enviar email para o admin
-      emailjs.send("service_c9ak8yp", "template_admin", data);
+      // Email para ADMIN
+      emailjs.send("service_c9ak8yp", "template_admin", data)
+        .then(res => console.log("✅ Admin OK", res))
+        .catch(err => console.error("❌ Admin ERRO", err));
 
-      // Enviar email para o cliente
+      // Email para CLIENTE
       emailjs.send("service_c9ak8yp", "template_5lax0jv", data)
-      .then(function() {
-        document.getElementById("msg").innerText = "✅ Seu ingresso foi reenviado! Confira seu e-mail.";
-      }, function(err) {
-        document.getElementById("msg").innerText = "❌ Erro no envio: " + JSON.stringify(err);
-      });
+        .then(function() {
+          document.getElementById("msg").innerText = "✅ Ingresso reenviado! Confira seu e-mail.";
+        }, function(err) {
+          document.getElementById("msg").innerText = "❌ Erro no envio: " + JSON.stringify(err);
+        });
     }
   </script>
 </head>
 <body>
   <h1>🎟️ Reenvio de Ingresso</h1>
-  <p>Você já pagou seu ingresso, agora preencha os dados abaixo para recebê-lo em seu e-mail.</p>
+  <p>Você já pagou seu ingresso. Preencha os dados para receber no e-mail.</p>
 
   <form onsubmit="reenviarIngresso(event)">
-    <label>Nome do Responsável pelo Pagamento:</label>
+    <label>Nome do Responsável pelo Pagamento (Pix):</label>
     <input type="text" id="nome" required>
 
     <label>Seu E-mail:</label>
@@ -139,29 +149,29 @@
 
     <label>Sessão Escolhida:</label>
     <select id="sessao" required>
-      <option value="03/10 - 20:30">03 de outubro - 20:30</option>
-      <option value="04/10 - 17:30">04 de outubro - 17:30</option>
-      <option value="04/10 - 20:30">04 de outubro - 20:30</option>
-      <option value="05/10 - 17:30">05 de outubro - 17:30</option>
-      <option value="05/10 - 20:30">05 de outubro - 20:30</option>
+      <option value="03/10 - 20:30">Dia 03 de outubro — 20:30</option>
+      <option value="04/10 - 17:30">Dia 04 de outubro — 17:30</option>
+      <option value="04/10 - 20:30">Dia 04 de outubro — 20:30</option>
+      <option value="05/10 - 17:30">Dia 05 de outubro — 17:30</option>
+      <option value="05/10 - 20:30">Dia 05 de outubro — 20:30</option>
     </select>
 
     <label>Ingressos:</label>
-    <div class="ingresso-group">
-      <div>
-        <span>Inteira:</span><br>
-        <button type="button" onclick="mudarQtd('inteira', -1)">-</button>
-        <span id="qtd_inteira">0</span>
-        <button type="button" onclick="mudarQtd('inteira', 1)">+</button>
-      </div>
-      <div>
-        <span>Meia:</span><br>
-        <button type="button" onclick="mudarQtd('meia', -1)">-</button>
-        <span id="qtd_meia">0</span>
-        <button type="button" onclick="mudarQtd('meia', 1)">+</button>
-      </div>
+    <div class="contador">
+      <span>🎟️ Meia (R$25,00)</span>
+      <button type="button" onclick="alterarQtd('meia', -1)">-</button>
+      <span id="qtdMeia">0</span>
+      <button type="button" onclick="alterarQtd('meia', 1)">+</button>
     </div>
-    <input type="hidden" id="ingresso" name="ingresso" value="0 inteiras, 0 meias">
+
+    <div class="contador">
+      <span>🎟️ Inteira (R$50,00)</span>
+      <button type="button" onclick="alterarQtd('inteira', -1)">-</button>
+      <span id="qtdInteira">0</span>
+      <button type="button" onclick="alterarQtd('inteira', 1)">+</button>
+    </div>
+
+    <p id="resumo">0 meia(s), 0 inteira(s) — Total: R$ 0,00</p>
 
     <label>Nomes dos Convidados:</label>
     <textarea id="convidados" placeholder="Separe os nomes por vírgula"></textarea>
@@ -170,4 +180,4 @@
     <div class="msg" id="msg"></div>
   </form>
 </body>
-</html>
+      </html>
