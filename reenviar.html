@@ -55,12 +55,28 @@
       margin-top: 20px;
       font-weight: bold;
     }
-    .flex {
+    .counter {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+      padding: 5px 10px;
     }
-    .flex input {
-      flex: 1;
+    .counter button {
+      background: #8000ff;
+      border: none;
+      color: white;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .counter span {
+      font-size: 16px;
+      font-weight: bold;
     }
   </style>
 
@@ -71,29 +87,32 @@
       publicKey: "zWI9wjgMNAHJ0WV7f" // SUA PUBLIC KEY
     });
 
+    function updateCounter(type, action) {
+      const el = document.getElementById(type);
+      let value = parseInt(el.innerText);
+      if (action === 'add') value++;
+      if (action === 'remove' && value > 0) value--;
+      el.innerText = value;
+    }
+
     function reenviarIngresso(e) {
       e.preventDefault();
       document.getElementById("msg").innerText = "⏳ Enviando ingresso...";
 
-      // Código único
       const codigo = "ING-" + Math.random().toString(36).substring(2,10).toUpperCase();
 
-      // Dados do formulário
       const data = {
         from_name: document.getElementById("nome").value,
         from_email: document.getElementById("email").value,
         phone: document.getElementById("telefone").value,
         sessao: document.getElementById("sessao").value,
-        inteira: document.getElementById("ingresso_inteira").value,
-        meia: document.getElementById("ingresso_meia").value,
+        inteira: document.getElementById("ingresso_inteira").innerText,
+        meia: document.getElementById("ingresso_meia").innerText,
         convidados: document.getElementById("convidados").value,
         code: codigo
       };
 
-      // Enviar email para o admin
       emailjs.send("service_c9ak8yp", "template_admin", data);
-
-      // Enviar email para o cliente
       emailjs.send("service_c9ak8yp", "template_5lax0jv", data)
       .then(function() {
         document.getElementById("msg").innerText = "✅ Seu ingresso foi reenviado! Confira seu e-mail.";
@@ -126,10 +145,18 @@
       <option value="05/10 - 20h30">Dia 05 de outubro - 20:30</option>
     </select>
 
-    <label>Ingressos (quantidade):</label>
-    <div class="flex">
-      <input type="number" id="ingresso_inteira" min="0" placeholder="Inteira">
-      <input type="number" id="ingresso_meia" min="0" placeholder="Meia">
+    <label>Ingressos Inteira:</label>
+    <div class="counter">
+      <button type="button" onclick="updateCounter('ingresso_inteira','remove')">-</button>
+      <span id="ingresso_inteira">0</span>
+      <button type="button" onclick="updateCounter('ingresso_inteira','add')">+</button>
+    </div>
+
+    <label>Ingressos Meia:</label>
+    <div class="counter">
+      <button type="button" onclick="updateCounter('ingresso_meia','remove')">-</button>
+      <span id="ingresso_meia">0</span>
+      <button type="button" onclick="updateCounter('ingresso_meia','add')">+</button>
     </div>
 
     <label>Nomes dos Convidados:</label>
