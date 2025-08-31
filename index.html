@@ -246,6 +246,11 @@
       .about-image-container{ order:-1 }
       .ticker{ font-size:14px; }
     }
+
+    /* pequenos estilos para campos de convidados */
+    .convidado-row{ display:flex; gap:10px; margin-bottom:8px; align-items:center; }
+    .convidado-row input { flex:1; }
+    .convidado-note { font-size:13px; opacity:.9; margin-bottom:8px; color:#ffd6f0; }
   </style>
 </head>
 <body>
@@ -351,6 +356,7 @@
         <div class="form-group"><label for="full-name">Nome Completo *</label><input type="text" id="full-name" required></div>
         <div class="form-group"><label for="email">E-mail *</label><input type="email" id="email" required></div>
         <div class="form-group"><label for="phone">Telefone</label><input type="tel" id="phone"></div>
+
         <div class="form-group">
           <label>Tipo de Ingresso</label>
           <div class="form-row">
@@ -358,6 +364,7 @@
             <div class="form-group"><label for="qty-meia">Meia (R$ 25,00)</label><input type="number" id="qty-meia" min="0" value="0" max="8"></div>
           </div>
         </div>
+
         <div id="session-picked" style="font-size:14px;opacity:.85;margin:6px 0 0 0;"></div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px 0">
@@ -373,13 +380,18 @@
         <span class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</span>
         <p style="margin-bottom:10px;">Seu ingresso será gerado e enviado por e-mail. O pagamento pode ser feito em seguida.</p>
 
+        <!-- ADICIONADO: Área de convidados (preenchimento opcional / recomendado) -->
+        <div id="convidadosContainer" style="margin-bottom:12px;">
+          <!-- campos serão inseridos dinamicamente -->
+        </div>
+
         <div class="form-group">
           <label for="responsavel-pix">Nome do responsável pelo pagamento (opcional)</label>
           <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
         </div>
 
-        <div class="form-row">
-          <div class="form-group"><button id="send-ticket-btn" class="continue-button">🪄 Gerar e enviar meu ingresso</button></div>
+        <div class="form-row" style="align-items:flex-end;">
+          <div class="form-group" style="flex:1;"><button id="send-ticket-btn" class="continue-button">🪄 Gerar e enviar meu ingresso</button></div>
         </div>
 
         <div style="margin:12px 0; text-align:center; font-size:12px; opacity:.85;">Depois de gerar, você também pode pagar:</div>
@@ -410,8 +422,11 @@
 
     const EMAILJS_SERVICE_ID    = "service_c9ak8yp";
     const EMAILJS_PUBLIC_KEY    = "zWI9wjgMNAHJ0WV7f";
-    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // Template do admin (você)
-    const EMAILJS_TEMPLATE_CLIENT = "template_w1t8lt8";     // Template do cliente
+    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // seu template de admin
+    const EMAILJS_TEMPLATE_CLIENT = "template_w1t8lt8";    // template cliente (usar {{to_email}} no campo To)
+
+    // URL da página de confirmação (coloque sua página do GitHub/Netlify aqui)
+    const CONFIRMATION_PAGE_URL = "https://proximaparadaanos2000.netlify.app/confirmacao.html"; // <-- ajuste conforme necessário
 
     // Links Mercado Pago (valores pré-definidos)
     const linksPagamento = {
@@ -447,7 +462,7 @@
     /***********************
      INICIALIZAÇÃO
     ***********************/
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 
     // DOM elements
     const uiClick = document.getElementById('ui-click');
@@ -464,6 +479,7 @@
     const qtyMeia = document.getElementById('qty-meia');
     const totalAmountDiv = document.getElementById('total-amount');
     const sessionPickedDiv = document.getElementById('session-picked');
+    const convidadosContainer = document.getElementById('convidadosContainer');
 
     let selectedSession = null;
     let generatedCode = null;
@@ -556,6 +572,8 @@
       generatedCode = null;
       updateTotalAmount();
       renderSessionPicked();
+      // garantir campos de convidados atualizados caso usuário abra direto
+      renderGuestFieldsInPostPayment();
     }
     function closeModal(){
       modal.style.display = 'none';
@@ -635,6 +653,58 @@
     }
 
     /***********************
+     Convidados (render + coleta)
+    ***********************/
+    function renderGuestFieldsInPostPayment(){
+      // popula #convidadosContainer com campos para (totalTickets - 1)
+      convidadostmp = convidadosContainer;
+      convidadostmp.innerHTML = ''; // limpa
+
+      const totalTickets = (parseInt(qtyInteira.value||'0') + parseInt(qtyMeia.value||'0')) || 0;
+      if(totalTickets <= 1){
+        convidadostmp.innerHTML = `<div class="convidado-note">Você comprou <b>1</b> ingresso. Não é necessário preencher nomes de convidados.</div>`;
+        return;
+      }
+
+      const need = Math.max(0, totalTickets - 1);
+      convidadostmp.innerHTML = `<div class="convidado-note">Preencha os nomes dos ${need} convidados (opcional, mas recomendado). Se não souber, deixe em branco e poderá completar depois com a produção.</div>`;
+
+      for(let i=1;i<=need;i++){
+        const row = document.createElement('div');
+        row.className = 'convidado-row';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = `Nome do convidado ${i}`;
+        input.setAttribute('data-guest-index', i);
+        input.name = `convidado_${i}`;
+        row.appendChild(input);
+        convidadostmp.appendChild(row);
+      }
+    }
+
+    function collectGuestNames(){
+      const arr = [];
+      document.querySelectorAll('#convidadosContainer input[data-guest-index]').forEach(inp=>{
+        const v = (inp.value||'').trim();
+        if(v) arr.push(v);
+      });
+      return arr;
+    }
+
+    function savePurchaseToLocalStorage(obj){
+      try{
+        const key = `compra_${obj.code}`;
+        localStorage.setItem(key, JSON.stringify(obj));
+        // manter lista pendente
+        const pending = JSON.parse(localStorage.getItem('compra_pending') || '[]');
+        if(!pending.includes(key)) pending.push(key);
+        localStorage.setItem('compra_pending', JSON.stringify(pending));
+      }catch(e){
+        console.warn('Não foi possível salvar localmente:', e);
+      }
+    }
+
+    /***********************
      EVENTOS
     ***********************/
     closeBtn.addEventListener('click', ()=>{ playClick(); closeModal(); });
@@ -642,111 +712,149 @@
       if(e.target === document.getElementById('purchase-modal')) closeModal();
     });
 
-    qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
-    qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); });
+    // atualizar total quando muda quantidade e atualizar convidados também
+    qtyInteira.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); renderGuestFieldsInPostPayment(); });
+    qtyMeia.addEventListener('input', ()=>{ playClick(); updateTotalAmount(); renderGuestFieldsInPostPayment(); });
 
     continueBtn.addEventListener('click', ()=>{
       playClick();
       if(!validateForm()) return;
       personalDataForm.style.display='none';
       postPaymentSection.style.display='block';
+      finalStatusScreen.style.display='none';
+      // renderiza campos de convidados na etapa 2
+      renderGuestFieldsInPostPayment();
     });
 
     // Gera ingresso + envia e-mail (adm + cliente)
-    sendTicketBtn.addEventListener('click', async ()=>{
+    sendTicketBtn.addEventListener('click', async ()=> {
       playClick();
+
+      // proibir clicks repetidos
+      sendTicketBtn.disabled = true;
+      sendingLoader.classList.add('active');
 
       const nome = document.getElementById('full-name').value.trim();
       const emailCliente = document.getElementById('email').value.trim();
-      const telefone = document.getElementById('phone').value || '—';
-      const respPix = document.getElementById('responsavel-pix').value.trim();
+      const telefone = document.getElementById('phone').value.trim() || '—';
+      const respPix = document.getElementById('responsavel-pix').value.trim() || '—';
       const totalNumero = calcularTotalNumero();
       const linkPagamento = linksPagamento[totalNumero] || '';
 
       if(!nome || !emailCliente){
         alert('Preencha nome e e-mail.');
+        sendTicketBtn.disabled = false;
+        sendingLoader.classList.remove('active');
         return;
       }
 
-      sendingLoader.classList.add('active');
+      // gerar código
       generatedCode = gerarCodigoUnico(selectedSession.id);
+
+      // coletar convidados (se tiverem)
+      const convidados = collectGuestNames(); // array
+      const convidadosStr = convidados.length ? convidados.join(' • ') : '—';
 
       const d = new Date(selectedSession.data);
       const sessaoStr = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' +
                         d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + 'h';
 
-      try {
-        // 1) Envia para o ADMIN
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, {
-          to_email: OWNER_EMAIL,
-          from_name: nome,
-          from_email: emailCliente,
-          phone: telefone,
-          responsavel_pix: respPix || '—',
-          sessao: selectedSession.id,
-          ingresso: detalhesCompraString(),
+      // payload base para admin
+      const adminPayload = {
+        to_email: OWNER_EMAIL,
+        from_name: nome,
+        from_email: emailCliente,
+        phone: telefone,
+        responsavel_pix: respPix,
+        sessao: selectedSession.id,
+        sessao_legivel: sessaoLegivel(selectedSession.id),
+        ingresso: detalhesCompraString(),
+        code: generatedCode,
+        total_value: totalAmountDiv.textContent.replace('R$','').trim(),
+        nomes_convidados: convidadosStr,
+        purchase_action: 'gerado_pendente',
+        purchase_time: new Date().toISOString()
+      };
+
+      // payload para cliente
+      const clientPayload = {
+        to_email: emailCliente,                 // importante: no template cliente usar {{to_email}}
+        reply_to: OWNER_EMAIL,
+        nome_cliente: nome,
+        codigo_ingresso: generatedCode,
+        sessao_escolhida: sessaoStr,
+        ingresso: detalhesCompraString(),
+        valor_ingresso: totalAmountDiv.textContent.replace('R$','').trim(),
+        link_pagamento: linkPagamento,
+        suporte_email: OWNER_EMAIL,
+        suporte_whatsapp: "5541985031409",
+        nomes_convidados: convidadosStr,
+        link_confirmacao: CONFIRMATION_PAGE_URL + '?email=' + encodeURIComponent(emailCliente) // opcional: link para completar dados
+      };
+
+      try{
+        // envia para ADMIN
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, adminPayload);
+
+        // envia para CLIENTE (se template cliente existir)
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, clientPayload);
+
+        // salva no localStorage (para referência / controle)
+        savePurchaseToLocalStorage({
           code: generatedCode,
-          total_value: totalAmountDiv.textContent.replace('R$','').trim()
+          nome,
+          email: emailCliente,
+          telefone,
+          respPix,
+          sessao: selectedSession.id,
+          detalhes: detalhesCompraString(),
+          nomes_convidados: convidados,
+          total_value: totalAmountDiv.textContent.replace('R$','').trim(),
+          timestamp: new Date().toISOString(),
+          status: 'PENDENTE'
         });
 
-        // 2) Envia para o CLIENTE (com link de pagamento e contatos)
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, {
-          to_email: emailCliente,
-          reply_to: OWNER_EMAIL,
-          nome_cliente: nome,
-          codigo_ingresso: generatedCode,
-          sessao_escolhida: sessaoStr,
-          ingresso: detalhesCompraString(),
-          valor_ingresso: totalAmountDiv.textContent.replace('R$','').trim(),
-          link_pagamento: linkPagamento,
-          suporte_email: OWNER_EMAIL,
-          suporte_whatsapp: "5541985031409"
-        });
-
-        // Tela final (mantém opção de pagar)
+        // UI: mostrar ingresso e manter opção de pagar
         finalStatusScreen.innerHTML = `
           <h2>✅ Ingresso gerado e enviado por e-mail!</h2>
           <div class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</div>
           <p>Guarde este código:</p>
           <div class="retro-code">${generatedCode}</div>
-          <p style="font-size:12px;opacity:.9;">Já mandamos para: <b>${emailCliente}</b></p>
-
+          <p style="font-size:12px;opacity:.9;">Enviamos para: <b>${emailCliente}</b>. Se não achar, verifique Spam.</p>
           <div style="margin-top:14px;">
             <img src="https://i.postimg.cc/mky7jPYT/ingresso-digital.png" alt="Ingresso">
           </div>
-
-          <div style="text-align:left; margin:10px auto 0; max-width:440px; font-size:14px; background:rgba(0,0,0,.4); padding:10px 12px; border-radius:10px;">
+          <div style="margin-top:12px; text-align:left; max-width:460px; margin-left:auto; margin-right:auto; background:rgba(0,0,0,.35); padding:12px; border-radius:8px;">
             <b>Resumo</b><br>
             Nome: ${nome}<br>
             E-mail: ${emailCliente}<br>
             Sessão: ${sessaoLegivel(selectedSession.id)}<br>
             Itens: ${detalhesCompraString()}<br>
-            Resp. Pgto: ${respPix || '—'}
+            Convidados: ${convidadosStr}
           </div>
-
           <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
             <button id="pay-after-generated" class="continue-button" style="max-width:260px;">💳 Pagar pelo Mercado Pago</button>
             <button id="copy-summary" class="continue-button" style="max-width:260px;">📋 Copiar resumo</button>
           </div>
-
           <div style="margin-top:10px; font-size:12px; opacity:.9;">
-            Você receberá este código por e-mail. Após o pagamento, a equipe valida e confirma.
+            Você também recebeu esse e-mail. Após o pagamento, validamos e confirmamos.
           </div>
         `;
         finalStatusScreen.style.display='block';
 
-        // Pagar (pós-geração)
+        // reativa botão de pagamento no modal
+        // pay-after-generated usará o total atual (calcular na hora que clicar)
         const payAfter = document.getElementById('pay-after-generated');
         if(payAfter){
           payAfter.addEventListener('click', ()=>{
-            const total = calcularTotalNumero();
-            if(total === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
-            if(!linksPagamento[total]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
-            openPaymentLinkForTotal(total);
+            const totalNow = calcularTotalNumero();
+            if(totalNow === 0){ alert('Selecione ao menos 1 ingresso.'); return; }
+            if(!linksPagamento[totalNow]){ alert('Para este total não há link configurado. Ajuste as quantidades.'); return; }
+            openPaymentLinkForTotal(totalNow);
           });
         }
 
-        // Copiar resumo
+        // copiar resumo
         const copyBtn = document.getElementById('copy-summary');
         if(copyBtn){
           copyBtn.addEventListener('click', ()=>{
@@ -754,22 +862,24 @@
 Código: ${generatedCode}
 Nome: ${nome}
 Sessão: ${sessaoLegivel(selectedSession.id)}
-${detalhesCompraString()}`;
+${detalhesCompraString()}
+Convidados: ${convidadosStr}`;
             navigator.clipboard.writeText(resumo).then(()=>alert('Resumo copiado!'));
           });
         }
 
-      } catch(err) {
-        console.error('Erro EmailJS:', err);
+      }catch(err){
+        console.error('Erro no envio por EmailJS:', err);
         finalStatusScreen.innerHTML = `
-          <h2>⚠️ Seu ingresso foi gerado, mas não conseguimos enviar o e-mail.</h2>
-          <p>Tire um print deste código:</p>
+          <h2>⚠️ Ingresso gerado, mas houve erro ao enviar e-mail.</h2>
+          <p><b>Tire um print deste código e salve:</b></p>
           <div class="retro-code">${generatedCode}</div>
           <p style="font-size:12px;opacity:.9;">Se precisar, fale com a produção: <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a></p>
-          <p style="font-size:11px;opacity:.7;margin-top:8px;">Detalhe técnico: ${err?.text || err?.message || 'Falha no envio EmailJS.'}</p>
+          <p style="font-size:11px;opacity:.7;margin-top:8px;">Detalhe técnico: ${JSON.stringify(err)}</p>
         `;
         finalStatusScreen.style.display='block';
       } finally {
+        sendTicketBtn.disabled = false;
         sendingLoader.classList.remove('active');
       }
     });
