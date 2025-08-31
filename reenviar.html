@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Reenvio de Ingresso - Próxima Parada: Anos 2000</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a0033 0%, #4a0080 50%, #8000ff 100%);
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #ffccff;
+    }
+    form {
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: left;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(45deg, #ff00ff, #8000ff);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .msg {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("zWI9wjgMNAHJ0WV7f"); // SUA PUBLIC KEY
+    })();
+
+    function reenviarIngresso(e) {
+      e.preventDefault();
+      document.getElementById("msg").innerText = "⏳ Enviando ingresso...";
+
+      // Código único
+      const codigo = "ING-" + Math.random().toString(36).substring(2,10).toUpperCase();
+
+      // Dados do formulário
+      const data = {
+        from_name: document.getElementById("nome").value,
+        from_email: document.getElementById("email").value,
+        phone: document.getElementById("telefone").value,
+        sessao: document.getElementById("sessao").value,
+        ingresso: document.getElementById("ingresso").value,
+        convidados: document.getElementById("convidados").value,
+        code: codigo
+      };
+
+      // Enviar email para o admin
+      emailjs.send("service_c9ak8yp", "template_admin", data);
+
+      // Enviar email para o cliente
+      emailjs.send("service_c9ak8yp", "template_5lax0jv", data)
+      .then(function() {
+        document.getElementById("msg").innerText = "✅ Seu ingresso foi reenviado! Confira seu e-mail.";
+      }, function(err) {
+        document.getElementById("msg").innerText = "❌ Erro no envio: " + JSON.stringify(err);
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>🎟️ Reenvio de Ingresso</h1>
+  <p>Você já pagou seu ingresso, agora preencha os dados abaixo para recebê-lo em seu e-mail.</p>
+
+  <form onsubmit="reenviarIngresso(event)">
+    <label>Nome do Responsável pelo Pagamento (Pix):</label>
+    <input type="text" id="nome" required>
+
+    <label>Seu E-mail:</label>
+    <input type="email" id="email" required>
+
+    <label>Telefone:</label>
+    <input type="text" id="telefone">
+
+    <label>Sessão Escolhida:</label>
+    <select id="sessao" required>
+      <option value="Dia 01 - 20h">Dia 01 - 20h</option>
+      <option value="Dia 02 - 20h">Dia 02 - 20h</option>
+      <option value="Dia 03 - 18h">Dia 03 - 18h</option>
+    </select>
+
+    <label>Ingressos (quantidade e tipo):</label>
+    <input type="text" id="ingresso" placeholder="Ex: 2 inteiras, 1 meia" required>
+
+    <label>Nomes dos Convidados:</label>
+    <textarea id="convidados" placeholder="Separe os nomes por vírgula"></textarea>
+
+    <button type="submit">📩 Receber Ingresso</button>
+    <div class="msg" id="msg"></div>
+  </form>
+</body>
+</html>
