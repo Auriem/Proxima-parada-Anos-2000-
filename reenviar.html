@@ -55,6 +55,24 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .ingresso-ctrl {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .ingresso-ctrl button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 50%;
+    }
+    .ingresso-ctrl input {
+      width: 60px;
+      text-align: center;
+      font-size: 16px;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <script>
@@ -62,14 +80,20 @@
       emailjs.init("zWI9wjgMNAHJ0WV7f"); // SUA PUBLIC KEY
     })();
 
+    function atualizarIngressos(qtd) {
+      let campo = document.getElementById("ingresso");
+      let valor = parseInt(campo.value) || 0;
+      valor += qtd;
+      if (valor < 1) valor = 1;
+      campo.value = valor;
+    }
+
     function reenviarIngresso(e) {
       e.preventDefault();
       document.getElementById("msg").innerText = "⏳ Enviando ingresso...";
 
-      // Código único
       const codigo = "ING-" + Math.random().toString(36).substring(2,10).toUpperCase();
 
-      // Dados do formulário
       const data = {
         from_name: document.getElementById("nome").value,
         from_email: document.getElementById("email").value,
@@ -80,10 +104,10 @@
         code: codigo
       };
 
-      // Enviar email para o admin
+      // Admin
       emailjs.send("service_c9ak8yp", "template_admin", data);
 
-      // Enviar email para o cliente
+      // Cliente
       emailjs.send("service_c9ak8yp", "template_5lax0jv", data)
       .then(function() {
         document.getElementById("msg").innerText = "✅ Seu ingresso foi reenviado! Confira seu e-mail.";
@@ -109,13 +133,20 @@
 
     <label>Sessão Escolhida:</label>
     <select id="sessao" required>
-      <option value="Dia 01 - 20h">Dia 01 - 20h</option>
-      <option value="Dia 02 - 20h">Dia 02 - 20h</option>
-      <option value="Dia 03 - 18h">Dia 03 - 18h</option>
+      <option value="">Selecione</option>
+      <option value="03/10 às 20:30">Dia 03 de outubro — 20:30</option>
+      <option value="04/10 às 17:30">Dia 04 de outubro — 17:30</option>
+      <option value="04/10 às 20:30">Dia 04 de outubro — 20:30</option>
+      <option value="05/10 às 17:30">Dia 05 de outubro — 17:30</option>
+      <option value="05/10 às 20:30">Dia 05 de outubro — 20:30</option>
     </select>
 
-    <label>Ingressos (quantidade e tipo):</label>
-    <input type="text" id="ingresso" placeholder="Ex: 2 inteiras, 1 meia" required>
+    <label>Quantidade de Ingressos:</label>
+    <div class="ingresso-ctrl">
+      <button type="button" onclick="atualizarIngressos(-1)">-</button>
+      <input type="text" id="ingresso" value="1" readonly>
+      <button type="button" onclick="atualizarIngressos(1)">+</button>
+    </div>
 
     <label>Nomes dos Convidados:</label>
     <textarea id="convidados" placeholder="Separe os nomes por vírgula"></textarea>
