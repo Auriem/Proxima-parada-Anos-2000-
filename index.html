@@ -372,13 +372,13 @@
           <div class="retro-code" id="total-amount">R$ 50,00</div>
         </div>
         <button id="continue-to-payment" class="continue-button">Avançar</button>
-        <p style="font-size:12px; opacity:.85; margin-top:8px;">Limite: 8 ingressos por compra • Você pode pagar no Mercado Pago e o ingresso chega por e-mail agora (status <b>PENDENTE</b> até confirmarmos).</p>
+        <p style="font-size:12px; opacity:.85; margin-top:8px;">Limite: 8 ingressos por compra • Gere seu ingresso e EFETUE O PAGAMENTO LOGO EM SEGUIDA. Seu ingresso único aparecerá na tela e será enviado por email. (status <b>PENDENTE</b> até confirmarmos).</p>
       </div>
 
       <!-- Etapa 2: Geração do ingresso + pagamento -->
       <div id="post-payment-section" class="payment-section" style="display:none;">
         <span class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</span>
-        <p style="margin-bottom:10px;">Seu ingresso será gerado e enviado por e-mail. O pagamento pode ser feito em seguida.</p>
+        <p style="margin-bottom:10px;">Seu ingresso será gerado e enviado por e-mail. O pagamento deve ser feito em seguida.</p>
 
         <!-- ADICIONADO: Área de convidados (preenchimento opcional / recomendado) -->
         <div id="convidadosContainer" style="margin-bottom:12px;">
@@ -386,7 +386,7 @@
         </div>
 
         <div class="form-group">
-          <label for="responsavel-pix">Nome do responsável pelo pagamento (opcional)</label>
+          <label for="responsavel-pix">Nome do responsável pelo pagamento (obrigatório)</label>
           <input type="text" id="responsavel-pix" placeholder="Ex.: Fulano de Tal">
         </div>
 
@@ -958,3 +958,4 @@ Convidados: ${convidadosStr}`;
   </script>
 </body>
 </html>
+
