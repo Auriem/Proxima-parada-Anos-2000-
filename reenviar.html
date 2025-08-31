@@ -55,65 +55,65 @@
       margin-top: 20px;
       font-weight: bold;
     }
-    .counter {
+    .ingresso-group {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 5px;
+      margin-top: 10px;
+    }
+    .ingresso-group div {
+      flex: 1;
+      margin: 0 5px;
+      text-align: center;
+    }
+    .ingresso-group button {
       padding: 5px 10px;
-    }
-    .counter button {
-      background: #8000ff;
-      border: none;
-      color: white;
-      font-size: 18px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    .counter span {
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 14px;
+      margin: 0 5px;
     }
   </style>
-
-  <!-- SDK EmailJS atualizado -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- SDK atualizado -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    emailjs.init({
-  publicKey: "zWI9wjgMNAHJ0WV7f"
-});
-    });
+    (function() {
+      emailjs.init("zWI9wjgMNAHJ0WV7f"); // SUA PUBLIC KEY
+    })();
 
-    function updateCounter(type, action) {
-      const el = document.getElementById(type);
-      let value = parseInt(el.innerText);
-      if (action === 'add') value++;
-      if (action === 'remove' && value > 0) value--;
-      el.innerText = value;
+    let qtd_inteira = 0;
+    let qtd_meia = 0;
+
+    function mudarQtd(tipo, valor) {
+      if (tipo === 'inteira') {
+        qtd_inteira = Math.max(0, qtd_inteira + valor);
+        document.getElementById("qtd_inteira").innerText = qtd_inteira;
+      } else {
+        qtd_meia = Math.max(0, qtd_meia + valor);
+        document.getElementById("qtd_meia").innerText = qtd_meia;
+      }
+      document.getElementById("ingresso").value = `${qtd_inteira} inteiras, ${qtd_meia} meias`;
     }
 
     function reenviarIngresso(e) {
       e.preventDefault();
       document.getElementById("msg").innerText = "⏳ Enviando ingresso...";
 
+      // Código único
       const codigo = "ING-" + Math.random().toString(36).substring(2,10).toUpperCase();
 
+      // Dados do formulário
       const data = {
         from_name: document.getElementById("nome").value,
         from_email: document.getElementById("email").value,
         phone: document.getElementById("telefone").value,
         sessao: document.getElementById("sessao").value,
-        inteira: document.getElementById("ingresso_inteira").innerText,
-        meia: document.getElementById("ingresso_meia").innerText,
+        ingresso: document.getElementById("ingresso").value,
         convidados: document.getElementById("convidados").value,
         code: codigo
       };
 
+      // Enviar email para o admin
       emailjs.send("service_c9ak8yp", "template_admin", data);
+
+      // Enviar email para o cliente
       emailjs.send("service_c9ak8yp", "template_5lax0jv", data)
       .then(function() {
         document.getElementById("msg").innerText = "✅ Seu ingresso foi reenviado! Confira seu e-mail.";
@@ -139,26 +139,29 @@
 
     <label>Sessão Escolhida:</label>
     <select id="sessao" required>
-      <option value="03/10 - 20h30">Dia 03 de outubro - 20:30</option>
-      <option value="04/10 - 17h30">Dia 04 de outubro - 17:30</option>
-      <option value="04/10 - 20h30">Dia 04 de outubro - 20:30</option>
-      <option value="05/10 - 17h30">Dia 05 de outubro - 17:30</option>
-      <option value="05/10 - 20h30">Dia 05 de outubro - 20:30</option>
+      <option value="03/10 - 20:30">03 de outubro - 20:30</option>
+      <option value="04/10 - 17:30">04 de outubro - 17:30</option>
+      <option value="04/10 - 20:30">04 de outubro - 20:30</option>
+      <option value="05/10 - 17:30">05 de outubro - 17:30</option>
+      <option value="05/10 - 20:30">05 de outubro - 20:30</option>
     </select>
 
-    <label>Ingressos Inteira:</label>
-    <div class="counter">
-      <button type="button" onclick="updateCounter('ingresso_inteira','remove')">-</button>
-      <span id="ingresso_inteira">0</span>
-      <button type="button" onclick="updateCounter('ingresso_inteira','add')">+</button>
+    <label>Ingressos:</label>
+    <div class="ingresso-group">
+      <div>
+        <span>Inteira:</span><br>
+        <button type="button" onclick="mudarQtd('inteira', -1)">-</button>
+        <span id="qtd_inteira">0</span>
+        <button type="button" onclick="mudarQtd('inteira', 1)">+</button>
+      </div>
+      <div>
+        <span>Meia:</span><br>
+        <button type="button" onclick="mudarQtd('meia', -1)">-</button>
+        <span id="qtd_meia">0</span>
+        <button type="button" onclick="mudarQtd('meia', 1)">+</button>
+      </div>
     </div>
-
-    <label>Ingressos Meia:</label>
-    <div class="counter">
-      <button type="button" onclick="updateCounter('ingresso_meia','remove')">-</button>
-      <span id="ingresso_meia">0</span>
-      <button type="button" onclick="updateCounter('ingresso_meia','add')">+</button>
-    </div>
+    <input type="hidden" id="ingresso" name="ingresso" value="0 inteiras, 0 meias">
 
     <label>Nomes dos Convidados:</label>
     <textarea id="convidados" placeholder="Separe os nomes por vírgula"></textarea>
@@ -168,5 +171,3 @@
   </form>
 </body>
 </html>
-
-
