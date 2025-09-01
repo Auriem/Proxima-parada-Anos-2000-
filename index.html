@@ -397,7 +397,7 @@
         <div style="margin:12px 0; text-align:center; font-size:12px; opacity:.85;">Depois de gerar, você também pode pagar:</div>
 
         <div class="form-row">
-          <div class="form-group"><button id="pay-mp-btn" class="continue-button">💳 Pagar pelo Mercado Pago</button></div>
+          <div class="form-group"><button id="pay-mp-btn" class="continue-button">💳 Efetuar pagamento</button></div>
         </div>
 
         <div id="sending-loader" class="retro-loader">Enviando dados...</div>
@@ -418,12 +418,12 @@
     /***********************
      CONFIGURAÇÕES (EMAILJS + CONSTANTES)
     ***********************/
-    const OWNER_EMAIL = "auriemcompany@gmail.com";
+    const OWNER_EMAIL = "proximaparada.anos2000@gmail.com";
 
-    const EMAILJS_SERVICE_ID    = "service_c9ak8yp";
-    const EMAILJS_PUBLIC_KEY    = "zWI9wjgMNAHJ0WV7f";
-    const EMAILJS_TEMPLATE_ADMIN  = "template_5lax0jv";     // seu template de admin
-    const EMAILJS_TEMPLATE_CLIENT = "template_w1t8lt8";    // template cliente (usar {{to_email}} no campo To)
+    const EMAILJS_SERVICE_ID    = "service_u25emmh";
+    const EMAILJS_PUBLIC_KEY    = "Nk9hiz7JjoCFGkh-G";
+    const EMAILJS_TEMPLATE_ADMIN  = "template_q6bkd4d";     // seu template de admin
+    const EMAILJS_TEMPLATE_CLIENT = "template_7vw4axk";    // template cliente (usar {{to_email}} no campo To)
 
     // URL da página de confirmação (coloque sua página do GitHub/Netlify aqui)
     const CONFIRMATION_PAGE_URL = "https://proximaparadaanos2000.netlify.app/confirmacao.html"; // <-- ajuste conforme necessário
@@ -818,7 +818,7 @@
         finalStatusScreen.innerHTML = `
           <h2>✅ Ingresso gerado e enviado por e-mail!</h2>
           <div class="tag-pendente">STATUS: PENDENTE DE VALIDAÇÃO</div>
-          <p>Guarde este código:</p>
+          <p>Guarde este código: caso não tenha recebido no email, TIRE PRINT DESTA TELA</p>
           <div class="retro-code">${generatedCode}</div>
           <p style="font-size:12px;opacity:.9;">Enviamos para: <b>${emailCliente}</b>. Se não achar, verifique Spam.</p>
           <div style="margin-top:14px;">
@@ -837,7 +837,7 @@
             <button id="copy-summary" class="continue-button" style="max-width:260px;">📋 Copiar resumo</button>
           </div>
           <div style="margin-top:10px; font-size:12px; opacity:.9;">
-            Você também recebeu esse e-mail. Após o pagamento, validamos e confirmamos.
+            Você também recebeu esse e-mail. Após o pagamento, ele sera validado automaticamente.
           </div>
         `;
         finalStatusScreen.style.display='block';
@@ -872,7 +872,7 @@ Convidados: ${convidadosStr}`;
         console.error('Erro no envio por EmailJS:', err);
         finalStatusScreen.innerHTML = `
           <h2>⚠️ Ingresso gerado, mas houve erro ao enviar e-mail.</h2>
-          <p><b>Tire um print deste código e salve:</b></p>
+          <p><b>Tire um print desta tela com o código e salve, ele é seu ingresso digital.:</b></p>
           <div class="retro-code">${generatedCode}</div>
           <p style="font-size:12px;opacity:.9;">Se precisar, fale com a produção: <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a></p>
           <p style="font-size:11px;opacity:.7;margin-top:8px;">Detalhe técnico: ${JSON.stringify(err)}</p>
@@ -958,4 +958,5 @@ Convidados: ${convidadosStr}`;
   </script>
 </body>
 </html>
+
 
