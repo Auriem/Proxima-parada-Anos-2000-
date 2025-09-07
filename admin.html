@@ -25,7 +25,7 @@
     }
     h2 { text-align: center; }
     label { display: block; margin-top: 10px; }
-    input, select, textarea, button {
+    input, select, button {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -41,9 +41,7 @@
       border: none;
       margin-top: 15px;
     }
-    button:hover {
-      opacity: 0.9;
-    }
+    button:hover { opacity: 0.9; }
     .hidden { display: none; }
   </style>
 </head>
@@ -58,9 +56,10 @@
     <p id="login-error" style="color:red; display:none; font-size:13px; margin-top:8px;">Senha incorreta.</p>
   </div>
 
-  <!-- Painel de envio -->
+  <!-- Painel -->
   <div class="panel hidden" id="admin-panel">
     <h2>📩 Enviar E-mail</h2>
+
     <label for="nome">Nome do Cliente</label>
     <input type="text" id="nome">
 
@@ -71,25 +70,17 @@
     <input type="text" id="telefone">
 
     <label for="sessao">Sessão</label>
-    <input type="text" id="sessao" placeholder="Ex.: 04/10/2025 - 20h30">
+    <select id="sessao"></select>
 
-    <label for="ingressos">Ingressos</label>
-    <input type="text" id="ingressos" placeholder="Ex.: 2 inteiras, 1 meia">
-
-    <label for="valor">Valor (R$)</label>
-    <select id="valor">
-      <option value="25">25</option>
-      <option value="50">50</option>
-      <option value="75">75</option>
-      <option value="100">100</option>
-      <option value="125">125</option>
-      <option value="150">150</option>
-      <option value="175">175</option>
-      <option value="200">200</option>
-    </select>
-
-    <label for="link_pagamento">Link de Pagamento</label>
-    <input type="text" id="link_pagamento" placeholder="Cole o link correto do Mercado Pago">
+    <label>Ingressos</label>
+    <div style="display:flex; gap:10px;">
+      <div style="flex:1;">
+        <input type="number" id="inteira" min="0" value="0" placeholder="Inteiras">
+      </div>
+      <div style="flex:1;">
+        <input type="number" id="meia" min="0" value="0" placeholder="Meias">
+      </div>
+    </div>
 
     <label for="tipo_email">Tipo de E-mail</label>
     <select id="tipo_email">
@@ -107,11 +98,32 @@
     /***************
      CONFIGURAÇÕES
     ***************/
-    const ADMIN_PASSWORD = "2000admin"; // 🔑 senha de acesso (troque se quiser)
+    const ADMIN_PASSWORD = "2000admin"; 
     const EMAILJS_SERVICE_ID = "service_c9ak8yp";
-    const TEMPLATE_PENDENTE = "template_5lax0jv";  // ⚠️ Pagamento pendente
-    const TEMPLATE_LEMBRETE = "template_w1t8lt8"; // ⏳ Lembrete
+    const TEMPLATE_PENDENTE = "template_5lax0jv";  
+    const TEMPLATE_LEMBRETE = "template_w1t8lt8"; 
     const EMAILJS_PUBLIC_KEY = "zWI9wjgMNAHJ0WV7f";
+
+    // Sessões disponíveis
+    const sessoes = [
+      { id: "sessao-251003-2030", label: "03/10/2025 - 20h30" },
+      { id: "sessao-251004-1730", label: "04/10/2025 - 17h30" },
+      { id: "sessao-251004-2030", label: "04/10/2025 - 20h30" },
+      { id: "sessao-251005-1730", label: "05/10/2025 - 17h30" },
+      { id: "sessao-251005-2030", label: "05/10/2025 - 20h30" }
+    ];
+
+    // Links Mercado Pago
+    const linksPagamento = {
+      25:  "https://mpago.li/1SDJxrj",
+      50:  "https://mpago.li/21ks87P",
+      75:  "https://mpago.li/1VmFtmt",
+      100: "https://mpago.li/2Lhv2M1",
+      125: "https://mpago.li/1a688tD",
+      150: "https://mpago.li/1uWW1XE",
+      175: "https://mpago.li/2a2GAF5",
+      200: "https://mpago.li/15tvMBA"
+    };
 
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
@@ -123,6 +135,15 @@
       if(pass === ADMIN_PASSWORD) {
         document.getElementById("login-box").classList.add("hidden");
         document.getElementById("admin-panel").classList.remove("hidden");
+
+        // Preenche sessões
+        const sel = document.getElementById("sessao");
+        sessoes.forEach(s => {
+          const opt = document.createElement("option");
+          opt.value = s.label;
+          opt.textContent = s.label;
+          sel.appendChild(opt);
+        });
       } else {
         document.getElementById("login-error").style.display = "block";
       }
@@ -135,14 +156,22 @@
       const nome = document.getElementById("nome").value.trim();
       const email = document.getElementById("email").value.trim();
       const telefone = document.getElementById("telefone").value.trim();
-      const sessao = document.getElementById("sessao").value.trim();
-      const ingressos = document.getElementById("ingressos").value.trim();
-      const valor = document.getElementById("valor").value;
-      const link_pagamento = document.getElementById("link_pagamento").value.trim();
+      const sessao = document.getElementById("sessao").value;
+      const inteiras = parseInt(document.getElementById("inteira").value || 0);
+      const meias = parseInt(document.getElementById("meia").value || 0);
       const tipo_email = document.getElementById("tipo_email").value;
 
-      if(!nome || !email || !sessao || !ingressos || !link_pagamento) {
-        document.getElementById("status").textContent = "❌ Preencha todos os campos obrigatórios.";
+      const ingressos = `${inteiras} inteira(s), ${meias} meia(s)`;
+      const total = (inteiras * 50) + (meias * 25);
+
+      if(total === 0) {
+        document.getElementById("status").textContent = "❌ Selecione pelo menos 1 ingresso.";
+        document.getElementById("status").style.color = "red";
+        return;
+      }
+
+      if(!linksPagamento[total]) {
+        document.getElementById("status").textContent = "❌ Valor não suportado (máximo R$200).";
         document.getElementById("status").style.color = "red";
         return;
       }
@@ -153,8 +182,8 @@
         phone: telefone || "—",
         sessao: sessao,
         ingressos: ingressos,
-        valor: valor,
-        link_pagamento: link_pagamento
+        valor: total,
+        link_pagamento: linksPagamento[total]
       };
 
       const templateID = (tipo_email === "pendente") ? TEMPLATE_PENDENTE : TEMPLATE_LEMBRETE;
