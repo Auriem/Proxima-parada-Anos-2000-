@@ -923,21 +923,23 @@ Convidados: ${convidadosStr}`;
     const scrapResult = document.getElementById('scrap-result');
     const msnSound = new Audio("https://www.myinstants.com/media/sounds/msn_nudge.mp3");
 
-    const scrapsVariacoes = [
-      txt => `oiiiee - passaNdO só p/ dxa um scrap bunitinhu aki 😜💖`
-      txt => `vc é mto + q especial s2 num esqce d mim nãao 😭💌`
-      txt => `amg vrddr é aki 👉 [ ] … vc marcou mto em 2005 kkkk 😎`
-      txt => `buzz só p/ te lembrar q eu existo (L) kkkkkk`
-      txt => `add no msn: gatinha_loka2005@hotmail.com 🤭🔥`
-      txt => `seu depo é verdadeiro??? kkk apaga nãao 😍📸`
-      txt => `meu status: ocupadoo… mas só p/ vc eu fico disp ;)`
-      txt => `flw vlw bjs d glitter ✨🌈 me manda 1 gif tbm`
-      txt => `sdds d qnd a gnt ficava até 3 da manhã jogando colheita feliz kkk 🌽🐄`
-      txt => `se num mandar scrap, num é amigo d vrdd 😏🤟`
-      txt => `meu coraçãum é cm o Orkut: só p/ qm tem convite 🥰🔒`
-      txt => `xegaa no role q vai ser mtooo loko \o/ 🕺💿`
-      txt => `se vc num me ligar d dscado hj a noite, fico mto xatiada 😤📞`
-      txt => `meu top 5 d depo ta fechadu só c/ qm é d vrdd s2`
+const scrapsVariacoes = [
+  () => "oiiiee - passaNdO só p/ dxa um scrap bunitinhu aki 😜💖",
+  () => "vc é mto + q especial s2 num esqce d mim nãao 😭💌",
+  () => "amg vrddr é aki 👉 [ ] … vc marcou mto em 2005 kkkk 😎",
+  () => "buzz só p/ te lembrar q eu existo (L) kkkkkk",
+  () => "add no msn: gatinha_loka2005@hotmail.com 🤭🔥",
+  () => "seu depo é verdadeiro??? kkk apaga nãao 😍📸",
+  () => "meu status: ocupadoo… mas só p/ vc eu fico disp ;)",
+  () => "flw vlw bjs d glitter ✨🌈 me manda 1 gif tbm",
+  () => "sdds d qnd a gnt ficava até 3 da manhã jogando colheita feliz kkk 🌽🐄",
+  () => "se num mandar scrap, num é amigo d vrdd 😏🤟",
+  () => "meu coraçãum é cm o Orkut: só p/ qm tem convite 🥰🔒",
+  () => "xegaa no role q vai ser mtooo loko \\o/ 🕺💿",
+  () => "se vc num me ligar d dscado hj a noite, fico mto xatiada 😤📞",
+  () => "meu top 5 d depo ta fechadu só c/ qm é d vrdd s2"
+];
+
 
     ];
 
@@ -949,7 +951,7 @@ Convidados: ${convidadosStr}`;
         setTimeout(()=>{
           scrapLoading.classList.remove('active');
           const variation = scrapsVariacoes[Math.floor(Math.random()*scrapsVariacoes.length)];
-          scrapResult.textContent = variation(txt);
+          scrapResult.textContent = variation();
           try{ msnSound.currentTime = 0; msnSound.play(); }catch(e){}
         }, 700);
       });
@@ -968,6 +970,7 @@ Convidados: ${convidadosStr}`;
   </script>
 </body>
 </html>
+
 
 
 
