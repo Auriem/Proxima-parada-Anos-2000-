@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://proximaparadaanos2000.online/sitemap.xml
